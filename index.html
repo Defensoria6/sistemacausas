@@ -38,7 +38,8 @@
     }
     .controls {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap; /* Permitir que los botones se envuelvan en varias líneas */
+      justify-content: center; /* Centrar los botones horizontalmente */
       gap: 0.75rem;
       margin: 1.5rem auto;
       max-width: 900px;
@@ -72,7 +73,6 @@
     }
     #btnLogout {
       background: var(--accent);
-      margin-left: auto !important;
     }
     #btnVerListado:hover,
     #btnNuevoRegistro:hover,
@@ -251,18 +251,38 @@
       font-weight: bold;
       color: var(--primary);
     }
+    .btn-siged {
+        background-color: #9b59b6; /* color violeta */
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: var(--radius);
+        text-decoration: none;
+        font-size: 0.9rem;
+        cursor: pointer;
+        white-space: nowrap;
+        height: 38px;
+        flex: 0 0 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-siged:hover {
+        background-color: #8e44ad;
+        filter: brightness(0.85);
+    }
     @media (max-width: 700px) {
       .controls {
         flex-wrap: wrap;
         justify-content: center;
       }
-      .controls button {
+      .controls button,
+      .controls .btn-siged {
         flex: 1 1 40%;
         max-width: 140px;
         margin-bottom: 0.5rem;
       }
       #btnLogout {
-        margin-left: 0 !important;
         flex: 1 1 100%;
         max-width: none;
       }
@@ -307,6 +327,7 @@
     <div id="userInfo" aria-live="polite" aria-atomic="true"></div>
 
     <div class="controls" role="group" aria-label="Controles principales">
+      <a href="https://www.jusmisiones.gov.ar/gestionexpedientes/" target="_blank" class="btn-siged" aria-label="Ir a SIGED PJM">SIGED PJM</a>
       <button id="btnVerListado" aria-label="Ver listado de causas">Ver Listado de Causas</button>
       <button id="btnNuevoRegistro" aria-label="Nuevo registro de causa">Nuevo Registro</button>
       <button id="btnBuscar" aria-label="Mostrar campo de búsqueda en listado">Buscar</button>

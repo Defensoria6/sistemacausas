@@ -182,6 +182,14 @@
       word-wrap: break-word;
       white-space: normal;
     }
+
+    /* Estilos para prioridad y vencimiento */
+    .prioridad-alta { color: red; font-weight: bold; }
+    .prioridad-media { color: orange; font-weight: normal; }
+    .prioridad-baja { color: green; font-weight: normal; }
+    .prioridad-ninguna { color: black; font-weight: normal; }
+    .vencimiento-alerta { color: red; font-weight: bold; }
+
     #main-app-container {
       display: none;
     }
@@ -273,6 +281,7 @@
   </style>
 </head>
 <body>
+
   <h1>Administración de Causas</h1>
   <h2>Defensoría Civil y Comercial 6 - Poder Judicial Misiones</h2>
 
@@ -397,297 +406,302 @@
     <div id="estadisticaContenido"></div>
   </div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBDXZYAxWsvMiMGCrPRp3EBVuU0dzuWF4M",
-    authDomain: "sistemadefensoria6.firebaseapp.com",
-    projectId: "sistemadefensoria6"
+  const firebaseConfig={
+    apiKey:"AIzaSyBDXZYAxWsvMiMGCrPRp3EBVuU0dzuWF4M",
+    authDomain:"sistemadefensoria6.firebaseapp.com",
+    projectId:"sistemadefensoria6"
   };
   firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+  const auth=firebase.auth();
+  const db=firebase.firestore();
 
-  // DOM references
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
-  const rolSelect = document.getElementById("rol");
-  const nombreInput = document.getElementById("nombre");
-  const apellidoInput = document.getElementById("apellido");
-  const mensaje = document.getElementById("mensaje");
-  const loginFormContainer = document.getElementById("login-form-container");
-  const mainAppContainer = document.getElementById("main-app-container");
-  const panelTitulo = document.getElementById("panel-titulo");
-  const userInfo = document.getElementById("userInfo");
+  // Elementos
+  const emailInput=document.getElementById("email");
+  const passwordInput=document.getElementById("password");
+  const rolSelect=document.getElementById("rol");
+  const nombreInput=document.getElementById("nombre");
+  const apellidoInput=document.getElementById("apellido");
+  const mensaje=document.getElementById("mensaje");
+  const loginFormContainer=document.getElementById("login-form-container");
+  const mainAppContainer=document.getElementById("main-app-container");
+  const panelTitulo=document.getElementById("panel-titulo");
+  const userInfo=document.getElementById("userInfo");
 
-  const btnLogin = document.getElementById("btnLogin");
-  const btnRegister = document.getElementById("btnRegister");
-  const btnVerListado = document.getElementById("btnVerListado");
-  const btnNuevoRegistro = document.getElementById("btnNuevoRegistro");
-  const btnGuardar = document.getElementById("btnGuardar");
-  const btnCancelar = document.getElementById("btnCancelar");
-  const btnBuscar = document.getElementById("btnBuscar");
-  const btnImprimir = document.getElementById("btnImprimir");
-  const btnEstadistica = document.getElementById("btnEstadistica");
-  const btnImprimirEstadistica = document.getElementById("btnImprimirEstadistica");
-  const buscadorInput = document.getElementById("buscadorInput");
-  const estadisticaBox = document.getElementById("estadisticaBox");
-  const estadisticaContenido = document.getElementById("estadisticaContenido");
-  const closeEstadistica = document.getElementById("closeEstadistica");
+  const btnLogin=document.getElementById("btnLogin");
+  const btnRegister=document.getElementById("btnRegister");
+  const btnVerListado=document.getElementById("btnVerListado");
+  const btnNuevoRegistro=document.getElementById("btnNuevoRegistro");
+  const btnGuardar=document.getElementById("btnGuardar");
+  const btnCancelar=document.getElementById("btnCancelar");
+  const btnBuscar=document.getElementById("btnBuscar");
+  const btnImprimir=document.getElementById("btnImprimir");
+  const btnEstadistica=document.getElementById("btnEstadistica");
+  const btnImprimirEstadistica=document.getElementById("btnImprimirEstadistica");
+  const buscadorInput=document.getElementById("buscadorInput");
+  const estadisticaBox=document.getElementById("estadisticaBox");
+  const estadisticaContenido=document.getElementById("estadisticaContenido");
+  const closeEstadistica=document.getElementById("closeEstadistica");
 
-  const selTipo = document.getElementById("tipoProceso");
-  const selJuz = document.getElementById("juzgado");
-  const selUsu = document.getElementById("usuarioAsignado");
-  const tituloForm = document.getElementById("tituloForm");
-  const formCausa = document.getElementById("formCausa");
-  const tablaCausasDiv = document.getElementById("tablaCausas");
+  const selTipo=document.getElementById("tipoProceso");
+  const selJuz=document.getElementById("juzgado");
+  const selUsu=document.getElementById("usuarioAsignado");
+  const tituloForm=document.getElementById("tituloForm");
+  const formCausa=document.getElementById("formCausa");
+  const tablaCausasDiv=document.getElementById("tablaCausas");
 
-  // Define mapping proceso → juzgados
-  const juzgadosPorTipo = {
-    Civil: [
+  const juzgadosPorTipo={
+    Civil:[
       "Juzgado Civil y Comercial Nro. 1","Juzgado Civil y Comercial Nro. 2","Juzgado Civil y Comercial Nro. 3",
       "Juzgado Civil y Comercial Nro. 4","Juzgado Civil y Comercial Nro. 5","Juzgado Civil y Comercial Nro. 6",
       "Juzgado Civil y Comercial Nro. 7","Juzgado Civil y Comercial Nro. 8"
     ],
-    Penal: [
+    Penal:[
       "Juzgado de Instrucción Nº 1 - Posadas","Juzgado de Instrucción Nº 2 - Posadas",
       "Juzgado de Instrucción Nº 3 - Posadas","Juzgado de Instrucción Nº 6 - Posadas",
       "Juzgado de Instrucción Nº 7 - Posadas","Tribunal Penal Nº 1 - Posadas","Tribunal Penal Nº 2 - Posadas"
     ],
-    Laboral: [
+    Laboral:[
       "Juzgado Laboral Nro. 1","Juzgado Laboral Nro. 2","Juzgado Laboral Nro. 3","Juzgado Laboral Nro. 4"
     ],
-    "Contencioso Administrativo": ["Juzgado de Paz Contravencional"],
-    Familia: [
+    "Contencioso Administrativo":["Juzgado de Paz Contravencional"],
+    Familia:[
       "Juzgado de Familia Nro. 1","Juzgado de Familia Nro. 2","Juzgado de Familia Nro. 3",
       "Juzgado de Familia y Violencia Familiar de Garupá"
     ].sort(),
-    "Violencia Familiar": [
+    "Violencia Familiar":[
       "Juzgado de Violencia Familiar Nro. 1","Juzgado de Violencia Familiar Nro. 2",
       "Juzgado de Familia y Violencia Familiar de Garupá"
     ].sort()
   };
 
-  const usuarios = [
+  const usuarios=[
     "Bazante Nadia Romina","Cardozo Maria Raquel","Cedron Noelia Aurora","Corrales Alicia Mariela","Escobar Monica Graciela",
     "Fioravante Romulo","Gonzalez Alberto Misael","Gonzalez Juan Jose","Gudiño Natalia Esther","Magnani Enzo Luciano",
     "Pablos Patricia","Palacios Ana Gabriela","Ramos Marcelo Gustavo","Riveros Patricia Soledad","Sosa Rita Cecilia"
   ];
+  let causaEnEdicion=null;
 
-  let causaEnEdicion = null;
-
-  function mostrarMensaje(msg, esError = false) {
-    mensaje.textContent = msg;
-    mensaje.style.color = esError ? "red" : "green";
+  function mostrarMensaje(msg, esError=false){
+    mensaje.textContent=msg;
+    mensaje.style.color=esError?"red":"green";
   }
-  function cerrarSesion() {
+
+  function cerrarSesion(){
     auth.signOut();
   }
 
-  function initForm() {
+  function initForm(){
     selTipo.innerHTML = "";
     selUsu.innerHTML = "";
-    Object.keys(juzgadosPorTipo).forEach((tipo) => {
-      const opt = document.createElement("option");
-      opt.value = tipo;
-      opt.textContent = tipo;
+    Object.keys(juzgadosPorTipo).forEach(tipo=>{
+      let opt=document.createElement("option");
+      opt.value=tipo;
+      opt.textContent=tipo;
       selTipo.appendChild(opt);
     });
-
-    usuarios.forEach(usuario => {
-      const opt = document.createElement("option");
-      opt.value = usuario;
-      opt.textContent = usuario;
+    usuarios.forEach(u=>{
+      let opt=document.createElement("option");
+      opt.value=u;
+      opt.textContent=u;
       selUsu.appendChild(opt);
     });
-
-    selTipo.value = "Civil";
+    selTipo.value="Civil";
     actualizarJuzgados();
-    selUsu.value = usuarios[0];
-    document.getElementById("prioridad").value = "Alta";
-    document.getElementById("estado").value = "En trámite";
-    document.getElementById("intervencion").value = "Ministerio Complementario";
-    document.getElementById("counter").textContent = "0/1000";
+    selUsu.value=usuarios[0];
+    document.getElementById("prioridad").value="Alta";
+    document.getElementById("estado").value="En trámite";
+    document.getElementById("intervencion").value="Ministerio Complementario";
+    document.getElementById("counter").textContent="0/1000";
   }
 
-  function actualizarJuzgados() {
-    const tipoSeleccionado = selTipo.value;
-    const juzgados = juzgadosPorTipo[tipoSeleccionado] || [];
-    selJuz.innerHTML = "";
-    juzgados.forEach(juzgado => {
-      const opt = document.createElement("option");
-      opt.value = juzgado;
-      opt.textContent = juzgado;
+  function actualizarJuzgados(){
+    const tipo=selTipo.value;
+    const juzgados=juzgadosPorTipo[tipo]||[];
+    selJuz.innerHTML="";
+    juzgados.forEach(j=>{
+      let opt=document.createElement("option");
+      opt.value=j;
+      opt.textContent=j;
       selJuz.appendChild(opt);
     });
   }
 
-  function contarPalabras() {
-    const ta = document.getElementById("observaciones");
-    const words = ta.value.trim().split(/\s+/).filter(w => w);
-    if(words.length > 1000) ta.value = words.slice(0, 1000).join(" ");
-    document.getElementById("counter").textContent = `${ta.value.trim().split(/\s+/).filter(w => w).length}/1000`;
+  function contarPalabras(){
+    const ta=document.getElementById("observaciones");
+    const words=ta.value.trim().split(/\s+/).filter(w=>w);
+    if(words.length>1000) ta.value=words.slice(0,1000).join(" ");
+    document.getElementById("counter").textContent=`${ta.value.trim().split(/\s+/).filter(w=>w).length}/1000`;
   }
 
-  async function guardarCausa(uid, email) {
-    const numCausa = document.getElementById("numCausa").value.trim();
-    const caratula = document.getElementById("caratula").value.trim();
-    const tipoProceso = document.getElementById("tipoProceso").value;
-    const juzgado = document.getElementById("juzgado").value;
-    const fechaInicio = document.getElementById("fechaInicio").value;
-    const fechaPase = document.getElementById("fechaPase").value;
-    const intervencion = document.getElementById("intervencion").value;
-    const audiencias = document.getElementById("audiencias").value;
-    const vencimiento = document.getElementById("vencimiento").value;
-    const usuarioAsignado = document.getElementById("usuarioAsignado").value;
-    const prioridad = document.getElementById("prioridad").value;
-    const estado = document.getElementById("estado").value;
-    const observaciones = document.getElementById("observaciones").value;
+  // Funciones de guardado, edición, carga, renderizado tabla (igual que lo hemos definido,
+  // pero con renderizado actualizado para estilos prioridad y vencimiento)...
 
-    if(!numCausa || !caratula || !tipoProceso || !juzgado) {
+  async function guardarCausa(uid,email){
+    const numCausa=document.getElementById("numCausa").value.trim();
+    const caratula=document.getElementById("caratula").value.trim();
+    const tipoProceso=document.getElementById("tipoProceso").value;
+    const juzgado=document.getElementById("juzgado").value;
+    const fechaInicio=document.getElementById("fechaInicio").value;
+    const fechaPase=document.getElementById("fechaPase").value;
+    const intervencion=document.getElementById("intervencion").value;
+    const audiencias=document.getElementById("audiencias").value;
+    const vencimiento=document.getElementById("vencimiento").value;
+    const usuarioAsignado=document.getElementById("usuarioAsignado").value;
+    const prioridad=document.getElementById("prioridad").value;
+    const estado=document.getElementById("estado").value;
+    const observaciones=document.getElementById("observaciones").value;
+
+    if(!numCausa || !caratula || !tipoProceso || !juzgado){
       alert("Complete los campos obligatorios.");
       return;
     }
-    const causaData = {
-      numCausa, caratula, tipoProceso, juzgado, fechaInicio, fechaPase, intervencion,
-      audiencias, vencimiento, usuarioAsignado, prioridad, estado, observaciones,
-      uid, creadorEmail: email
+    const data={
+      numCausa,caratula,tipoProceso,juzgado,fechaInicio,fechaPase,intervencion,audiencias,vencimiento,usuarioAsignado,prioridad,estado,observaciones,uid,creadorEmail:email
     };
-    try {
+    try{
       if(causaEnEdicion){
-        await db.collection("causas").doc(causaEnEdicion).update(causaData);
+        await db.collection("causas").doc(causaEnEdicion).update(data);
         alert("Causa actualizada correctamente.");
-        causaEnEdicion = null;
-        tituloForm.textContent = "Nuevo Expediente";
-        btnGuardar.textContent = "Guardar";
+        causaEnEdicion=null;
+        tituloForm.textContent="Nuevo Expediente";
+        btnGuardar.textContent="Guardar";
       } else {
-        causaData.fechaCreacion = new Date();
-        await db.collection("causas").add(causaData);
+        data.fechaCreacion=new Date();
+        await db.collection("causas").add(data);
         alert("Causa registrada correctamente.");
       }
       formCausa.reset();
       initForm();
       cargarCausas(uid);
       mostrarListado();
-    } catch(error){
-      alert("Error guardando causa: "+error.message);
+    }catch(e){
+      alert("Error guardando causa: "+e.message);
     }
   }
 
   async function editarCausa(id){
-    try {
-      const doc = await db.collection("causas").doc(id).get();
+    try{
+      const doc=await db.collection("causas").doc(id).get();
       if(!doc.exists){
         alert("La causa no existe.");
         return;
       }
-      const causa = doc.data();
-      causaEnEdicion = doc.id;
-      tituloForm.textContent = "Editar Expediente";
-      btnGuardar.textContent = "Actualizar";
+      const c=doc.data();
+      causaEnEdicion=doc.id;
+      tituloForm.textContent="Editar Expediente";
+      btnGuardar.textContent="Actualizar";
       mostrarFormulario();
 
-      document.getElementById("numCausa").value = causa.numCausa || "";
-      document.getElementById("caratula").value = causa.caratula || "";
-      document.getElementById("tipoProceso").value = causa.tipoProceso || "";
+      document.getElementById("numCausa").value=c.numCausa||"";
+      document.getElementById("caratula").value=c.caratula||"";
+      document.getElementById("tipoProceso").value=c.tipoProceso||"";
       actualizarJuzgados();
-      document.getElementById("juzgado").value = causa.juzgado || "";
-      document.getElementById("fechaInicio").value = causa.fechaInicio || "";
-      document.getElementById("fechaPase").value = causa.fechaPase || "";
-      document.getElementById("intervencion").value = causa.intervencion || "Ministerio Complementario";
-      document.getElementById("audiencias").value = causa.audiencias || "";
-      document.getElementById("vencimiento").value = causa.vencimiento || "";
-      document.getElementById("usuarioAsignado").value = causa.usuarioAsignado || "";
-      document.getElementById("prioridad").value = causa.prioridad || "Alta";
-      document.getElementById("estado").value = causa.estado || "En trámite";
-      document.getElementById("observaciones").value = causa.observaciones || "";
+      document.getElementById("juzgado").value=c.juzgado||"";
+      document.getElementById("fechaInicio").value=c.fechaInicio||"";
+      document.getElementById("fechaPase").value=c.fechaPase||"";
+      document.getElementById("intervencion").value=c.intervencion||"Ministerio Complementario";
+      document.getElementById("audiencias").value=c.audiencias||"";
+      document.getElementById("vencimiento").value=c.vencimiento||"";
+      document.getElementById("usuarioAsignado").value=c.usuarioAsignado||"";
+      document.getElementById("prioridad").value=c.prioridad||"Alta";
+      document.getElementById("estado").value=c.estado||"En trámite";
+      document.getElementById("observaciones").value=c.observaciones||"";
       contarPalabras();
-    } catch(error) {
-      alert("Error al editar causa: " + error.message);
+    }catch(e){
+      alert("Error al editar causa: "+e.message);
     }
   }
 
   async function cargarCausas(uid){
     try{
-      const user = auth.currentUser;
+      const user=auth.currentUser;
       if(!user) return;
-
-      const userDoc = await db.collection("usuarios").doc(user.uid).get();
+      const userDoc=await db.collection("usuarios").doc(user.uid).get();
       if(!userDoc.exists) {
         mostrarMensaje("Usuario sin datos en Firestore.", true);
         return;
       }
-      const rol = userDoc.data().rol;
+      const rol=userDoc.data().rol;
       let snapshot;
-      if(rol === "Defensor" || rol === "Secretario"){
-        snapshot = await db.collection("causas").orderBy("fechaCreacion","desc").get();
+      if(rol==="Defensor" || rol==="Secretario"){
+        snapshot=await db.collection("causas").orderBy("fechaCreacion","desc").get();
       } else {
-        snapshot = await db.collection("causas")
+        snapshot=await db.collection("causas")
           .where("uid","==",uid)
           .orderBy("fechaCreacion","desc")
           .get();
       }
       renderizarTablaCausas(snapshot,rol,user.uid);
-    } catch(error){
-      mostrarMensaje("Error cargando causas: " + error.message,true);
+    } catch(e){
+      mostrarMensaje("Error cargando causas: "+e.message,true);
     }
   }
 
-  function formatearFecha(fechaStr,soloFecha=false){
+  function formatearFecha(fechaStr, soloFecha=false){
     if(!fechaStr) return "";
-    const d = new Date(fechaStr);
+    const d=new Date(fechaStr);
     if(isNaN(d)) return fechaStr;
     if(soloFecha) return d.toLocaleDateString("es-AR");
-    return d.toLocaleString("es-AR", {
-      year: "numeric", month: "2-digit", day: "2-digit",
-      hour: "2-digit", minute: "2-digit"
-    });
+    return d.toLocaleString("es-AR",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
   }
 
+  // Renderizado tabla con estilos en prioridad y vencimiento
   function renderizarTablaCausas(snapshot, rol, uid){
-    const isLoggedIn = uid !== null && uid !== undefined;
-    let html = `<h4>Listado de causas</h4><table><thead><tr>
+    const isLoggedIn=uid!==null && uid!==undefined;
+    let html=`<h4>Listado de causas</h4><table><thead><tr>
       <th>N° Expediente</th><th>Carátula</th><th>Tipo</th><th>Juzgado</th><th>Fecha Inicio</th>
-      <th>Fecha Pase</th><th>Intervención</th><th>Audiencias</th><th>Vencimiento</th>
-      <th>Usuario Asignado</th><th>Prioridad</th><th>Estado</th><th>Observaciones</th><th>Creador</th>
-      ${isLoggedIn ? "<th>Acción</th>" : ""}
+      <th>Fecha Pase</th><th>Intervención</th><th>Audiencias</th><th>Vencimiento</th><th>Usuario Asignado</th>
+      <th>Prioridad</th><th>Estado</th><th>Observaciones</th><th>Creador</th>${isLoggedIn?"<th>Acción</th>":""}
     </tr></thead><tbody>`;
 
     if(snapshot.empty){
-      html += `<tr><td colspan="${isLoggedIn ? 15 : 14}">No hay causas registradas.</td></tr>`;
+      html+=`<tr><td colspan="${isLoggedIn?15:14}">No hay causas registradas.</td></tr>`;
     } else {
       snapshot.forEach(doc=>{
-        const c = doc.data();
-        const puedeEditar = rol==="Defensor"||rol==="Secretario"||(rol==="Empleado"&&c.uid===uid);
-        const puedeEliminar = rol==="Defensor";
-        html += `<tr>
+        const c=doc.data();
+        const puedeEditar=rol==="Defensor"||rol==="Secretario"||(rol==="Empleado"&&c.uid===uid);
+        const puedeEliminar=rol==="Defensor";
+
+        let clasePrioridad="prioridad-ninguna";
+        if(c.prioridad){
+          switch(c.prioridad.toLowerCase()){
+            case "alta": clasePrioridad="prioridad-alta"; break;
+            case "media": clasePrioridad="prioridad-media"; break;
+            case "baja": clasePrioridad="prioridad-baja"; break;
+            default: clasePrioridad="prioridad-ninguna";
+          }
+        }
+        const vencFormatted=c.vencimiento?formatearFecha(c.vencimiento):"";
+
+        html+=`<tr>
           <td>${c.numCausa||""}</td>
-          <td style="max-width:200px; white-space: normal;">${c.caratula||""}</td>
+          <td style="max-width:200px;white-space:normal;">${c.caratula||""}</td>
           <td>${c.tipoProceso||""}</td>
           <td>${c.juzgado||""}</td>
           <td>${formatearFecha(c.fechaInicio,true)}</td>
           <td>${formatearFecha(c.fechaPase)}</td>
           <td>${c.intervencion||""}</td>
           <td>${formatearFecha(c.audiencias)}</td>
-          <td>${formatearFecha(c.vencimiento)}</td>
+          <td class="vencimiento-alerta">${vencFormatted}</td>
           <td>${c.usuarioAsignado||""}</td>
-          <td>${c.prioridad||""}</td>
+          <td class="${clasePrioridad}">${c.prioridad||""}</td>
           <td>${c.estado||""}</td>
-          <td style="max-width:200px; white-space: normal;">${c.observaciones||""}</td>
+          <td style="max-width:200px;white-space:normal;">${c.observaciones||""}</td>
           <td>${c.creadorEmail||""}</td>
-          ${isLoggedIn ? "<td>" : ""}
-          ${isLoggedIn && puedeEditar ? `<button class="btn-edit" onclick="editarCausa('${doc.id}')">Editar</button>` : ""}
-          ${isLoggedIn && puedeEliminar ? ` <button class="btn-delete" onclick="eliminarCausa('${doc.id}')">Eliminar</button>` : ""}
-          ${isLoggedIn ? "</td>" : ""}
+          ${isLoggedIn?"<td>":""}
+          ${isLoggedIn && puedeEditar?`<button class="btn-edit" onclick="editarCausa('${doc.id}')">Editar</button>`:""}
+          ${isLoggedIn && puedeEliminar?`<button class="btn-delete" onclick="eliminarCausa('${doc.id}')">Eliminar</button>`:""}
+          ${isLoggedIn?"</td>":""}
         </tr>`;
       });
     }
-    html += "</tbody></table>";
-    tablaCausasDiv.innerHTML = html;
+    html+="</tbody></table>";
+    tablaCausasDiv.innerHTML=html;
   }
 
   async function eliminarCausa(id){
@@ -695,26 +709,26 @@
       try{
         await db.collection("causas").doc(id).delete();
         cargarCausas(auth.currentUser.uid);
-      }catch(error){
-        alert("Error eliminando causa: "+error.message);
+      } catch(e){
+        alert("Error eliminando causa: "+e.message);
       }
     }
   }
 
   function mostrarListado(){
-    tablaCausasDiv.style.display = "block";
-    formCausa.style.display = "none";
-    buscadorInput.style.display = "none";
-    buscadorInput.value = "";
-    estadisticaBox.style.display = "none";
+    tablaCausasDiv.style.display="block";
+    formCausa.style.display="none";
+    buscadorInput.style.display="none";
+    buscadorInput.value="";
+    estadisticaBox.style.display="none";
   }
 
   function mostrarFormulario(){
-    tablaCausasDiv.style.display = "none";
-    formCausa.style.display = "block";
-    buscadorInput.style.display = "none";
-    buscadorInput.value = "";
-    estadisticaBox.style.display = "none";
+    tablaCausasDiv.style.display="none";
+    formCausa.style.display="block";
+    buscadorInput.style.display="none";
+    buscadorInput.value="";
+    estadisticaBox.style.display="none";
   }
 
   // Eventos
@@ -722,48 +736,47 @@
   selTipo.addEventListener("change", actualizarJuzgados);
   document.getElementById("observaciones").addEventListener("input", contarPalabras);
 
-  btnRegister.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    const rol = rolSelect.value;
-    const nombre = nombreInput.value.trim();
-    const apellido = apellidoInput.value.trim();
-
-    if(!email || !password || !rol || !nombre || !apellido){
-      mostrarMensaje("Complete todos los campos, incluyendo nombre y apellido.",true);
+  btnRegister.addEventListener("click",async()=>{
+    const email=emailInput.value.trim();
+    const password=passwordInput.value;
+    const rol=rolSelect.value;
+    const nombre=nombreInput.value.trim();
+    const apellido=apellidoInput.value.trim();
+    if(!email||!password||!rol||!nombre||!apellido){
+      mostrarMensaje("Complete todos los campos, incluyendo nombre y apellido.", true);
       return;
     }
     try{
-      const userCred = await auth.createUserWithEmailAndPassword(email,password);
+      const userCred=await auth.createUserWithEmailAndPassword(email,password);
       await db.collection("usuarios").doc(userCred.user.uid).set({
         email, rol, nombre, apellido, fechaRegistro: new Date()
       });
       mostrarMensaje("Usuario registrado correctamente. Ya puede iniciar sesión.");
-      nombreInput.value = "";
-      apellidoInput.value = "";
-      emailInput.value = "";
-      passwordInput.value = "";
-      rolSelect.value = "";
-    }catch(err){
-      mostrarMensaje(err.message,true);
+      nombreInput.value="";
+      apellidoInput.value="";
+      emailInput.value="";
+      passwordInput.value="";
+      rolSelect.value="";
+    } catch(e){
+      mostrarMensaje(e.message,true);
     }
   });
 
-  btnLogin.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
+  btnLogin.addEventListener("click",async()=>{
+    const email=emailInput.value.trim();
+    const password=passwordInput.value;
     if(!email || !password){
-      mostrarMensaje("Ingrese email y contraseña.",true);
+      mostrarMensaje("Ingrese email y contraseña.", true);
       return;
     }
     try{
       await auth.signInWithEmailAndPassword(email,password);
-    }catch(err){
-      mostrarMensaje(err.message,true);
+    } catch(e){
+      mostrarMensaje(e.message,true);
     }
   });
 
-  btnVerListado.addEventListener("click", () => {
+  btnVerListado.addEventListener("click",()=>{
     causaEnEdicion=null;
     tituloForm.textContent="Nuevo Expediente";
     btnGuardar.textContent="Guardar";
@@ -773,7 +786,7 @@
     cargarCausas(auth.currentUser.uid);
   });
 
-  btnNuevoRegistro.addEventListener("click", () => {
+  btnNuevoRegistro.addEventListener("click", ()=>{
     causaEnEdicion=null;
     tituloForm.textContent="Nuevo Expediente";
     btnGuardar.textContent="Guardar";
@@ -782,7 +795,7 @@
     mostrarFormulario();
   });
 
-  btnCancelar.addEventListener("click", () => {
+  btnCancelar.addEventListener("click", ()=>{
     causaEnEdicion=null;
     tituloForm.textContent="Nuevo Expediente";
     btnGuardar.textContent="Guardar";
@@ -790,7 +803,7 @@
     initForm();
   });
 
-  btnGuardar.addEventListener("click", () => {
+  btnGuardar.addEventListener("click",()=>{
     if(!auth.currentUser){
       alert("Debe iniciar sesión para guardar una causa.");
       return;
@@ -798,33 +811,33 @@
     guardarCausa(auth.currentUser.uid, auth.currentUser.email);
   });
 
-  btnBuscar.addEventListener("click", () => {
-    if(buscadorInput.style.display==="block"){
-      buscadorInput.style.display="none";
-      buscadorInput.value="";
+  btnBuscar.addEventListener("click",()=>{
+    if(buscadorInput.style.display==='block'){
+      buscadorInput.style.display='none';
+      buscadorInput.value='';
       cargarCausas(auth.currentUser.uid);
     } else {
-      buscadorInput.style.display="block";
+      buscadorInput.style.display='block';
       buscadorInput.focus();
     }
   });
 
-  buscadorInput.addEventListener("input", () => {
-    const filtro = buscadorInput.value.toLowerCase();
+  buscadorInput.addEventListener("input", ()=>{
+    const filtro=buscadorInput.value.toLowerCase();
     if(!filtro){
       cargarCausas(auth.currentUser.uid);
       return;
     }
-    const rows = tablaCausasDiv.querySelectorAll("table tbody tr");
-    rows.forEach(row => {
-      const text = row.innerText.toLowerCase();
-      row.style.display = text.includes(filtro) ? "" : "none";
+    const rows=tablaCausasDiv.querySelectorAll("table tbody tr");
+    rows.forEach(row=>{
+      const text=row.innerText.toLowerCase();
+      row.style.display=text.includes(filtro)?"":"none";
     });
   });
 
-  btnImprimir.addEventListener("click", () => {
-    const contenido = tablaCausasDiv.innerHTML;
-    const ventana = window.open("","", "width=900,height=700");
+  btnImprimir.addEventListener("click", ()=>{
+    const contenido=tablaCausasDiv.innerHTML;
+    const ventana=window.open("","","width=900,height=700");
     ventana.document.write("<html><head><title>Imprimir listado de causas</title>");
     ventana.document.write("<style>body{font-family:Roboto,sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:6px;white-space:normal;}</style>");
     ventana.document.write("</head><body>");
@@ -836,28 +849,28 @@
     ventana.close();
   });
 
-  btnEstadistica.addEventListener("click", () => {
-    if(estadisticaBox.style.display==="block"){
-      estadisticaBox.style.display="none";
+  btnEstadistica.addEventListener("click", ()=>{
+    if(estadisticaBox.style.display==='block'){
+      estadisticaBox.style.display='none';
     } else {
-      estadisticaBox.style.display="block";
+      estadisticaBox.style.display='block';
       calcularEstadisticas();
     }
   });
 
-  closeEstadistica.addEventListener("click", () => {
-    estadisticaBox.style.display="none";
+  closeEstadistica.addEventListener("click", ()=>{
+    estadisticaBox.style.display='none';
   });
 
-  btnImprimirEstadistica.addEventListener("click", () => {
-    if(estadisticaBox.style.display !== "block"){
+  btnImprimirEstadistica.addEventListener("click", ()=>{
+    if(estadisticaBox.style.display!=='block'){
       alert("Primero debe mostrar la estadística para imprimirla.");
       return;
     }
-    const contenido = estadisticaContenido.innerHTML;
-    const ventana = window.open("","", "width=700,height=600");
+    const contenido=estadisticaContenido.innerHTML;
+    const ventana=window.open("","","width=700,height=600");
     ventana.document.write("<html><head><title>Imprimir Estadísticas</title>");
-    ventana.document.write("<style>body{font-family:Roboto,sans-serif;padding:20px;}h4,h5,p,ul{color:#003366;} ul{padding-left: 20px;}</style>");
+    ventana.document.write("<style>body{font-family:Roboto,sans-serif;padding:20px;}h4,h5,p,ul{color:#003366;} ul{padding-left:20px;}</style>");
     ventana.document.write("</head><body>");
     ventana.document.write("<h3>Estadísticas de Causas</h3>");
     ventana.document.write(contenido);
@@ -868,32 +881,39 @@
     ventana.close();
   });
 
-  function calcularEstadisticas() {
+  function calcularEstadisticas(){
     const user = auth.currentUser;
     if(!user) return;
     db.collection("usuarios").doc(user.uid).get()
-      .then(doc => {
+      .then(doc=>{
         if(!doc.exists) return;
-        const rol = doc.data().rol;
-        let query = (rol === "Defensor" || rol === "Secretario") ? db.collection("causas") : db.collection("causas").where("uid","==",user.uid);
-        query.get().then(snapshot => {
+        const rol=doc.data().rol;
+        let query;
+        if(rol === 'Defensor' || rol === 'Secretario'){
+          query = db.collection("causas");
+        } else {
+          query = db.collection("causas").where("uid","==",user.uid);
+        }
+        query.get().then(snapshot=>{
           const total = snapshot.size;
           const porProceso = {};
           const porJuzgado = {};
           const porUsuarioAsignado = {};
-          snapshot.forEach(doc => {
+          snapshot.forEach(doc=>{
             const c = doc.data();
-            if(c.tipoProceso) porProceso[c.tipoProceso]=(porProceso[c.tipoProceso]||0)+1;
-            if(c.juzgado) porJuzgado[c.juzgado]=(porJuzgado[c.juzgado]||0)+1;
-            if(c.usuarioAsignado) porUsuarioAsignado[c.usuarioAsignado]=(porUsuarioAsignado[c.usuarioAsignado]||0)+1;
+            if(c.tipoProceso) porProceso[c.tipoProceso] = (porProceso[c.tipoProceso]||0)+1;
+            if(c.juzgado) porJuzgado[c.juzgado] = (porJuzgado[c.juzgado]||0)+1;
+            if(c.usuarioAsignado) porUsuarioAsignado[c.usuarioAsignado] = (porUsuarioAsignado[c.usuarioAsignado]||0)+1;
           });
+
           function mapToHtml(title,obj){
-            if(Object.keys(obj).length===0)return"";
-            let html=`<h5>${title}</h5><ul>`;
+            if(Object.keys(obj).length === 0) return "";
+            let html = `<h5>${title}</h5><ul>`;
             for(const [key,val] of Object.entries(obj)) html+=`<li>${key}: ${val}</li>`;
             html+="</ul>";
             return html;
           }
+
           estadisticaContenido.innerHTML = `
             <p><strong>Total de causas:</strong> ${total}</p>
             ${mapToHtml("Por Tipo de Proceso", porProceso)}
@@ -904,37 +924,37 @@
       });
   }
 
-  auth.onAuthStateChanged(async (user) => {
+  auth.onAuthStateChanged(async (user)=>{
     if(user){
-      loginFormContainer.style.display = "none";
-      mainAppContainer.style.display = "block";
+      loginFormContainer.style.display="none";
+      mainAppContainer.style.display="block";
       try{
-        const doc = await db.collection("usuarios").doc(user.uid).get();
+        const doc=await db.collection("usuarios").doc(user.uid).get();
         if(!doc.exists){
-          mostrarMensaje("Usuario sin datos en Firestore.", true);
+          mostrarMensaje("Usuario sin datos en Firestore.",true);
           return;
         }
-        const datos = doc.data();
-        const rol = datos.rol || "";
-        const nombreCompleto = `${datos.nombre || ""} ${datos.apellido || ""}`.trim();
-        panelTitulo.textContent = `Panel ${rol}`;
-        userInfo.textContent = `Usuario: ${nombreCompleto} - ${datos.email}`;
+        const datos=doc.data();
+        const rol=datos.rol||"";
+        const nombreCompleto=`${datos.nombre||""} ${datos.apellido||""}`.trim();
+        panelTitulo.textContent=`Panel ${rol}`;
+        userInfo.textContent=`Usuario: ${nombreCompleto} - ${datos.email}`;
         mostrarMensaje(`Bienvenido ${datos.email} (${rol})`);
         initForm();
         cargarCausas(user.uid);
         mostrarListado();
-      }catch(error){
-        mostrarMensaje("Error obteniendo datos usuario: " + error.message, true);
+      }catch(e){
+        mostrarMensaje("Error obteniendo datos usuario: "+e.message,true);
       }
     } else {
-      loginFormContainer.style.display = "block";
-      mainAppContainer.style.display = "none";
-      mostrarMensaje(`Inicie sesión para editar o registrar causas.`);
-      tablaCausasDiv.innerHTML = "";
-      formCausa.style.display = "none";
-      buscadorInput.style.display = "none";
-      estadisticaBox.style.display = "none";
-      userInfo.textContent = "";
+      loginFormContainer.style.display="block";
+      mainAppContainer.style.display="none";
+      mostrarMensaje("Inicie sesión para editar o registrar causas.");
+      tablaCausasDiv.innerHTML="";
+      formCausa.style.display="none";
+      buscadorInput.style.display="none";
+      estadisticaBox.style.display="none";
+      userInfo.textContent="";
     }
   });
 </script>

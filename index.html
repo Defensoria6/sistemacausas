@@ -108,6 +108,26 @@
     .btn-delete:hover {
       background-color: #d35400;
     }
+    /* Nuevos estilos para los botones de la tabla */
+    td .btn-table-edit,
+    td .btn-table-delete {
+      font-weight: bold;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-size: 0.9rem;
+    }
+    td .btn-table-edit {
+      color: black;
+    }
+    td .btn-table-delete {
+      color: red;
+    }
+    td .btn-table-edit:hover,
+    td .btn-table-delete:hover {
+        text-decoration: underline;
+    }
     form#formCausa {
       display: none;
       position: relative;
@@ -740,8 +760,8 @@
           <td style="max-width:200px;white-space:normal;">${c.observaciones||""}</td>
           <td>${c.creadorEmail||""}</td>
           ${isLoggedIn?"<td>":""}
-          ${isLoggedIn && puedeEditar?`<button class="btn-edit" onclick="editarCausa('${doc.id}')">Editar</button>`:""}
-          ${isLoggedIn && puedeEliminar?`<button class="btn-delete" onclick="eliminarCausa('${doc.id}')">Eliminar</button>`:""}
+          ${isLoggedIn && puedeEditar?`<button class="btn-table-edit" onclick="editarCausa('${doc.id}')">Editar</button>`:""}
+          ${isLoggedIn && puedeEliminar?`<button class="btn-table-delete" onclick="eliminarCausa('${doc.id}')">Eliminar</button>`:""}
           ${isLoggedIn?"</td>":""}
         </tr>`;
       });

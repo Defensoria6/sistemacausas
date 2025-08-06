@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Administración de Causas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f7fa;
+      --card: #fff;
+      --primary: #1f3a93;
+      --accent: #e74c3c;
+      --text: #2c3e50;
+      --muted: #7f8c8d;
+      --radius: 10px;
+      --transition: 0.3s;
+    }
+    * {
+      box-sizing: border-box;
+      transition: var(--transition);
+    }
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      text-align: center;
+      padding: 30px;
+    }
+    main {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 1.5rem auto;
+      max-width: 900px;
+      width: 100%;
+      align-items: center;
+    }
+    .controls button {
+      flex: 0 0 140px;
+      height: 38px;
+      font-size: 0.9rem;
+      border-radius: var(--radius);
+      text-align: center;
+      white-space: nowrap;
+      cursor: pointer;
+      border: none;
+      color: white;
+    }
+    #btnVerListado { background: var(--primary); }
+    #btnNuevoRegistro { background: #3498db; }
+    #btnBuscar,
+    #btnImprimir {
+      background-color: #27ae60;
+    }
+    #btnEstadistica,
+    #btnImprimirEstadistica {
+      background-color: #e67e22;
+    }
+    #btnEstadistica:hover,
+    #btnImprimirEstadistica:hover {
+      background-color: #d35400;
+    }
+    #btnLogout {
+      background: var(--accent);
+    }
+    #btnVerListado:hover,
+    #btnNuevoRegistro:hover,
+    #btnBuscar:hover,
+    #btnImprimir:hover,
+    #btnEstadistica:hover,
+    #btnImprimirEstadistica:hover,
+    #btnLogout:hover {
+      filter: brightness(0.85);
+    }
+    .btn-add {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .btn-add:hover {
+      background-color: #2980b9;
+    }
+    .btn-delete {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .btn-delete:hover {
+      background-color: #d35400;
+    }
+    td .btn-table-edit,
+    td .btn-table-delete {
+      font-weight: bold;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-size: 0.9rem;
+    }
+    td .btn-table-edit {
+      color: black;
+    }
+    td .btn-table-delete {
+      color: red;
+    }
+    td .btn-table-edit:hover,
+    td .btn-table-delete:hover {
+        text-decoration: underline;
+    }
+    form#formCausa {
+      display: none;
+      position: relative;
+      background: var(--card);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      margin: 2rem auto;
+      max-width: 900px;
+      width: 90%;
+      animation: fadeIn 0.5s ease;
+      overflow-wrap: break-word;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      word-wrap: break-word;
+    }
+    label {
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+      color: var(--muted);
+    }
+    input, select, textarea {
+      padding: 0.8rem;
+      border: 1px solid #dfe6e9;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      word-wrap: break-word;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .counter {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: right;
+    }
+    h1, h2 {
+      color: #003366;
+    }
+    #login-form-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px auto;
+      max-width: 320px;
+      text-align: center;
+    }
+    #login-form-container input,
+    #login-form-container select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    #login-form-container .btn-login {
+      background-color: #003366;
+      color: white;
+      border-radius: var(--radius);
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.3s;
+    }
+    #login-form-container .btn-login:hover {
+      background-color: #0055a5;
+    }
+    #mensaje {
+      margin-top: 10px;
+      font-weight: bold;
+      min-height: 24px;
+    }
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 90%;
+      font-size: 0.85rem;
+      table-layout: fixed;
+      word-wrap: break-word;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      vertical-align: top;
+      max-width: 150px;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+    .prioridad-alta { color: red; font-weight: bold; }
+    .prioridad-media { color: orange; font-weight: normal; }
+    .prioridad-baja { color: green; font-weight: normal; }
+    .prioridad-ninguna { color: black; font-weight: normal; }
+    .vencimiento-alerta { color: red; font-weight: bold; }
+    #main-app-container {
+      display: none;
+    }
+    .required-asterisk {
+      color: red;
+      font-weight: bold;
+      margin-left: 5px;
+      cursor: help;
+    }
+    #buscadorInput {
+      margin: 1rem auto;
+      padding: 6px 10px;
+      width: 280px;
+      font-size: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid #ccc;
+      display: none;
+      box-sizing: border-box;
+    }
+    #estadisticaBox {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--card);
+      border: 1px solid #ccc;
+      padding: 15px 20px;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 320px;
+      max-height: 400px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      display: none;
+      z-index: 1000;
+      text-align: left;
+    }
+    #estadisticaBox h4 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+    #estadisticaBox ul {
+      padding-left: 20px;
+      margin-top: 0;
+      margin-bottom: 0.7rem;
+    }
+    #estadisticaBox button#closeEstadistica {
+      background-color: var(--accent);
+      border: none;
+      color: white;
+      padding: 4px 8px;
+      border-radius: var(--radius);
+      float: right;
+      cursor: pointer;
+    }
+    #userInfo {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    .btn-siged {
+        background-color: #9b59b6;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: var(--radius);
+        text-decoration: none;
+        font-size: 0.9rem;
+        cursor: pointer;
+        white-space: nowrap;
+        height: 38px;
+        flex: 0 0 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-siged:hover {
+        background-color: #8e44ad;
+        filter: brightness(0.85);
+    }
+    @media (max-width: 700px) {
+      .controls {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .controls button,
+      .controls .btn-siged {
+        flex: 1 1 40%;
+        max-width: 140px;
+        margin-bottom: 0.5rem;
+      }
+      #btnLogout {
+        flex: 1 1 100%;
+        max-width: none;
+      }
+      #login-form-container {
+        flex-direction: column;
+        max-width: 320px;
+      }
+      #login-form-container input,
+      #login-form-container select {
+        width: 100%;
+      }
+      #login-form-container .btn-login {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Administración de Causas</h1>
+  <h2>Defensoría Civil y Comercial 6 - Poder Judicial Misiones</h2>
+
+  <div id="login-form-container" aria-label="Formulario de inicio de sesión y registro">
+    <input type="text" id="nombre" placeholder="Nombre" aria-label="Nombre" autocomplete="given-name" />
+    <input type="text" id="apellido" placeholder="Apellido" aria-label="Apellido" autocomplete="family-name" />
+    <input type="email" id="email" placeholder="Email" autocomplete="username" aria-label="Correo electrónico" />
+    <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password" aria-label="Contraseña" />
+    <select id="rol" aria-label="Seleccionar rol para registro">
+      <option value="">Seleccionar rol (solo para registro)</option>
+      <option value="Defensor">Defensor</option>
+      <option value="Secretario">Secretario</option>
+      <option value="Empleado">Empleado</option>
+    </select>
+    <button class="btn-login" id="btnLogin" aria-label="Iniciar sesión">Iniciar sesión</button>
+    <button class="btn-login" id="btnRegister" aria-label="Registrarse">Registrarse</button>
+  </div>
+
+  <div id="mensaje" role="alert" aria-live="polite"></div>
+
+  <div id="main-app-container" aria-live="polite" aria-label="Aplicación principal de administración">
+    <h3 id="panel-titulo"></h3>
+    <div id="userInfo" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="controls" role="group" aria-label="Controles principales">
+      <a href="https://www.jusmisiones.gov.ar/gestionexpedientes/" target="_blank" class="btn-siged" aria-label="Ir a SIGED PJM">SIGED PJM</a>
+      <button id="btnVerListado" aria-label="Ver listado de causas">Ver Listado de Causas</button>
+      <button id="btnNuevoRegistro" aria-label="Nuevo registro de causa">Nuevo Registro</button>
+      <button id="btnBuscar" aria-label="Mostrar campo de búsqueda en listado">Buscar</button>
+      <button id="btnImprimir" aria-label="Imprimir listado de causas">Imprimir</button>
+      <button id="btnEstadistica" aria-label="Mostrar/ocultar estadísticas">Estadística</button>
+      <button id="btnImprimirEstadistica" aria-label="Imprimir estadísticas de causas">Imprimir Estadística</button>
+      <button id="btnLogout" aria-label="Cerrar sesión" onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+
+    <input type="text" id="buscadorInput" placeholder="Buscar en el listado..." aria-label="Campo de búsqueda en listado" />
+
+    <div id="tablaCausas" style="overflow-x:auto;" aria-live="polite" role="region" aria-label="Listado de causas"></div>
+
+    <main>
+      <form id="formCausa" action="#" method="post" aria-label="Formulario para nuevo expediente o edición">
+        <h2 id="tituloForm">Nuevo Expediente</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="numCausa">N° Expediente <span class="required-asterisk" title="Obligatorio">*</span></label>
+            <input id="numCausa" name="numCausa" required autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="caratula">Carátula Completa <span class="required-asterisk" title="Obligatorio">*</span></label>
+            <textarea id="caratula" name="caratula" required></textarea>
+          </div>
+          <div class="field">
+            <label for="tipoProceso">Tipo de Proceso <span class="required-asterisk" title="Obligatorio">*</span></label>
+            <select id="tipoProceso" name="tipoProceso" required>
+              <option value="Civil">Civil</option>
+              <option value="Comercial">Comercial</option>
+              <option value="Penal">Penal</option>
+              <option value="Laboral">Laboral</option>
+              <option value="Familia">Familia</option>
+              <option value="Violencia Familiar">Violencia Familiar</option>
+              <option value="Contencioso Administrativo">Contencioso Administrativo</option>
+              <option value="Niñez y Adolescencia">Niñez y Adolescencia</option>
+              <option value="Paz">Juzgado de Paz</option>
+              <option value="Ejecución Fiscal">Ejecución Fiscal</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="juzgado">Juzgado <span class="required-asterisk" title="Obligatorio">*</span></label>
+            <select id="juzgado" name="juzgado" required></select>
+          </div>
+          <div class="field">
+            <label for="fechaInicio">Fecha de Inicio</label>
+            <input type="date" id="fechaInicio" name="fechaInicio" />
+          </div>
+          <div class="field">
+            <label for="fechaPase">Fecha de Pase</label>
+            <input type="datetime-local" id="fechaPase" name="fechaPase" />
+          </div>
+          <div class="field">
+            <label for="intervencion">Intervención</label>
+            <select id="intervencion" name="intervencion">
+              <option>Ministerio Complementario</option>
+              <option>Ministerio Principal</option>
+              <option>Patrocinante Actor</option>
+              <option>Patrocinante Demandado</option>
+              <option>Patrocinante Tercero</option>
+              <option>Asesor de Incapaces</option>
+              <option>Defensor de Ausente</option>
+              <option>Defensor Oficial</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="audiencias">Audiencias señaladas</label>
+            <input type="datetime-local" id="audiencias" name="audiencias" />
+          </div>
+          <div class="field">
+            <label for="vencimiento">Vencimiento</label>
+            <input type="datetime-local" id="vencimiento" name="vencimiento" />
+          </div>
+          <div class="field">
+            <label for="usuarioAsignado">Usuario Asignado</label>
+            <select id="usuarioAsignado" name="usuarioAsignado"></select>
+          </div>
+          <div class="field">
+            <label for="prioridad">Prioridad de Trabajo</label>
+            <select id="prioridad" name="prioridad">
+              <option>Alta</option>
+              <option>Media</option>
+              <option>Baja</option>
+              <option>Ninguna</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="estado">Estado</label>
+            <select id="estado" name="estado">
+              <option>Finalizado</option>
+              <option>En trámite</option>
+              <option>Archivado</option>
+              <option>En Alzada</option>
+              <option>En Casación</option>
+            </select>
+          </div>
+          
+          <!-- Campo Recursos como select simple -->
+          <div class="field">
+            <label for="recursos">Recursos Interpuestos</label>
+            <select id="recursos" name="recursos">
+              <option value="">Seleccione un recurso</option>
+              <option value="Apelación">Apelación</option>
+              <option value="Queja">Queja</option>
+              <option value="Casación">Casación</option>
+              <option value="Inconstitucionalidad">Inconstitucionalidad</option>
+              <option value="Revisión">Revisión</option>
+              <option value="Reposición">Reposición</option>
+              <option value="Aclaratoria">Aclaratoria</option>
+              <option value="Incidente de Apelación">Incidente de Apelación</option>
+              <option value="Recurso Extraordinario">Recurso Extraordinario</option>
+              <option value="Recurso de Hecho">Recurso de Hecho</option>
+              <option value="Recurso de Inaplicabilidad">Recurso de Inaplicabilidad</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="radicadoAlzada">Radicado en Alzada</label>
+            <select id="radicadoAlzada" name="radicadoAlzada">
+              <option value="">No aplica</option>
+              <option>Cámara de Apelaciones en lo Civil y Comercial - Posadas</option>
+              <option>Cámara de Apelaciones en lo Civil y Comercial - Eldorado</option>
+              <option>Cámara de Apelaciones en lo Laboral - Posadas</option>
+              <option>Cámara de Apelaciones en lo Penal - Posadas</option>
+              <option>Cámara de Apelaciones en lo Contencioso Administrativo - Posadas</option>
+              <option>Cámara de Apelaciones en Familia - Posadas</option>
+              <option>Superior Tribunal de Justicia - Sala I</option>
+              <option>Superior Tribunal de Justicia - Sala II</option>
+              <option>Superior Tribunal de Justicia - Sala III</option>
+            </select>
+          </div>
+
+          <!-- Campo Protección de Persona como select simple -->
+          <div class="field">
+            <label for="proteccionPersona">Protección de Persona</label>
+            <select id="proteccionPersona" name="proteccionPersona">
+              <option value="">Seleccione una protección</option>
+              <option value="Medidas Autosatisfactivas">Medidas Autosatisfactivas</option>
+              <option value="Prohibición de Acercamiento">Prohibición de Acercamiento</option>
+              <option value="Restricción Perimetral">Restricción Perimetral</option>
+              <option value="Asistencia Económica">Asistencia Económica</option>
+              <option value="Tenencia Precautoria">Tenencia Precautoria</option>
+              <option value="Régimen de Visitas">Régimen de Visitas</option>
+              <option value="Alimentos Provisionales">Alimentos Provisionales</option>
+              <option value="Asistencia Psicológica">Asistencia Psicológica</option>
+              <option value="Asistencia Médica">Asistencia Médica</option>
+              <option value="Protección Patrimonial">Protección Patrimonial</option>
+              <option value="Curatela">Curatela</option>
+              <option value="Tutela">Tutela</option>
+              <option value="Guarda">Guarda</option>
+            </select>
+          </div>
+
+          <!-- Campo Organismos como select simple -->
+          <div class="field">
+            <label for="organismos">Organismos Intervinientes</label>
+            <select id="organismos" name="organismos">
+              <option value="">Seleccione un organismo</option>
+              <option value="Ministerio de Desarrollo Social">Ministerio de Desarrollo Social</option>
+              <option value="Secretaría de Niñez, Adolescencia y Familia">Secretaría de Niñez, Adolescencia y Familia</option>
+              <option value="Dirección de Adicciones">Dirección de Adicciones</option>
+              <option value="Hospital Escuela de Salud Mental">Hospital Escuela de Salud Mental</option>
+              <option value="Centro de Atención Primaria de la Salud (CAPS)">Centro de Atención Primaria de la Salud (CAPS)</option>
+              <option value="Defensoría de Niñas, Niños y Adolescentes">Defensoría de Niñas, Niños y Adolescentes</option>
+              <option value="Programa Provincial de Asistencia Integral">Programa Provincial de Asistencia Integral</option>
+              <option value="Servicio Local de Protección de Derechos">Servicio Local de Protección de Derechos</option>
+              <option value="INADI Delegación Misiones">INADI Delegación Misiones</option>
+              <option value="ANSeS">ANSeS</option>
+              <option value="PAMI">PAMI</option>
+              <option value="Programa ProHuerta">Programa ProHuerta</option>
+              <option value="Secretaría de Vivienda">Secretaría de Vivienda</option>
+              <option value="Municipalidad correspondiente">Municipalidad correspondiente</option>
+            </select>
+          </div>
+
+          <div class="field" style="grid-column: 1/-1">
+            <label for="observaciones">Observaciones (máx. 1000 palabras)</label>
+            <textarea id="observaciones" name="observaciones"></textarea>
+            <div class="counter" id="counter">0/1000</div>
+          </div>
+        </div>
+        <div class="controls" style="margin-top: 2rem">
+          <button class="btn-add" type="button" id="btnGuardar">Guardar</button>
+          <button class="btn-delete" type="reset" id="btnCancelar">Cancelar</button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <div id="estadisticaBox" role="region" aria-live="polite" aria-label="Estadísticas de causas">
+    <button id="closeEstadistica" title="Cerrar" aria-label="Cerrar estadísticas">X</button>
+    <h4>Estadísticas de Causas</h4>
+    <div id="estadisticaContenido"></div>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig={
+    apiKey:"AIzaSyBDXZYAxWsvMiMGCrPRp3EBVuU0dzuWF4M",
+    authDomain:"sistemadefensoria6.firebaseapp.com",
+    projectId:"sistemadefensoria6"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth=firebase.auth();
+  const db=firebase.firestore();
+
+  // Elementos
+  const emailInput=document.getElementById("email");
+  const passwordInput=document.getElementById("password");
+  const rolSelect=document.getElementById("rol");
+  const nombreInput=document.getElementById("nombre");
+  const apellidoInput=document.getElementById("apellido");
+  const mensaje=document.getElementById("mensaje");
+  const loginFormContainer=document.getElementById("login-form-container");
+  const mainAppContainer=document.getElementById("main-app-container");
+  const panelTitulo=document.getElementById("panel-titulo");
+  const userInfo=document.getElementById("userInfo");
+
+  const btnLogin=document.getElementById("btnLogin");
+  const btnRegister=document.getElementById("btnRegister");
+  const btnVerListado=document.getElementById("btnVerListado");
+  const btnNuevoRegistro=document.getElementById("btnNuevoRegistro");
+  const btnGuardar=document.getElementById("btnGuardar");
+  const btnCancelar=document.getElementById("btnCancelar");
+  const btnBuscar=document.getElementById("btnBuscar");
+  const btnImprimir=document.getElementById("btnImprimir");
+  const btnEstadistica=document.getElementById("btnEstadistica");
+  const btnImprimirEstadistica=document.getElementById("btnImprimirEstadistica");
+  const buscadorInput=document.getElementById("buscadorInput");
+  const estadisticaBox=document.getElementById("estadisticaBox");
+  const estadisticaContenido=document.getElementById("estadisticaContenido");
+  const closeEstadistica=document.getElementById("closeEstadistica");
+
+  const selTipo=document.getElementById("tipoProceso");
+  const selJuz=document.getElementById("juzgado");
+  const selUsu=document.getElementById("usuarioAsignado");
+  const tituloForm=document.getElementById("tituloForm");
+  const formCausa=document.getElementById("formCausa");
+  const tablaCausasDiv=document.getElementById("tablaCausas");
+
+  // Lista actualizada de juzgados del Poder Judicial de Misiones
+  const juzgadosPorTipo={
+    Civil:[
+      "Juzgado Civil y Comercial N° 1 - Posadas",
+      "Juzgado Civil y Comercial N° 2 - Posadas",
+      "Juzgado Civil y Comercial N° 3 - Posadas",
+      "Juzgado Civil y Comercial N° 4 - Posadas",
+      "Juzgado Civil y Comercial N° 5 - Posadas",
+      "Juzgado Civil y Comercial N° 6 - Posadas",
+      "Juzgado Civil y Comercial N° 7 - Posadas",
+      "Juzgado Civil y Comercial N° 8 - Posadas",
+      "Juzgado Civil y Comercial N° 1 - Oberá",
+      "Juzgado Civil y Comercial N° 2 - Oberá",
+      "Juzgado Civil y Comercial N° 1 - Eldorado",
+      "Juzgado Civil y Comercial N° 2 - Eldorado",
+      "Juzgado Civil y Comercial N° 1 - Puerto Iguazú",
+      "Juzgado Civil y Comercial N° 1 - Apóstoles",
+      "Juzgado Civil y Comercial N° 1 - San Vicente"
+    ],
+    Comercial:[
+      "Juzgado Civil y Comercial N° 1 - Posadas",
+      "Juzgado Civil y Comercial N° 2 - Posadas",
+      "Juzgado Civil y Comercial N° 3 - Posadas",
+      "Juzgado Civil y Comercial N° 4 - Posadas",
+      "Juzgado Civil y Comercial N° 5 - Posadas",
+      "Juzgado Civil y Comercial N° 6 - Posadas",
+      "Juzgado Civil y Comercial N° 7 - Posadas",
+      "Juzgado Civil y Comercial N° 8 - Posadas",
+      "Juzgado Civil y Comercial N° 1 - Oberá",
+      "Juzgado Civil y Comercial N° 2 - Oberá",
+      "Juzgado Civil y Comercial N° 1 - Eldorado",
+      "Juzgado Civil y Comercial N° 2 - Eldorado",
+      "Juzgado Civil y Comercial N° 1 - Puerto Iguazú"
+    ],
+    Penal:[
+      "Juzgado de Instrucción N° 1 - Posadas",
+      "Juzgado de Instrucción N° 2 - Posadas",
+      "Juzgado de Instrucción N° 3 - Posadas",
+      "Juzgado de Instrucción N° 6 - Posadas",
+      "Juzgado de Instrucción N° 7 - Posadas",
+      "Tribunal Penal N° 1 - Posadas",
+      "Tribunal Penal N° 2 - Posadas",
+      "Juzgado de Instrucción N° 1 - Oberá",
+      "Juzgado de Instrucción N° 1 - Eldorado",
+      "Juzgado de Instrucción N° 1 - Puerto Iguazú"
+    ],
+    Laboral:[
+      "Juzgado Laboral N° 1 - Posadas",
+      "Juzgado Laboral N° 2 - Posadas",
+      "Juzgado Laboral N° 3 - Posadas",
+      "Juzgado Laboral N° 4 - Posadas",
+      "Juzgado Laboral N° 1 - Oberá",
+      "Juzgado Laboral N° 1 - Eldorado"
+    ],
+    "Contencioso Administrativo":[
+      "Juzgado de Paz Contravencional - Posadas",
+      "Juzgado Contencioso Administrativo N° 1 - Posadas"
+    ],
+    Familia:[
+      "Juzgado de Familia N° 1 - Posadas",
+      "Juzgado de Familia N° 2 - Posadas",
+      "Juzgado de Familia N° 3 - Posadas",
+      "Juzgado de Familia N° 1 - Oberá",
+      "Juzgado de Familia N° 1 - Eldorado",
+      "Juzgado de Familia N° 1 - Puerto Iguazú",
+      "Juzgado de Familia y Violencia Familiar de Garupá"
+    ],
+    "Violencia Familiar":[
+      "Juzgado de Violencia Familiar N° 1 - Posadas",
+      "Juzgado de Violencia Familiar N° 2 - Posadas",
+      "Juzgado de Familia y Violencia Familiar de Garupá"
+    ],
+    "Ejecución Fiscal":[
+      "Juzgado de Ejecución Fiscal N° 1 - Posadas",
+      "Juzgado de Ejecución Fiscal N° 2 - Posadas"
+    ],
+    "Niñez y Adolescencia":[
+      "Juzgado de Niñez y Adolescencia N° 1 - Posadas",
+      "Juzgado de Niñez y Adolescencia N° 2 - Posadas",
+      "Juzgado de Niñez y Adolescencia N° 1 - Oberá",
+      "Juzgado de Niñez y Adolescencia N° 1 - Eldorado"
+    ],
+    "Paz":[
+      "Juzgado de Paz - Posadas",
+      "Juzgado de Paz - Oberá",
+      "Juzgado de Paz - Eldorado",
+      "Juzgado de Paz - Puerto Iguazú",
+      "Juzgado de Paz - Apóstoles",
+      "Juzgado de Paz - San Vicente",
+      "Juzgado de Paz - Leandro N. Alem",
+      "Juzgado de Paz - San Pedro",
+      "Juzgado de Paz - Jardín América",
+      "Juzgado de Paz - Montecarlo",
+      "Juzgado de Paz - Puerto Rico",
+      "Juzgado de Paz - El Soberbio",
+      "Juzgado de Paz - San Javier",
+      "Juzgado de Paz - Concepción de la Sierra",
+      "Juzgado de Paz - Candelaria",
+      "Juzgado de Paz - Santa Ana",
+      "Juzgado de Paz - Loreto",
+      "Juzgado de Paz - San Ignacio",
+      "Juzgado de Paz - Corpus Christi",
+      "Juzgado de Paz - Gobernador Roca",
+      "Juzgado de Paz - Santo Pipó",
+      "Juzgado de Paz - Bernardo de Irigoyen",
+      "Juzgado de Paz - Dos de Mayo",
+      "Juzgado de Paz - San Antonio",
+      "Juzgado de Paz - Colonia Aurora",
+      "Juzgado de Paz - 25 de Mayo",
+      "Juzgado de Paz - Campo Grande",
+      "Juzgado de Paz - Campo Ramón",
+      "Juzgado de Paz - Campo Viera",
+      "Juzgado de Paz - Garuhapé",
+      "Juzgado de Paz - Ruiz de Montoya",
+      "Juzgado de Paz - Puerto Esperanza",
+      "Juzgado de Paz - Wanda",
+      "Juzgado de Paz - Andresito",
+      "Juzgado de Paz - Comandante Andresito"
+    ]
+  };
+
+  const usuarios=[
+    "Bazante Nadia Romina","Cardozo Maria Raquel","Cedron Noelia Aurora","Corrales Alicia Mariela","Escobar Monica Graciela",
+    "Fioravante Romulo","Gonzalez Alberto Misael","Gonzalez Juan Jose","Gudiño Natalia Esther","Magnani Enzo Luciano",
+    "Pablos Patricia","Palacios Ana Gabriela","Ramos Marcelo Gustavo","Riveros Patricia Soledad","Sosa Rita Cecilia"
+  ];
+  let causaEnEdicion=null;
+
+  function mostrarMensaje(msg, esError=false){
+    mensaje.textContent=msg;
+    mensaje.style.color=esError?"red":"green";
+  }
+
+  function cerrarSesion(){
+    auth.signOut();
+  }
+
+  function initForm(){
+    selTipo.innerHTML = "";
+    selUsu.innerHTML = "";
+    Object.keys(juzgadosPorTipo).forEach(tipo=>{
+      let opt=document.createElement("option");
+      opt.value=tipo;
+      opt.textContent=tipo;
+      selTipo.appendChild(opt);
+    });
+    usuarios.forEach(u=>{
+      let opt=document.createElement("option");
+      opt.value=u;
+      opt.textContent=u;
+      selUsu.appendChild(opt);
+    });
+    selTipo.value="Civil";
+    actualizarJuzgados();
+    selUsu.value=usuarios[0];
+    document.getElementById("prioridad").value="Alta";
+    document.getElementById("estado").value="En trámite";
+    document.getElementById("intervencion").value="Ministerio Complementario";
+    document.getElementById("counter").textContent="0/1000";
+  }
+
+  function actualizarJuzgados(){
+    const tipo=selTipo.value;
+    const juzgados=juzgadosPorTipo[tipo]||[];
+    selJuz.innerHTML="";
+    juzgados.forEach(j=>{
+      let opt=document.createElement("option");
+      opt.value=j;
+      opt.textContent=j;
+      selJuz.appendChild(opt);
+    });
+  }
+
+  function contarPalabras(){
+    const ta=document.getElementById("observaciones");
+    const words=ta.value.trim().split(/\s+/).filter(w=>w);
+    if(words.length>1000) ta.value=words.slice(0,1000).join(" ");
+    document.getElementById("counter").textContent=`${ta.value.trim().split(/\s+/).filter(w=>w).length}/1000`;
+  }
+
+  async function guardarCausa(uid,email){
+    const numCausa=document.getElementById("numCausa").value.trim();
+    const caratula=document.getElementById("caratula").value.trim();
+    const tipoProceso=document.getElementById("tipoProceso").value;
+    const juzgado=document.getElementById("juzgado").value;
+    const fechaInicio=document.getElementById("fechaInicio").value;
+    const fechaPase=document.getElementById("fechaPase").value;
+    const intervencion=document.getElementById("intervencion").value;
+    const audiencias=document.getElementById("audiencias").value;
+    const vencimiento=document.getElementById("vencimiento").value;
+    const usuarioAsignado=document.getElementById("usuarioAsignado").value;
+    const prioridad=document.getElementById("prioridad").value;
+    const estado=document.getElementById("estado").value;
+    const recursos=document.getElementById("recursos").value;
+    const radicadoAlzada=document.getElementById("radicadoAlzada").value;
+    const proteccionPersona=document.getElementById("proteccionPersona").value;
+    const organismos=document.getElementById("organismos").value;
+    const observaciones=document.getElementById("observaciones").value;
+
+    if(!numCausa || !caratula || !tipoProceso || !juzgado){
+      alert("Complete los campos obligatorios.");
+      return;
+    }
+    
+    const data={
+      numCausa,caratula,tipoProceso,juzgado,fechaInicio,fechaPase,intervencion,audiencias,vencimiento,
+      usuarioAsignado,prioridad,estado,recursos,radicadoAlzada,proteccionPersona,organismos,observaciones,
+      uid,creadorEmail:email
+    };
+    
+    try{
+      if(causaEnEdicion){
+        await db.collection("causas").doc(causaEnEdicion).update(data);
+        alert("Causa actualizada correctamente.");
+        causaEnEdicion=null;
+        tituloForm.textContent="Nuevo Expediente";
+        btnGuardar.textContent="Guardar";
+      } else {
+        data.fechaCreacion=new Date();
+        await db.collection("causas").add(data);
+        alert("Causa registrada correctamente.");
+      }
+      formCausa.reset();
+      initForm();
+      cargarCausas(uid);
+      mostrarListado();
+    }catch(e){
+      alert("Error guardando causa: "+e.message);
+    }
+  }
+
+  async function editarCausa(id){
+    try{
+      const doc=await db.collection("causas").doc(id).get();
+      if(!doc.exists){
+        alert("La causa no existe.");
+        return;
+      }
+      const c=doc.data();
+      causaEnEdicion=doc.id;
+      tituloForm.textContent="Editar Expediente";
+      btnGuardar.textContent="Actualizar";
+      mostrarFormulario();
+
+      document.getElementById("numCausa").value=c.numCausa||"";
+      document.getElementById("caratula").value=c.caratula||"";
+      document.getElementById("tipoProceso").value=c.tipoProceso||"";
+      actualizarJuzgados();
+      document.getElementById("juzgado").value=c.juzgado||"";
+      document.getElementById("fechaInicio").value=c.fechaInicio||"";
+      document.getElementById("fechaPase").value=c.fechaPase||"";
+      document.getElementById("intervencion").value=c.intervencion||"Ministerio Complementario";
+      document.getElementById("audiencias").value=c.audiencias||"";
+      document.getElementById("vencimiento").value=c.vencimiento||"";
+      document.getElementById("usuarioAsignado").value=c.usuarioAsignado||"";
+      document.getElementById("prioridad").value=c.prioridad||"Alta";
+      document.getElementById("estado").value=c.estado||"En trámite";
+      document.getElementById("recursos").value=c.recursos||"";
+      document.getElementById("radicadoAlzada").value=c.radicadoAlzada||"";
+      document.getElementById("proteccionPersona").value=c.proteccionPersona||"";
+      document.getElementById("organismos").value=c.organismos||"";
+      document.getElementById("observaciones").value=c.observaciones||"";
+      contarPalabras();
+    }catch(e){
+      alert("Error al editar causa: "+e.message);
+    }
+  }
+
+  async function cargarCausas(uid){
+    try{
+      const user=auth.currentUser;
+      if(!user) return;
+      const userDoc=await db.collection("usuarios").doc(user.uid).get();
+      if(!userDoc.exists) {
+        mostrarMensaje("Usuario sin datos en Firestore.", true);
+        return;
+      }
+      const rol=userDoc.data().rol;
+      let snapshot;
+      if(rol==="Defensor" || rol==="Secretario"){
+        snapshot=await db.collection("causas").orderBy("fechaCreacion","desc").get();
+      } else {
+        snapshot=await db.collection("causas")
+          .where("uid","==",uid)
+          .orderBy("fechaCreacion","desc")
+          .get();
+      }
+      renderizarTablaCausas(snapshot,rol,user.uid);
+    } catch(e){
+      mostrarMensaje("Error cargando causas: "+e.message,true);
+    }
+  }
+
+  function formatearFecha(fechaStr, soloFecha=false){
+    if(!fechaStr) return "";
+    const d=new Date(fechaStr);
+    if(isNaN(d)) return fechaStr;
+    if(soloFecha) return d.toLocaleDateString("es-AR");
+    return d.toLocaleString("es-AR",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+  }
+
+  function renderizarTablaCausas(snapshot, rol, uid){
+    const isLoggedIn=uid!==null && uid!==undefined;
+    let html=`<h4>Listado de causas</h4><table><thead><tr>
+      <th>N° Expediente</th><th>Carátula</th><th>Tipo</th><th>Juzgado</th><th>Fecha Inicio</th>
+      <th>Fecha Pase</th><th>Intervención</th><th>Audiencias</th><th>Vencimiento</th><th>Usuario Asignado</th>
+      <th>Prioridad</th><th>Estado</th><th>Recursos</th><th>Alzada</th><th>Protección</th><th>Organismos</th><th>Observaciones</th><th>Creador</th>${isLoggedIn?"<th>Acción</th>":""}
+    </tr></thead><tbody>`;
+
+    if(snapshot.empty){
+      html+=`<tr><td colspan="${isLoggedIn?19:18}">No hay causas registradas.</td></tr>`;
+    } else {
+      snapshot.forEach(doc=>{
+        const c=doc.data();
+        const puedeEditar=rol==="Defensor"||rol==="Secretario"||(rol==="Empleado"&&c.uid===uid);
+        const puedeEliminar=rol==="Defensor";
+
+        let clasePrioridad="prioridad-ninguna";
+        if(c.prioridad){
+          switch(c.prioridad.toLowerCase()){
+            case "alta": clasePrioridad="prioridad-alta"; break;
+            case "media": clasePrioridad="prioridad-media"; break;
+            case "baja": clasePrioridad="prioridad-baja"; break;
+            default: clasePrioridad="prioridad-ninguna";
+          }
+        }
+        const vencFormatted=c.vencimiento?formatearFecha(c.vencimiento):"";
+
+        html+=`<tr>
+          <td>${c.numCausa||""}</td>
+          <td style="max-width:200px;white-space:normal;">${c.caratula||""}</td>
+          <td>${c.tipoProceso||""}</td>
+          <td>${c.juzgado||""}</td>
+          <td>${formatearFecha(c.fechaInicio,true)}</td>
+          <td>${formatearFecha(c.fechaPase)}</td>
+          <td>${c.intervencion||""}</td>
+          <td>${formatearFecha(c.audiencias)}</td>
+          <td class="vencimiento-alerta">${vencFormatted}</td>
+          <td>${c.usuarioAsignado||""}</td>
+          <td class="${clasePrioridad}">${c.prioridad||""}</td>
+          <td>${c.estado||""}</td>
+          <td>${c.recursos||""}</td>
+          <td>${c.radicadoAlzada||""}</td>
+          <td>${c.proteccionPersona||""}</td>
+          <td>${c.organismos||""}</td>
+          <td style="max-width:200px;white-space:normal;">${c.observaciones||""}</td>
+          <td>${c.creadorEmail||""}</td>
+          ${isLoggedIn?"<td>":""}
+          ${isLoggedIn && puedeEditar?`<button class="btn-table-edit" onclick="editarCausa('${doc.id}')">Editar</button>`:""}
+          ${isLoggedIn && puedeEliminar?`<button class="btn-table-delete" onclick="eliminarCausa('${doc.id}')">Eliminar</button>`:""}
+          ${isLoggedIn?"</td>":""}
+        </tr>`;
+      });
+    }
+    html+="</tbody></table>";
+    tablaCausasDiv.innerHTML=html;
+  }
+
+  async function eliminarCausa(id){
+    if(confirm("¿Desea eliminar esta causa?")){
+      try{
+        await db.collection("causas").doc(id).delete();
+        cargarCausas(auth.currentUser.uid);
+      } catch(e){
+        alert("Error eliminando causa: "+e.message);
+      }
+    }
+  }
+
+  function mostrarListado(){
+    tablaCausasDiv.style.display="block";
+    formCausa.style.display="none";
+    buscadorInput.style.display="none";
+    buscadorInput.value="";
+    estadisticaBox.style.display="none";
+  }
+
+  function mostrarFormulario(){
+    tablaCausasDiv.style.display="none";
+    formCausa.style.display="block";
+    buscadorInput.style.display="none";
+    buscadorInput.value="";
+    estadisticaBox.style.display="none";
+  }
+
+  // Eventos
+
+  selTipo.addEventListener("change", actualizarJuzgados);
+  document.getElementById("observaciones").addEventListener("input", contarPalabras);
+
+  btnRegister.addEventListener("click",async()=>{
+    const email=emailInput.value.trim();
+    const password=passwordInput.value;
+    const rol=rolSelect.value;
+    const nombre=nombreInput.value.trim();
+    const apellido=apellidoInput.value.trim();
+    if(!email||!password||!rol||!nombre||!apellido){
+      mostrarMensaje("Complete todos los campos, incluyendo nombre y apellido.", true);
+      return;
+    }
+    try{
+      const userCred=await auth.createUserWithEmailAndPassword(email,password);
+      await db.collection("usuarios").doc(userCred.user.uid).set({
+        email, rol, nombre, apellido, fechaRegistro: new Date()
+      });
+      mostrarMensaje("Usuario registrado correctamente. Ya puede iniciar sesión.");
+      nombreInput.value="";
+      apellidoInput.value="";
+      emailInput.value="";
+      passwordInput.value="";
+      rolSelect.value="";
+    } catch(e){
+      mostrarMensaje(e.message,true);
+    }
+  });
+
+  btnLogin.addEventListener("click",async()=>{
+    const email=emailInput.value.trim();
+    const password=passwordInput.value;
+    if(!email || !password){
+      mostrarMensaje("Ingrese email y contraseña.", true);
+      return;
+    }
+    try{
+      await auth.signInWithEmailAndPassword(email,password);
+    } catch(e){
+      mostrarMensaje(e.message,true);
+    }
+  });
+
+  btnVerListado.addEventListener("click",()=>{
+    causaEnEdicion=null;
+    tituloForm.textContent="Nuevo Expediente";
+    btnGuardar.textContent="Guardar";
+    formCausa.reset();
+    initForm();
+    mostrarListado();
+    cargarCausas(auth.currentUser.uid);
+  });
+
+  btnNuevoRegistro.addEventListener("click", ()=>{
+    causaEnEdicion=null;
+    tituloForm.textContent="Nuevo Expediente";
+    btnGuardar.textContent="Guardar";
+    formCausa.reset();
+    initForm();
+    mostrarFormulario();
+  });
+
+  btnCancelar.addEventListener("click", ()=>{
+    causaEnEdicion=null;
+    tituloForm.textContent="Nuevo Expediente";
+    btnGuardar.textContent="Guardar";
+    formCausa.reset();
+    initForm();
+  });
+
+  btnGuardar.addEventListener("click",()=>{
+    if(!auth.currentUser){
+      alert("Debe iniciar sesión para guardar una causa.");
+      return;
+    }
+    guardarCausa(auth.currentUser.uid, auth.currentUser.email);
+  });
+
+  btnBuscar.addEventListener("click",()=>{
+    if(buscadorInput.style.display==='block'){
+      buscadorInput.style.display='none';
+      buscadorInput.value='';
+      cargarCausas(auth.currentUser.uid);
+    } else {
+      buscadorInput.style.display='block';
+      buscadorInput.focus();
+    }
+  });
+
+  buscadorInput.addEventListener("input", ()=>{
+    const filtro=buscadorInput.value.toLowerCase();
+    if(!filtro){
+      cargarCausas(auth.currentUser.uid);
+      return;
+    }
+    const rows=tablaCausasDiv.querySelectorAll("table tbody tr");
+    rows.forEach(row=>{
+      const text=row.innerText.toLowerCase();
+      row.style.display=text.includes(filtro)?"":"none";
+    });
+  });
+
+  btnImprimir.addEventListener("click", ()=>{
+    const contenido=tablaCausasDiv.innerHTML;
+    const ventana=window.open("","","width=900,height=700");
+    ventana.document.write("<html><head><title>Imprimir listado de causas</title>");
+    ventana.document.write("<style>body{font-family:Roboto,sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:6px;white-space:normal;}</style>");
+    ventana.document.write("</head><body>");
+    ventana.document.write(contenido);
+    ventana.document.write("</body></html>");
+    ventana.document.close();
+    ventana.focus();
+    ventana.print();
+    ventana.close();
+  });
+
+  btnEstadistica.addEventListener("click", ()=>{
+    if(estadisticaBox.style.display==='block'){
+      estadisticaBox.style.display='none';
+    } else {
+      estadisticaBox.style.display='block';
+      calcularEstadisticas();
+    }
+  });
+
+  closeEstadistica.addEventListener("click", ()=>{
+    estadisticaBox.style.display='none';
+  });
+
+  btnImprimirEstadistica.addEventListener("click", ()=>{
+    if(estadisticaBox.style.display!=='block'){
+      alert("Primero debe mostrar la estadística para imprimirla.");
+      return;
+    }
+    const contenido=estadisticaContenido.innerHTML;
+    const ventana=window.open("","","width=700,height=600");
+    ventana.document.write("<html><head><title>Imprimir Estadísticas</title>");
+    ventana.document.write("<style>body{font-family:Roboto,sans-serif;padding:20px;}h4,h5,p,ul{color:#003366;} ul{padding-left:20px;}</style>");
+    ventana.document.write("</head><body>");
+    ventana.document.write("<h3>Estadísticas de Causas</h3>");
+    ventana.document.write(contenido);
+    ventana.document.write("</body></html>");
+    ventana.document.close();
+    ventana.focus();
+    ventana.print();
+    ventana.close();
+  });
+
+  function calcularEstadisticas(){
+    const user = auth.currentUser;
+    if(!user) return;
+    db.collection("usuarios").doc(user.uid).get()
+      .then(doc=>{
+        if(!doc.exists) return;
+        const rol=doc.data().rol;
+        let query;
+        if(rol === 'Defensor' || rol === 'Secretario'){
+          query = db.collection("causas");
+        } else {
+          query = db.collection("causas").where("uid","==",user.uid);
+        }
+        query.get().then(snapshot=>{
+          const total = snapshot.size;
+          const porProceso = {};
+          const porJuzgado = {};
+          const porUsuarioAsignado = {};
+          snapshot.forEach(doc=>{
+            const c = doc.data();
+            if(c.tipoProceso) porProceso[c.tipoProceso] = (porProceso[c.tipoProceso]||0)+1;
+            if(c.juzgado) porJuzgado[c.juzgado] = (porJuzgado[c.juzgado]||0)+1;
+            if(c.usuarioAsignado) porUsuarioAsignado[c.usuarioAsignado] = (porUsuarioAsignado[c.usuarioAsignado]||0)+1;
+          });
+
+          function mapToHtml(title,obj){
+            if(Object.keys(obj).length === 0) return "";
+            let html = `<h5>${title}</h5><ul>`;
+            for(const [key,val] of Object.entries(obj)) html+=`<li>${key}: ${val}</li>`;
+            html+="</ul>";
+            return html;
+          }
+
+          estadisticaContenido.innerHTML = `
+            <p><strong>Total de causas:</strong> ${total}</p>
+            ${mapToHtml("Por Tipo de Proceso", porProceso)}
+            ${mapToHtml("Por Juzgado", porJuzgado)}
+            ${mapToHtml("Por Usuario Asignado", porUsuarioAsignado)}
+          `;
+        });
+      });
+  }
+
+  auth.onAuthStateChanged(async (user)=>{
+    if(user){
+      loginFormContainer.style.display="none";
+      mainAppContainer.style.display="block";
+      try{
+        const doc=await db.collection("usuarios").doc(user.uid).get();
+        if(!doc.exists){
+          mostrarMensaje("Usuario sin datos en Firestore.",true);
+          return;
+        }
+        const datos=doc.data();
+        const rol=datos.rol||"";
+        const nombreCompleto=`${datos.nombre||""} ${datos.apellido||""}`.trim();
+        panelTitulo.textContent=`Panel ${rol}`;
+        userInfo.textContent=`Usuario: ${nombreCompleto} - ${datos.email}`;
+        mostrarMensaje(`Bienvenido ${datos.email} (${rol})`);
+        initForm();
+        cargarCausas(user.uid);
+        mostrarListado();
+      }catch(e){
+        mostrarMensaje("Error obteniendo datos usuario: "+e.message,true);
+      }
+    } else {
+      loginFormContainer.style.display="block";
+      mainAppContainer.style.display="none";
+      mostrarMensaje("Inicie sesión para editar o registrar causas.");
+      tablaCausasDiv.innerHTML="";
+      formCausa.style.display="none";
+      buscadorInput.style.display="none";
+      estadisticaBox.style.display="none";
+      userInfo.textContent="";
+    }
+  });
+</script>
+</body>
+</html>

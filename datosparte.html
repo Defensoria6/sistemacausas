@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro de Datos Personales</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f7fa;
+      --card: #fff;
+      --primary: #1f3a93;
+      --accent: #e74c3c;
+      --text: #2c3e50;
+      --muted: #7f8c8d;
+      --radius: 10px;
+      --transition: 0.3s;
+    }
+    * {
+      box-sizing: border-box;
+      transition: var(--transition);
+    }
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      text-align: center;
+      padding: 30px;
+    }
+    
+    main {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 1.5rem auto;
+      max-width: 900px;
+      width: 100%;
+      align-items: center;
+    }
+    .controls button {
+      flex: 0 0 140px;
+      height: 38px;
+      font-size: 0.9rem;
+      border-radius: var(--radius);
+      text-align: center;
+      white-space: nowrap;
+      cursor: pointer;
+      border: none;
+      color: white;
+    }
+    #btnVerListado { background: var(--primary); }
+    #btnNuevoRegistro { background: #3498db; }
+    #btnBuscar,
+    #btnImprimir {
+      background-color: #27ae60;
+    }
+    #btnEstadistica,
+    #btnImprimirEstadistica {
+      background-color: #e67e22;
+    }
+    #btnEstadistica:hover,
+    #btnImprimirEstadistica:hover {
+      background-color: #d35400;
+    }
+    #btnLogout {
+      background: var(--accent);
+    }
+    #btnVerListado:hover,
+    #btnNuevoRegistro:hover,
+    #btnBuscar:hover,
+    #btnImprimir:hover,
+    #btnEstadistica:hover,
+    #btnImprimirEstadistica:hover,
+    #btnLogout:hover {
+      filter: brightness(0.85);
+    }
+    .btn-add {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .btn-add:hover {
+      background-color: #2980b9;
+    }
+    .btn-delete {
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .btn-delete:hover {
+      background-color: #d35400;
+    }
+    td .btn-table-edit,
+    td .btn-table-delete {
+      font-weight: bold;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-size: 0.9rem;
+    }
+    td .btn-table-edit {
+      color: black;
+    }
+    td .btn-table-delete {
+      color: red;
+    }
+    td .btn-table-edit:hover,
+    td .btn-table-delete:hover {
+        text-decoration: underline;
+    }
+    form#formDatosPersonales {
+      display: none;
+      position: relative;
+      background: var(--card);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      margin: 2rem auto;
+      max-width: 900px;
+      width: 90%;
+      animation: fadeIn 0.5s ease;
+      overflow-wrap: break-word;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      word-wrap: break-word;
+    }
+    label {
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+      color: var(--muted);
+    }
+    input, select, textarea {
+      padding: 0.8rem;
+      border: 1px solid #dfe6e9;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      word-wrap: break-word;
+    }
+    select[multiple] {
+      height: auto;
+      min-height: 100px;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .counter {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: right;
+    }
+    .multiselect-selected {
+      font-size: 0.8rem;
+      color: var(--primary);
+      margin-top: 5px;
+    }
+    h1, h2 {
+      color: #003366;
+    }
+    #mensaje {
+      margin-top: 10px;
+      font-weight: bold;
+      min-height: 24px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: var(--radius);
+      max-width: 400px;
+      margin: 10px auto;
+    }
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 90%;
+      font-size: 0.85rem;
+      table-layout: fixed;
+      word-wrap: break-word;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      vertical-align: top;
+      max-width: 150px;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+    .prioridad-alta { color: red; font-weight: bold; }
+    .prioridad-media { color: orange; font-weight: normal; }
+    .prioridad-baja { color: green; font-weight: normal; }
+    .prioridad-ninguna { color: black; font-weight: normal; }
+    .vencimiento-alerta { color: red; font-weight: bold; }
+    .required-asterisk {
+      color: red;
+      font-weight: bold;
+      margin-left: 5px;
+      cursor: help;
+    }
+    #buscadorInput {
+      margin: 1rem auto;
+      padding: 6px 10px;
+      width: 280px;
+      font-size: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid #ccc;
+      display: none;
+      box-sizing: border-box;
+    }
+    #estadisticaBox {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--card);
+      border: 1px solid #ccc;
+      padding: 15px 20px;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 320px;
+      max-height: 400px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      display: none;
+      z-index: 1000;
+      text-align: left;
+    }
+    #estadisticaBox h4 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+    #estadisticaBox ul {
+      padding-left: 20px;
+      margin-top: 0;
+      margin-bottom: 0.7rem;
+    }
+    #estadisticaBox button#closeEstadistica {
+      background-color: var(--accent);
+      border: none;
+      color: white;
+      padding: 4px 8px;
+      border-radius: var(--radius);
+      float: right;
+      cursor: pointer;
+    }
+    #userInfo {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    .btn-siged {
+        background-color: #9b59b6;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: var(--radius);
+        text-decoration: none;
+        font-size: 0.9rem;
+        cursor: pointer;
+        white-space: nowrap;
+        height: 38px;
+        flex: 0 0 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-siged:hover {
+        background-color: #8e44ad;
+        filter: brightness(0.85);
+    }
+    #tablaDatosPersonales {
+      margin-top: 20px;
+    }
+    #btnVerExpedientes {
+      background-color: #9b59b6;
+    }
+    @media (max-width: 700px) {
+      .controls {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .controls button,
+      .controls .btn-siged {
+        flex: 1 1 40%;
+        max-width: 140px;
+        margin-bottom: 0.5rem;
+      }
+      #btnLogout {
+        flex: 1 1 100%;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Registro de Datos Personales</h1>
+  <h2>Defensoría Civil y Comercial 6 - Poder Judicial Misiones</h2>
+
+  <div id="mensaje" role="alert" aria-live="polite">Sistema de registro de datos personales</div>
+
+  <div id="main-app-container" aria-live="polite" aria-label="Aplicación principal de administración">
+    <h3 id="panel-titulo">Panel de Administración</h3>
+    <div id="userInfo" aria-live="polite" aria-atomic="true">Usuario: Acceso Público</div>
+
+    <div class="controls" role="group" aria-label="Controles principales">
+      <button id="btnVerListado" aria-label="Ver listado de datos personales">Ver Listado</button>
+      <button id="btnNuevoRegistro" aria-label="Nuevo registro de datos personales">Nuevo Registro</button>
+      <button id="btnBuscar" aria-label="Mostrar campo de búsqueda en listado">Buscar</button>
+      <button id="btnImprimir" aria-label="Imprimir listado de datos personales">Imprimir</button>
+      <button id="btnVerExpedientes" aria-label="Ver expedientes vinculados">Ver Expedientes</button>
+    </div>
+
+    <input type="text" id="buscadorInput" placeholder="Buscar en el listado..." aria-label="Campo de búsqueda en listado" />
+
+    <div id="tablaDatosPersonales" style="overflow-x:auto;" aria-live="polite" role="region" aria-label="Listado de datos personales"></div>
+
+    <main>
+      <form id="formDatosPersonales" action="#" method="post" aria-label="Formulario para datos personales">
+        <h2 id="tituloForm">Nuevo Registro de Datos Personales</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="nombreCompleto">Nombre y Apellido <span class="required-asterisk" title="Obligatorio">*</span></label>
+            <input id="nombreCompleto" name="nombreCompleto" required autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="dni">DNI <span class="required-asterisk" title="Obligatorio">*</span></label>
+            <input id="dni" name="dni" required type="number" />
+          </div>
+          <div class="field">
+            <label for="domicilioActual">Domicilio Actual</label>
+            <input id="domicilioActual" name="domicilioActual" />
+          </div>
+          <div class="field">
+            <label for="ultimoDomicilio">Último Domicilio</label>
+            <input id="ultimoDomicilio" name="ultimoDomicilio" />
+          </div>
+          <div class="field">
+            <label for="ciudad">Ciudad</label>
+            <input id="ciudad" name="ciudad" />
+          </div>
+          <div class="field">
+            <label for="provincia">Provincia</label>
+            <select id="provincia" name="provincia">
+              <option value="Misiones" selected>Misiones</option>
+              <option value="Buenos Aires">Buenos Aires</option>
+              <option value="Ciudad Autónoma de Buenos Aires">Ciudad Autónoma de Buenos Aires</option>
+              <option value="Catamarca">Catamarca</option>
+              <option value="Chaco">Chaco</option>
+              <option value="Chubut">Chubut</option>
+              <option value="Córdoba">Córdoba</option>
+              <option value="Corrientes">Corrientes</option>
+              <option value="Entre Ríos">Entre Ríos</option>
+              <option value="Formosa">Formosa</option>
+              <option value="Jujuy">Jujuy</option>
+              <option value="La Pampa">La Pampa</option>
+              <option value="La Rioja">La Rioja</option>
+              <option value="Mendoza">Mendoza</option>
+              <option value="Neuquén">Neuquén</option>
+              <option value="Río Negro">Río Negro</option>
+              <option value="Salta">Salta</option>
+              <option value="San Juan">San Juan</option>
+              <option value="San Luis">San Luis</option>
+              <option value="Santa Cruz">Santa Cruz</option>
+              <option value="Santa Fe">Santa Fe</option>
+              <option value="Santiago del Estero">Santiago del Estero</option>
+              <option value="Tierra del Fuego">Tierra del Fuego</option>
+              <option value="Tucumán">Tucumán</option>
+              <option value="Islas Malvinas">Islas Malvinas</option>
+              <option value="Otro país">Otro país</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="pais">País</label>
+            <select id="pais" name="pais">
+              <optgroup label="América del Sur">
+                <option value="Argentina" selected>Argentina</option>
+                <option value="Bolivia">Bolivia</option>
+                <option value="Brasil">Brasil</option>
+                <option value="Chile">Chile</option>
+                <option value="Colombia">Colombia</option>
+                <option value="Ecuador">Ecuador</option>
+                <option value="Paraguay">Paraguay</option>
+                <option value="Perú">Perú</option>
+                <option value="Uruguay">Uruguay</option>
+                <option value="Venezuela">Venezuela</option>
+                <option value="Guyana">Guyana</option>
+                <option value="Surinam">Surinam</option>
+                <option value="Guayana Francesa">Guayana Francesa</option>
+              </optgroup>
+              <optgroup label="América Central">
+                <option value="Belice">Belice</option>
+                <option value="Costa Rica">Costa Rica</option>
+                <option value="El Salvador">El Salvador</option>
+                <option value="Guatemala">Guatemala</option>
+                <option value="Honduras">Honduras</option>
+                <option value="Nicaragua">Nicaragua</option>
+                <option value="Panamá">Panamá</option>
+              </optgroup>
+              <optgroup label="América del Norte">
+                <option value="Canadá">Canadá</option>
+                <option value="Estados Unidos">Estados Unidos</option>
+                <option value="México">México</option>
+              </optgroup>
+              <optgroup label="Europa">
+                <option value="Alemania">Alemania</option>
+                <option value="España">España</option>
+                <option value="Francia">Francia</option>
+                <option value="Italia">Italia</option>
+                <option value="Portugal">Portugal</option>
+                <option value="Reino Unido">Reino Unido</option>
+                <option value="Rusia">Rusia</option>
+                <option value="Suiza">Suiza</option>
+                <option value="Ucrania">Ucrania</option>
+                <option value="Polonia">Polonia</option>
+                <option value="Países Bajos">Países Bajos</option>
+                <option value="Bélgica">Bélgica</option>
+                <option value="Suecia">Suecia</option>
+                <option value="Noruega">Noruega</option>
+                <option value="Finlandia">Finlandia</option>
+                <option value="Dinamarca">Dinamarca</option>
+                <option value="Austria">Austria</option>
+                <option value="Grecia">Grecia</option>
+                <option value="Irlanda">Irlanda</option>
+              </optgroup>
+              <optgroup label="Asia">
+                <option value="China">China</option>
+                <option value="Japón">Japón</option>
+                <option value="India">India</option>
+                <option value="Corea del Sur">Corea del Sur</option>
+                <option value="Israel">Israel</option>
+                <option value="Rusia">Rusia</option>
+                <option value="Turquía">Turquía</option>
+                <option value="Arabia Saudita">Arabia Saudita</option>
+                <option value="Emiratos Árabes Unidos">Emiratos Árabes Unidos</option>
+                <option value="Tailandia">Tailandia</option>
+                <option value="Vietnam">Vietnam</option>
+              </optgroup>
+              <optgroup label="Oceanía">
+                <option value="Australia">Australia</option>
+                <option value="Nueva Zelanda">Nueva Zelanda</option>
+                <option value="Fiyi">Fiyi</option>
+                <option value="Papúa Nueva Guinea">Papúa Nueva Guinea</option>
+                <option value="Samoa">Samoa</option>
+              </optgroup>
+              <optgroup label="África">
+                <option value="Sudáfrica">Sudáfrica</option>
+                <option value="Egipto">Egipto</option>
+                <option value="Marruecos">Marruecos</option>
+                <option value="Nigeria">Nigeria</option>
+                <option value="Kenia">Kenia</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="field">
+            <label for="celular">Celular</label>
+            <input id="celular" name="celular" type="tel" />
+          </div>
+          <div class="field">
+            <label for="emailPersonal">Email</label>
+            <input id="emailPersonal" name="emailPersonal" type="email" />
+          </div>
+          <div class="field">
+            <label for="redesSociales">Redes Sociales</label>
+            <input id="redesSociales" name="redesSociales" />
+          </div>
+          <div class="field" style="grid-column: 1/-1">
+            <label for="condicionSalud">Condición de Salud</label>
+            <textarea id="condicionSalud" name="condicionSalud"></textarea>
+          </div>
+          <div class="field" style="grid-column: 1/-1">
+            <label for="condicionLaboral">Condición Laboral</label>
+            <textarea id="condicionLaboral" name="condicionLaboral"></textarea>
+          </div>
+          <div class="field" style="grid-column: 1/-1">
+            <label for="condicionJudicial">Condición Judicial</label>
+            <textarea id="condicionJudicial" name="condicionJudicial"></textarea>
+          </div>
+          <div class="field" style="grid-column: 1/-1">
+            <label for="observaciones">Observaciones</label>
+            <textarea id="observaciones" name="observaciones"></textarea>
+          </div>
+        </div>
+        <div class="controls" style="margin-top: 2rem">
+          <button class="btn-add" type="button" id="btnGuardar">Guardar</button>
+          <button class="btn-delete" type="reset" id="btnCancelar">Cancelar</button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<script>
+  // Configuración de Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyBDXZYAxWsvMiMGCrPRp3EBVuU0dzuWF4M",
+    authDomain: "sistemadefensoria6.firebaseapp.com",
+    projectId: "sistemadefensoria6",
+    storageBucket: "sistemadefensoria6.appspot.com",
+    messagingSenderId: "TU_SENDER_ID",
+    appId: "TU_APP_ID"
+  };
+
+  // Inicializar Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Configuración de Firestore
+  db.settings({
+    merge: true
+  });
+
+  // Variables globales
+  let registroEnEdicion = null;
+
+  // Elementos del DOM
+  const mensaje = document.getElementById("mensaje");
+  const btnVerListado = document.getElementById("btnVerListado");
+  const btnNuevoRegistro = document.getElementById("btnNuevoRegistro");
+  const btnGuardar = document.getElementById("btnGuardar");
+  const btnCancelar = document.getElementById("btnCancelar");
+  const btnBuscar = document.getElementById("btnBuscar");
+  const btnImprimir = document.getElementById("btnImprimir");
+  const btnVerExpedientes = document.getElementById("btnVerExpedientes");
+  const buscadorInput = document.getElementById("buscadorInput");
+  const formDatosPersonales = document.getElementById("formDatosPersonales");
+  const tablaDatosPersonalesDiv = document.getElementById("tablaDatosPersonales");
+  const tituloForm = document.getElementById("tituloForm");
+
+  // Función para inicializar el formulario
+  function initForm() {
+    formDatosPersonales.reset();
+    registroEnEdicion = null;
+    tituloForm.textContent = "Nuevo Registro de Datos Personales";
+    btnGuardar.textContent = "Guardar";
+    document.getElementById("provincia").value = "Misiones";
+    document.getElementById("pais").value = "Argentina";
+  }
+
+  // Función para guardar datos personales
+  async function guardarDatosPersonales() {
+    const nombreCompleto = document.getElementById("nombreCompleto").value.trim();
+    const dni = document.getElementById("dni").value.trim();
+    
+    if (!nombreCompleto || !dni) {
+      mostrarMensaje("Complete los campos obligatorios (Nombre y Apellido, DNI).", true);
+      return;
+    }
+    
+    const data = {
+      nombreCompleto,
+      dni,
+      domicilioActual: document.getElementById("domicilioActual").value.trim(),
+      ultimoDomicilio: document.getElementById("ultimoDomicilio").value.trim(),
+      ciudad: document.getElementById("ciudad").value.trim(),
+      provincia: document.getElementById("provincia").value,
+      pais: document.getElementById("pais").value,
+      celular: document.getElementById("celular").value.trim(),
+      emailPersonal: document.getElementById("emailPersonal").value.trim(),
+      redesSociales: document.getElementById("redesSociales").value.trim(),
+      condicionSalud: document.getElementById("condicionSalud").value.trim(),
+      condicionLaboral: document.getElementById("condicionLaboral").value.trim(),
+      condicionJudicial: document.getElementById("condicionJudicial").value.trim(),
+      observaciones: document.getElementById("observaciones").value.trim(),
+      fechaCreacion: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    try {
+      if (registroEnEdicion) {
+        await db.collection("datosPersonales").doc(registroEnEdicion).update({
+          ...data,
+          fechaActualizacion: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        mostrarMensaje("Datos actualizados correctamente");
+      } else {
+        await db.collection("datosPersonales").add(data);
+        mostrarMensaje("Datos registrados correctamente");
+      }
+      
+      initForm();
+      cargarDatosPersonales();
+      mostrarListado();
+    } catch(e) {
+      console.error("Error guardando datos:", e);
+      mostrarMensaje("Error al guardar datos: " + e.message, true);
+    }
+  }
+
+  // Función para cargar datos personales
+  async function cargarDatosPersonales() {
+    try {
+      const snapshot = await db.collection("datosPersonales").orderBy("fechaCreacion", "desc").get();
+      renderizarTablaDatosPersonales(snapshot);
+    } catch(e) {
+      mostrarMensaje("Error cargando datos: " + e.message, true);
+    }
+  }
+
+  // Función para renderizar la tabla de datos
+  function renderizarTablaDatosPersonales(snapshot) {
+    let html = `<h4>Listado de Datos Personales</h4><table><thead><tr>
+      <th>Nombre y Apellido</th><th>DNI</th><th>Domicilio</th><th>Ciudad</th>
+      <th>Provincia</th><th>Acciones</th>
+    </tr></thead><tbody>`;
+
+    if (snapshot.empty) {
+      html += `<tr><td colspan="6">No hay registros</td></tr>`;
+    } else {
+      snapshot.forEach(doc => {
+        const dp = doc.data();
+        html += `<tr>
+          <td>${dp.nombreCompleto || ""}</td>
+          <td>${dp.dni || ""}</td>
+          <td>${dp.domicilioActual || ""}</td>
+          <td>${dp.ciudad || ""}</td>
+          <td>${dp.provincia || ""}</td>
+          <td>
+            <button class="btn-table-edit" onclick="editarDatosPersonales('${doc.id}')">Editar</button>
+            <button class="btn-table-delete" onclick="eliminarDatosPersonales('${doc.id}')">Eliminar</button>
+          </td>
+        </tr>`;
+      });
+    }
+    html += "</tbody></table>";
+    tablaDatosPersonalesDiv.innerHTML = html;
+  }
+
+  // Función para editar datos personales
+  async function editarDatosPersonales(id) {
+    try {
+      const doc = await db.collection("datosPersonales").doc(id).get();
+      if (!doc.exists) {
+        mostrarMensaje("Registro no encontrado", true);
+        return;
+      }
+      
+      const dp = doc.data();
+      registroEnEdicion = doc.id;
+      tituloForm.textContent = "Editar Registro";
+      btnGuardar.textContent = "Actualizar";
+      mostrarFormulario();
+
+      document.getElementById("nombreCompleto").value = dp.nombreCompleto || "";
+      document.getElementById("dni").value = dp.dni || "";
+      document.getElementById("domicilioActual").value = dp.domicilioActual || "";
+      document.getElementById("ultimoDomicilio").value = dp.ultimoDomicilio || "";
+      document.getElementById("ciudad").value = dp.ciudad || "";
+      document.getElementById("provincia").value = dp.provincia || "Misiones";
+      document.getElementById("pais").value = dp.pais || "Argentina";
+      document.getElementById("celular").value = dp.celular || "";
+      document.getElementById("emailPersonal").value = dp.emailPersonal || "";
+      document.getElementById("redesSociales").value = dp.redesSociales || "";
+      document.getElementById("condicionSalud").value = dp.condicionSalud || "";
+      document.getElementById("condicionLaboral").value = dp.condicionLaboral || "";
+      document.getElementById("condicionJudicial").value = dp.condicionJudicial || "";
+      document.getElementById("observaciones").value = dp.observaciones || "";
+      
+    } catch(e) {
+      mostrarMensaje("Error al editar: " + e.message, true);
+    }
+  }
+
+  // Función para eliminar datos personales
+  async function eliminarDatosPersonales(id) {
+    if (confirm("¿Está seguro de eliminar este registro?")) {
+      try {
+        await db.collection("datosPersonales").doc(id).delete();
+        mostrarMensaje("Registro eliminado");
+        cargarDatosPersonales();
+      } catch(e) {
+        mostrarMensaje("Error al eliminar: " + e.message, true);
+      }
+    }
+  }
+
+  // Funciones para mostrar/ocultar secciones
+  function mostrarListado() {
+    tablaDatosPersonalesDiv.style.display = "block";
+    formDatosPersonales.style.display = "none";
+    buscadorInput.style.display = "none";
+    buscadorInput.value = "";
+  }
+
+  function mostrarFormulario() {
+    tablaDatosPersonalesDiv.style.display = "none";
+    formDatosPersonales.style.display = "block";
+    buscadorInput.style.display = "none";
+    buscadorInput.value = "";
+  }
+
+  function mostrarMensaje(msg, esError = false) {
+    mensaje.textContent = msg;
+    mensaje.style.color = esError ? "red" : "green";
+  }
+
+  // Event Listeners
+  btnVerListado.addEventListener("click", () => {
+    initForm();
+    mostrarListado();
+    cargarDatosPersonales();
+  });
+
+  btnNuevoRegistro.addEventListener("click", () => {
+    initForm();
+    mostrarFormulario();
+  });
+
+  btnCancelar.addEventListener("click", initForm);
+
+  btnGuardar.addEventListener("click", guardarDatosPersonales);
+
+  btnBuscar.addEventListener("click", () => {
+    if (buscadorInput.style.display === 'block') {
+      buscadorInput.style.display = 'none';
+      buscadorInput.value = '';
+      cargarDatosPersonales();
+    } else {
+      buscadorInput.style.display = 'block';
+      buscadorInput.focus();
+    }
+  });
+
+  buscadorInput.addEventListener("input", () => {
+    const filtro = buscadorInput.value.toLowerCase();
+    const rows = tablaDatosPersonalesDiv.querySelectorAll("table tbody tr");
+    
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      row.style.display = text.includes(filtro) ? "" : "none";
+    });
+  });
+
+  btnImprimir.addEventListener("click", () => {
+    const contenido = tablaDatosPersonalesDiv.innerHTML;
+    const ventana = window.open("", "", "width=900,height=700");
+    ventana.document.write("<html><head><title>Imprimir listado</title>");
+    ventana.document.write("<style>body{font-family:Roboto,sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:6px;}</style>");
+    ventana.document.write("</head><body>");
+    ventana.document.write(contenido);
+    ventana.document.write("</body></html>");
+    ventana.document.close();
+    ventana.focus();
+    setTimeout(() => {
+      ventana.print();
+      ventana.close();
+    }, 500);
+  });
+
+  // Inicialización
+  window.onload = function() {
+    initForm();
+    cargarDatosPersonales();
+    mostrarListado();
+  };
+
+  // Hacer funciones disponibles globalmente
+  window.editarDatosPersonales = editarDatosPersonales;
+  window.eliminarDatosPersonales = eliminarDatosPersonales;
+</script>
+</body>
+</html>

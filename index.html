@@ -1163,11 +1163,23 @@
           const total = snapshot.size;
           const porProceso = {};
           const porJuzgado = {};
+          const porIntervencion = {};
+          const porEstado = {};
+          const porRecursos = {};
+          const porPrioridad = {};
+          const vencimientosProximos = [];
+          const audienciasProximas = [];
           const porUsuarioAsignado = {};
           snapshot.forEach(doc=>{
             const c = doc.data();
             if(c.tipoProceso) porProceso[c.tipoProceso] = (porProceso[c.tipoProceso]||0)+1;
             if(c.juzgado) porJuzgado[c.juzgado] = (porJuzgado[c.juzgado]||0)+1;
+            if(c.intervencion) porIntervencion[c.intervencion] = (porIntervencion[c.intervencion]||0)+1;
+            if(c.estado) porEstado[c.estado] = (porEstado[c.estado]||0)+1;
+            if(c.recursos) porRecursos[c.recursos] = (porRecursos[c.recursos]||0)+1;
+            if(c.prioridad) porPrioridad[c.prioridad] = (porPrioridad[c.prioridad]||0)+1;
+            if(c.vencimiento && new Date(c.vencimiento) > new Date()) vencimientosProximos.push(c);
+            if(c.audiencias && new Date(c.audiencias) > new Date()) audienciasProximas.push(c);
             if(c.usuarioAsignado) porUsuarioAsignado[c.usuarioAsignado] = (porUsuarioAsignado[c.usuarioAsignado]||0)+1;
           });
 
@@ -1183,6 +1195,18 @@
             <p><strong>Total de causas:</strong> ${total}</p>
             ${mapToHtml("Por Tipo de Proceso", porProceso)}
             ${mapToHtml("Por Juzgado", porJuzgado)}
+            ${mapToHtml("Por Intervención", porIntervencion)}
+            ${mapToHtml("Por Estado", porEstado)}
+            ${mapToHtml("Por Recursos", porRecursos)}
+            ${mapToHtml("Por Prioridad", porPrioridad)}
+            <h5>Próximos Vencimientos</h5>
+            <ul>
+              ${vencimientosProximos.length > 0 ? vencimientosProximos.map(c => `<li>${c.caratula} - ${new Date(c.vencimiento).toLocaleDateString()}</li>`).join('') : '<li>No hay próximos vencimientos.</li>'}
+            </ul>
+            <h5>Próximas Audiencias</h5>
+            <ul>
+              ${audienciasProximas.length > 0 ? audienciasProximas.map(c => `<li>${c.caratula} - ${new Date(c.audiencias).toLocaleDateString()}</li>`).join('') : '<li>No hay próximas audiencias.</li>'}
+            </ul>
             ${mapToHtml("Por Usuario Asignado", porUsuarioAsignado)}
           `;
         });

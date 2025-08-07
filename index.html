@@ -65,7 +65,8 @@
       width: 100%;
       align-items: center;
     }
-    .controls button {
+    .controls button,
+    .controls a {
       flex: 0 0 140px;
       height: 38px;
       font-size: 0.9rem;
@@ -75,6 +76,10 @@
       cursor: pointer;
       border: none;
       color: white;
+      text-decoration: none; /* Asegurar que los enlaces no tengan subrayado */
+      display: flex; /* Para centrar el contenido del enlace */
+      align-items: center;
+      justify-content: center;
     }
     #btnVerListado { background: var(--primary); }
     #btnNuevoRegistro { background: #3498db; }
@@ -82,25 +87,13 @@
     #btnImprimir {
       background-color: #27ae60;
     }
-    #btn-datos-parte {background-color: #1E90FF;
-    color: #002244;
-    border: none;
-    padding: 10px 15px;
-    border-radius: var(--radius);
-    text-decoration: none;
-    font-size: 0.9rem;
-    cursor: pointer;
-    white-space: nowrap;
-    height: 38px;
-    flex: 0 0 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    #btn-datos-parte {
+        background-color: #95a5a6;
+        color: #2c3e50;
     }
     #btn-datos-parte:hover {
-    background-color: #1abc9c;
-    filter: brightness(0.85);
-
+        background-color: #7f8c8d;
+        filter: brightness(0.85);
     }
     #btnEstadistica,
     #btnImprimirEstadistica {
@@ -378,7 +371,8 @@
         justify-content: center;
       }
       .controls button,
-      .controls .btn-siged {
+      .controls .btn-siged,
+      .controls a {
         flex: 1 1 40%;
         max-width: 140px;
         margin-bottom: 0.5rem;
@@ -431,6 +425,7 @@
       <a href="https://www.jusmisiones.gov.ar/gestionexpedientes/" target="_blank" class="btn-siged" aria-label="Ir a SIGED PJM">SIGED PJM</a>
       <button id="btnVerListado" aria-label="Ver listado de causas">Ver Listado de Causas</button>
       <button id="btnNuevoRegistro" aria-label="Nuevo registro de causa">Nuevo Registro</button>
+      <a href="https://defensoria6.github.io/datospartes/" target="_blank" class="btn-datos-parte" id="btn-datos-parte" aria-label="Acceder a datos de partes">Datos de Partes</a>
       <button id="btnBuscar" aria-label="Mostrar campo de búsqueda en listado">Buscar</button>
       <button id="btnImprimir" aria-label="Imprimir listado de causas">Imprimir</button>
       <button id="btnEstadistica" aria-label="Mostrar/ocultar estadísticas">Estadística</button>
@@ -522,7 +517,6 @@
             </select>
           </div>
           
-          <!-- Campo Recursos como select simple -->
           <div class="field">
             <label for="recursos">Recursos Interpuestos</label>
             <select id="recursos" name="recursos">
@@ -557,8 +551,7 @@
             </select>
           </div>
 
-         <!-- Campo Medida de Protección de Persona como multiselect -->
-          <div class="field">
+         <div class="field">
             <label for="proteccionPersona">Medidas de Protección de Persona (Selección múltiple)</label>
             <select id="proteccionPersona" name="proteccionPersona" multiple size="4">
               <option value="Medidas Autosatisfactivas">Medidas Autosatisfactivas</option>
@@ -578,7 +571,6 @@
             <div id="proteccionPersona-selected" class="multiselect-selected"></div>
           </div>
 
-          <!-- Campo Organismos como multiselect -->
           <div class="field">
             <label for="organismos">Organismos Intervinientes (Selección múltiple)</label>
             <select id="organismos" name="organismos" multiple size="4">

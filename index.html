@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -459,9 +462,7 @@
               <option value="Laboral">Laboral</option>
               <option value="Familia">Familia</option>
               <option value="Violencia Familiar">Violencia Familiar</option>
-              <option value="Contravencional">Contravencional</option>
-              <option value="Paz">Juzgado de Paz</option>
-              <option value="Ejecución Fiscal">Ejecución Fiscal</option>
+              <option value="Paz">Juzgado de Paz</option>              
             </select>
           </div>
           <div class="field">
@@ -486,7 +487,7 @@
               <option>Patrocinante Tercero</option>
               <option>Asesor de Incapaces</option>
               <option>Defensor de Ausente</option>
-              <option>Defensor Oficial</option>
+              <option>Defensor Oficial Asesor Letrado</option>
             </select>
           </div>
           <div class="field">
@@ -516,8 +517,7 @@
               <option>Finalizado</option>
               <option>En trámite</option>
               <option>Archivado</option>
-              <option>En Alzada</option>
-              <option>En Casación</option>
+              <option>En Alzada</option>              
             </select>
           </div>
           
@@ -527,8 +527,7 @@
             <select id="recursos" name="recursos">
               <option value="">Seleccione un recurso</option>
               <option value="Apelación">Apelación</option>
-              <option value="Queja">Queja</option>
-              <option value="Casación">Casación</option>
+              <option value="Queja">Queja</option>              
               <option value="Inconstitucionalidad">Inconstitucionalidad</option>
               <option value="Nulidad">Nulidad</option>
               <option value="Reposición">Reposición</option>
@@ -708,9 +707,6 @@
       "Juzgado Laboral N° 3 - Posadas",
       "Juzgado Laboral N° 4 - Posadas"
     ],
-    "Contravencional":[
-      "Juzgado de Paz Contravencional - Posadas"
-    ],
     Familia:[
       "Juzgado de Familia N° 1 - Posadas",
       "Juzgado de Familia N° 2 - Posadas",
@@ -723,10 +719,6 @@
       "Juzgado de Violencia Familiar N° 2 - Posadas",
       "Juzgado de Familia y Violencia Familiar de Garupá",
       "Juzgado 1 Inst Civil Comercial Laboral Familia y Violencia Fliar- Apostoles"
-    ],
-    "Ejecución Fiscal":[
-      "Juzgado de Ejecución Fiscal N° 1 - Posadas",
-      "Juzgado de Ejecución Fiscal N° 2 - Posadas"
     ],
     "Paz":[
       "Juzgado de Paz Civil Comercial N° 1 - Posadas",
@@ -806,7 +798,7 @@
       opt.textContent=u;
       selUsu.appendChild(opt);
     });
-    selTipo.value="Civil";
+    selTipo.value="Administrativo";
     actualizarJuzgados();
     selUsu.value=usuarios[0];
     document.getElementById("prioridad").value="Alta";

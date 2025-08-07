@@ -1111,41 +1111,100 @@
     ventana.print();
   }
 
-  async function mostrarEstadisticas(){
-    if(estadisticaBox.style.display==="block"){
-      estadisticaBox.style.display="none";
-      return;
-    }
-    
-    try{
-      const snapshot=await db.collection("causas").get();
-      const stats={};
-      
-      snapshot.forEach(doc=>{
-        const c=doc.data();
-        const tipo=c.tipoProceso||"Sin tipo";
-        const estado=c.estado||"Sin estado";
-        const prioridad=c.prioridad||"Sin prioridad";
-        
-        if(!stats[tipo]) stats[tipo]={};
-        if(!stats[tipo][estado]) stats[tipo][estado]=0;
-        stats[tipo][estado]++;
-      });
-      
-      let html="";
-      Object.keys(stats).forEach(tipo=>{
-        html+=`<h5>${tipo}</h5><ul>`;
-        Object.keys(stats[tipo]).forEach(estado=>{
-          html+=`<li>${estado}: ${stats[tipo][estado]}</li>`;
+  function calcularEstadisticas(){
+    const user = auth.currentUser;
+    if(!user) return;
+    db.collection("usuarios").doc(user.uid).get()
+      .then(doc=>{
+        if(!doc.exists) return;
+        const rol=doc.data().rol;
+        let query;
+        if(rol === 'Defensor' || rol === 'Secretario'){
+          query = db.collection("causas");
+        } else {
+          query = db.collection("causas").where("uid","==",user.uid);
+        }
+        query.get().then(snapshot=>{
+          const total = snapshot.size;
+          const porProceso = {};
+          const porJuzgado = {};
+          const porUsuarioAsignado = {};
+          const porPrioridad = {};
+          const porIntervencion = {};
+          const porRecursos = {};
+          
+          // Para vencimientos y audiencias próximas
+          const hoy = new Date();
+          const unaSemana = new Date(hoy.getTime() + 7 * 24 * 60 * 60 * 1000);
+          const vencimientosProximos = [];
+          const audienciasProximas = [];
+          
+          snapshot.forEach(doc=>{
+            const c = doc.data();
+            
+            // Estadísticas básicas
+            if(c.tipoProceso) porProceso[c.tipoProceso] = (porProceso[c.tipoProceso]||0)+1;
+            if(c.juzgado) porJuzgado[c.juzgado] = (porJuzgado[c.juzgado]||0)+1;
+            if(c.usuarioAsignado) porUsuarioAsignado[c.usuarioAsignado] = (porUsuarioAsignado[c.usuarioAsignado]||0)+1;
+            if(c.prioridad) porPrioridad[c.prioridad] = (porPrioridad[c.prioridad]||0)+1;
+            if(c.intervencion) porIntervencion[c.intervencion] = (porIntervencion[c.intervencion]||0)+1;
+            if(c.recursos) porRecursos[c.recursos] = (porRecursos[c.recursos]||0)+1;
+            
+            // Vencimientos próximos
+            if(c.vencimiento) {
+              const fechaVenc = new Date(c.vencimiento);
+              if(fechaVenc > hoy && fechaVenc < unaSemana) {
+                vencimientosProximos.push({
+                  numCausa: c.numCausa,
+                  fecha: formatearFecha(c.vencimiento),
+                  dias: Math.ceil((fechaVenc - hoy) / (1000 * 60 * 60 * 24))
+                });
+              }
+            }
+            
+            // Audiencias próximas
+            if(c.audiencias) {
+              const fechaAud = new Date(c.audiencias);
+              if(fechaAud > hoy && fechaAud < unaSemana) {
+                audienciasProximas.push({
+                  numCausa: c.numCausa,
+                  fecha: formatearFecha(c.audiencias),
+                  dias: Math.ceil((fechaAud - hoy) / (1000 * 60 * 60 * 24))
+                });
+              }
+            }
+          });
+
+          function mapToHtml(title,obj){
+            if(Object.keys(obj).length === 0) return "";
+            let html = `<h5>${title}</h5><ul>`;
+            for(const [key,val] of Object.entries(obj)) html+=`<li>${key}: ${val}</li>`;
+            html+="</ul>";
+            return html;
+          }
+          
+          function listarEventosProximos(title, eventos) {
+            if(eventos.length === 0) return "";
+            let html = `<h5>${title}</h5><ul>`;
+            eventos.forEach(e => {
+              html += `<li>${e.numCausa}: ${e.fecha} (en ${e.dias} días)</li>`;
+            });
+            html += "</ul>";
+            return html;
+          }
+
+          estadisticaContenido.innerHTML = `
+            <p><strong>Total de causas:</strong> ${total}</p>
+            ${mapToHtml("Por Tipo de Proceso", porProceso)}
+            ${mapToHtml("Por Prioridad", porPrioridad)}
+            ${mapToHtml("Por Intervención", porIntervencion)}
+            ${mapToHtml("Por Recursos", porRecursos)}
+            ${mapToHtml("Por Usuario Asignado", porUsuarioAsignado)}
+            ${listarEventosProximos("Vencimientos próximos (7 días)", vencimientosProximos)}
+            ${listarEventosProximos("Audiencias próximas (7 días)", audienciasProximas)}
+          `;
         });
-        html+=`</ul>`;
       });
-      
-      estadisticaContenido.innerHTML=html;
-      estadisticaBox.style.display="block";
-    }catch(e){
-      alert("Error cargando estadísticas: "+e.message);
-    }
   }
 
   function imprimirEstadisticas(){
@@ -1240,7 +1299,14 @@
 
   btnBuscar.addEventListener("click",mostrarBuscador);
   btnImprimir.addEventListener("click",imprimirListado);
-  btnEstadistica.addEventListener("click",mostrarEstadisticas);
+  btnEstadistica.addEventListener("click", ()=>{
+    if(estadisticaBox.style.display==='block'){
+      estadisticaBox.style.display='none';
+    } else {
+      estadisticaBox.style.display='block';
+      calcularEstadisticas();
+    }
+  });
   btnImprimirEstadistica.addEventListener("click",imprimirEstadisticas);
   closeEstadistica.addEventListener("click",()=>{
     estadisticaBox.style.display="none";

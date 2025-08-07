@@ -225,6 +225,10 @@
     h1, h2 {
       color: #87CEEB;
     }
+    /* Clase para cambiar color de títulos después del login */
+    .logged-in-title {
+      color: #00008B !important; /* Azul oscuro */
+    }
     #login-form-container {
       display: flex;
       flex-direction: column;
@@ -406,7 +410,7 @@
     <input type="text" id="nombre" placeholder="Nombre" aria-label="Nombre" autocomplete="given-name" />
     <input type="text" id="apellido" placeholder="Apellido" aria-label="Apellido" autocomplete="family-name" />
     <input type="email" id="email" placeholder="Email" autocomplete="username" aria-label="Correo electrónico" />
-    <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password" aria-label="Contraseña" />
+    <input type="password" id="password" placeholder="Contraseña *" title="Únicamente seis caracteres alfanumericos" pattern="[a-zA-Z0-9]{6}" maxlength="6" autocomplete="current-password" aria-label="Contraseña" />
     <select id="rol" aria-label="Seleccionar rol para registro">
       <option value="">Seleccionar rol (solo para registro)</option>
       <option value="Defensor">Defensor</option>
@@ -669,6 +673,10 @@
   const proteccionPersonaSelected=document.getElementById("proteccionPersona-selected");
   const organismosSelected=document.getElementById("organismos-selected");
 
+  // Referencias a títulos para cambio de color
+  const h1Title = document.querySelector('h1');
+  const h2Subtitle = document.querySelector('h2');
+
   // Lista actualizada de juzgados del Poder Judicial de Misiones
   const juzgadosPorTipo={
     Administrativo:[
@@ -755,6 +763,25 @@
   ];
   let causaEnEdicion=null;
 
+  // Funcionalidad de Enter en campos de login
+  function setupEnterKeyHandlers() {
+    const loginInputs = [nombreInput, apellidoInput, emailInput, passwordInput, rolSelect];
+    loginInputs.forEach(input => {
+      input.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          btnLogin.click(); // Activar botón de login por defecto
+        }
+      });
+    });
+  }
+
+  // Validación de contraseña
+  function validatePassword(password) {
+    const alphanumericRegex = /^[a-zA-Z0-9]{6}$/;
+    return alphanumericRegex.test(password);
+  }
+
   // Actualizar visualización de selecciones múltiples
   function actualizarSeleccionesMultiples() {
     // Protección Persona
@@ -778,6 +805,9 @@
   function cerrarSesion(){
     auth.signOut();
     document.body.classList.add('login-page');
+    // Restaurar color original de títulos
+    h1Title.classList.remove('logged-in-title');
+    h2Subtitle.classList.remove('logged-in-title');
   }
 
   function initForm(){
@@ -992,18 +1022,24 @@
             default: clasePrioridad="prioridad-ninguna";
           }
         }
-        const vencFormatted=c.vencimiento?formatearFecha(c.vencimiento):"";
+
+        let claseVencimiento="";
+        if(c.vencimiento){
+          const venc=new Date(c.vencimiento);
+          const hoy=new Date();
+          if(venc<hoy) claseVencimiento="vencimiento-alerta";
+        }
 
         html+=`<tr>
           <td>${c.numCausa||""}</td>
-          <td style="max-width:200px;white-space:normal;">${c.caratula||""}</td>
+          <td>${c.caratula||""}</td>
           <td>${c.tipoProceso||""}</td>
           <td>${c.juzgado||""}</td>
           <td>${formatearFecha(c.fechaInicio,true)}</td>
           <td>${formatearFecha(c.fechaPase)}</td>
           <td>${c.intervencion||""}</td>
           <td>${formatearFecha(c.audiencias)}</td>
-          <td class="vencimiento-alerta">${vencFormatted}</td>
+          <td class="${claseVencimiento}">${formatearFecha(c.vencimiento)}</td>
           <td>${c.usuarioAsignado||""}</td>
           <td class="${clasePrioridad}">${c.prioridad||""}</td>
           <td>${c.estado||""}</td>
@@ -1011,27 +1047,30 @@
           <td>${c.radicadoAlzada||""}</td>
           <td>${c.proteccionPersona||""}</td>
           <td>${c.organismos||""}</td>
-          <td style="max-width:200px;white-space:normal;">${c.observaciones||""}</td>
-          <td>${c.creadorEmail||""}</td>
-          ${isLoggedIn?"<td>":""}
-          ${isLoggedIn && puedeEditar?`<button class="btn-table-edit" onclick="editarCausa('${doc.id}')">Editar</button>`:""}
-          ${isLoggedIn && puedeEliminar?`<button class="btn-table-delete" onclick="eliminarCausa('${doc.id}')">Eliminar</button>`:""}
-          ${isLoggedIn?"</td>":""}
-        </tr>`;
+          <td>${c.observaciones||""}</td>
+          <td>${c.creadorEmail||""}</td>`;
+        
+        if(isLoggedIn){
+          html+=`<td>`;
+          if(puedeEditar) html+=`<button class="btn-table-edit" onclick="editarCausa('${doc.id}')">Editar</button>`;
+          if(puedeEliminar) html+=`<button class="btn-table-delete" onclick="eliminarCausa('${doc.id}')">Eliminar</button>`;
+          html+=`</td>`;
+        }
+        html+=`</tr>`;
       });
     }
-    html+="</tbody></table>";
+    html+=`</tbody></table>`;
     tablaCausasDiv.innerHTML=html;
   }
 
   async function eliminarCausa(id){
-    if(confirm("¿Desea eliminar esta causa?")){
-      try{
-        await db.collection("causas").doc(id).delete();
-        cargarCausas(auth.currentUser.uid);
-      } catch(e){
-        alert("Error eliminando causa: "+e.message);
-      }
+    if(!confirm("¿Está seguro de eliminar esta causa?")) return;
+    try{
+      await db.collection("causas").doc(id).delete();
+      alert("Causa eliminada correctamente.");
+      cargarCausas(auth.currentUser.uid);
+    }catch(e){
+      alert("Error eliminando causa: "+e.message);
     }
   }
 
@@ -1039,77 +1078,146 @@
     tablaCausasDiv.style.display="block";
     formCausa.style.display="none";
     buscadorInput.style.display="none";
-    buscadorInput.value="";
-    estadisticaBox.style.display="none";
   }
 
   function mostrarFormulario(){
     tablaCausasDiv.style.display="none";
     formCausa.style.display="block";
     buscadorInput.style.display="none";
-    buscadorInput.value="";
-    estadisticaBox.style.display="none";
   }
 
-  // Eventos
+  function mostrarBuscador(){
+    buscadorInput.style.display=buscadorInput.style.display==="none"?"block":"none";
+  }
 
-  selTipo.addEventListener("change", actualizarJuzgados);
-  document.getElementById("observaciones").addEventListener("input", contarPalabras);
-  proteccionPersonaSelect.addEventListener("change", actualizarSeleccionesMultiples);
-  organismosSelect.addEventListener("change", actualizarSeleccionesMultiples);
+  function buscarEnTabla(){
+    const termino=buscadorInput.value.toLowerCase();
+    const filas=tablaCausasDiv.querySelectorAll("tbody tr");
+    filas.forEach(fila=>{
+      const texto=fila.textContent.toLowerCase();
+      fila.style.display=texto.includes(termino)?"":"none";
+    });
+  }
 
-  btnRegister.addEventListener("click",async()=>{
-    const email=emailInput.value.trim();
-    const password=passwordInput.value;
-    const rol=rolSelect.value;
-    const nombre=nombreInput.value.trim();
-    const apellido=apellidoInput.value.trim();
-    if(!email||!password||!rol||!nombre||!apellido){
-      mostrarMensaje("Complete todos los campos, incluyendo nombre y apellido.", true);
+  function imprimirListado(){
+    const contenido=tablaCausasDiv.innerHTML;
+    const ventana=window.open("","_blank");
+    ventana.document.write(`
+      <html><head><title>Listado de Causas</title>
+      <style>table{border-collapse:collapse;width:100%;}th,td{border:1px solid #000;padding:4px;font-size:10px;}</style>
+      </head><body>${contenido}</body></html>
+    `);
+    ventana.document.close();
+    ventana.print();
+  }
+
+  async function mostrarEstadisticas(){
+    if(estadisticaBox.style.display==="block"){
+      estadisticaBox.style.display="none";
       return;
     }
+    
     try{
-      const userCred=await auth.createUserWithEmailAndPassword(email,password);
-      await db.collection("usuarios").doc(userCred.user.uid).set({
-        email, rol, nombre, apellido, fechaRegistro: new Date()
+      const snapshot=await db.collection("causas").get();
+      const stats={};
+      
+      snapshot.forEach(doc=>{
+        const c=doc.data();
+        const tipo=c.tipoProceso||"Sin tipo";
+        const estado=c.estado||"Sin estado";
+        const prioridad=c.prioridad||"Sin prioridad";
+        
+        if(!stats[tipo]) stats[tipo]={};
+        if(!stats[tipo][estado]) stats[tipo][estado]=0;
+        stats[tipo][estado]++;
       });
-      mostrarMensaje("Usuario registrado correctamente. Ya puede iniciar sesión.");
-      nombreInput.value="";
-      apellidoInput.value="";
-      emailInput.value="";
-      passwordInput.value="";
-      rolSelect.value="";
-    } catch(e){
-      mostrarMensaje(e.message,true);
+      
+      let html="";
+      Object.keys(stats).forEach(tipo=>{
+        html+=`<h5>${tipo}</h5><ul>`;
+        Object.keys(stats[tipo]).forEach(estado=>{
+          html+=`<li>${estado}: ${stats[tipo][estado]}</li>`;
+        });
+        html+=`</ul>`;
+      });
+      
+      estadisticaContenido.innerHTML=html;
+      estadisticaBox.style.display="block";
+    }catch(e){
+      alert("Error cargando estadísticas: "+e.message);
+    }
+  }
+
+  function imprimirEstadisticas(){
+    const contenido=estadisticaContenido.innerHTML;
+    const ventana=window.open("","_blank");
+    ventana.document.write(`
+      <html><head><title>Estadísticas de Causas</title></head>
+      <body><h1>Estadísticas de Causas</h1>${contenido}</body></html>
+    `);
+    ventana.document.close();
+    ventana.print();
+  }
+
+  // Event Listeners
+  btnLogin.addEventListener("click",async()=>{
+    const email=emailInput.value.trim();
+    const password=passwordInput.value.trim();
+    
+    if(!email||!password){
+      mostrarMensaje("Complete email y contraseña.",true);
+      return;
+    }
+
+    // Validar contraseña
+    if(!validatePassword(password)){
+      mostrarMensaje("La contraseña debe tener exactamente 6 caracteres alfanuméricos.",true);
+      return;
+    }
+    
+    try{
+      await auth.signInWithEmailAndPassword(email,password);
+    }catch(e){
+      mostrarMensaje("Error de inicio de sesión: "+e.message,true);
     }
   });
 
-  btnLogin.addEventListener("click",async()=>{
+  btnRegister.addEventListener("click",async()=>{
+    const nombre=nombreInput.value.trim();
+    const apellido=apellidoInput.value.trim();
     const email=emailInput.value.trim();
-    const password=passwordInput.value;
-    if(!email || !password){
-      mostrarMensaje("Ingrese email y contraseña.", true);
+    const password=passwordInput.value.trim();
+    const rol=rolSelect.value;
+    
+    if(!nombre||!apellido||!email||!password||!rol){
+      mostrarMensaje("Complete todos los campos para registrarse.",true);
       return;
     }
+
+    // Validar contraseña
+    if(!validatePassword(password)){
+      mostrarMensaje("La contraseña debe tener exactamente 6 caracteres alfanuméricos.",true);
+      return;
+    }
+    
     try{
-      await auth.signInWithEmailAndPassword(email,password);
-      document.body.classList.remove('login-page');
-    } catch(e){
-      mostrarMensaje(e.message,true);
+      const userCredential=await auth.createUserWithEmailAndPassword(email,password);
+      const user=userCredential.user;
+      await db.collection("usuarios").doc(user.uid).set({
+        nombre,apellido,email,rol,fechaRegistro:new Date()
+      });
+      mostrarMensaje("Usuario registrado correctamente.",false);
+    }catch(e){
+      mostrarMensaje("Error de registro: "+e.message,true);
     }
   });
 
   btnVerListado.addEventListener("click",()=>{
-    causaEnEdicion=null;
-    tituloForm.textContent="Nuevo Expediente";
-    btnGuardar.textContent="Guardar";
-    formCausa.reset();
-    initForm();
-    mostrarListado();
     cargarCausas(auth.currentUser.uid);
+    mostrarListado();
   });
 
-  btnNuevoRegistro.addEventListener("click", ()=>{
+  btnNuevoRegistro.addEventListener("click",()=>{
     causaEnEdicion=null;
     tituloForm.textContent="Nuevo Expediente";
     btnGuardar.textContent="Guardar";
@@ -1118,221 +1226,79 @@
     mostrarFormulario();
   });
 
-  btnCancelar.addEventListener("click", ()=>{
+  btnGuardar.addEventListener("click",()=>{
+    const user=auth.currentUser;
+    if(user) guardarCausa(user.uid,user.email);
+  });
+
+  btnCancelar.addEventListener("click",()=>{
     causaEnEdicion=null;
     tituloForm.textContent="Nuevo Expediente";
     btnGuardar.textContent="Guardar";
-    formCausa.reset();
-    initForm();
+    mostrarListado();
   });
 
-  btnGuardar.addEventListener("click",()=>{
-    if(!auth.currentUser){
-      alert("Debe iniciar sesión para guardar una causa.");
-      return;
-    }
-    guardarCausa(auth.currentUser.uid, auth.currentUser.email);
+  btnBuscar.addEventListener("click",mostrarBuscador);
+  btnImprimir.addEventListener("click",imprimirListado);
+  btnEstadistica.addEventListener("click",mostrarEstadisticas);
+  btnImprimirEstadistica.addEventListener("click",imprimirEstadisticas);
+  closeEstadistica.addEventListener("click",()=>{
+    estadisticaBox.style.display="none";
   });
 
-  btnBuscar.addEventListener("click",()=>{
-    if(buscadorInput.style.display==='block'){
-      buscadorInput.style.display='none';
-      buscadorInput.value='';
-      cargarCausas(auth.currentUser.uid);
-    } else {
-      buscadorInput.style.display='block';
-      buscadorInput.focus();
-    }
-  });
+  buscadorInput.addEventListener("input",buscarEnTabla);
+  selTipo.addEventListener("change",actualizarJuzgados);
+  document.getElementById("observaciones").addEventListener("input",contarPalabras);
+  proteccionPersonaSelect.addEventListener("change",actualizarSeleccionesMultiples);
+  organismosSelect.addEventListener("change",actualizarSeleccionesMultiples);
 
-  buscadorInput.addEventListener("input", ()=>{
-    const filtro=buscadorInput.value.toLowerCase();
-    if(!filtro){
-      cargarCausas(auth.currentUser.uid);
-      return;
-    }
-    const rows=tablaCausasDiv.querySelectorAll("table tbody tr");
-    rows.forEach(row=>{
-      const text=row.innerText.toLowerCase();
-      row.style.display=text.includes(filtro)?"":"none";
-    });
-  });
+  // Configurar manejadores de Enter
+  setupEnterKeyHandlers();
 
-  btnImprimir.addEventListener("click", ()=>{
-    const contenido=tablaCausasDiv.innerHTML;
-    const ventana=window.open("","","width=900,height=700");
-    ventana.document.write("<html><head><title>Imprimir listado de causas</title>");
-    ventana.document.write("<style>body{font-family:Roboto,sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:6px;white-space:normal;}</style>");
-    ventana.document.write("</head><body>");
-    ventana.document.write(contenido);
-    ventana.document.write("</body></html>");
-    ventana.document.close();
-    ventana.focus();
-    ventana.print();
-    ventana.close();
-  });
-
-  btnEstadistica.addEventListener("click", ()=>{
-    if(estadisticaBox.style.display==='block'){
-      estadisticaBox.style.display='none';
-    } else {
-      estadisticaBox.style.display='block';
-      calcularEstadisticas();
-    }
-  });
-
-  closeEstadistica.addEventListener("click", ()=>{
-    estadisticaBox.style.display='none';
-  });
-
-  btnImprimirEstadistica.addEventListener("click", ()=>{
-    if(estadisticaBox.style.display!=='block'){
-      alert("Primero debe mostrar la estadística para imprimirla.");
-      return;
-    }
-    const contenido=estadisticaContenido.innerHTML;
-    const ventana=window.open("","","width=700,height=600");
-    ventana.document.write("<html><head><title>Imprimir Estadísticas</title>");
-    ventana.document.write("<style>body{font-family:Roboto,sans-serif;padding:20px;}h4,h5,p,ul{color:#003366;} ul{padding-left:20px;}</style>");
-    ventana.document.write("</head><body>");
-    ventana.document.write("<h3>Estadísticas de Causas</h3>");
-    ventana.document.write(contenido);
-    ventana.document.write("</body></html>");
-    ventana.document.close();
-    ventana.focus();
-    ventana.print();
-    ventana.close();
-  });
-
-  function calcularEstadisticas(){
-    const user = auth.currentUser;
-    if(!user) return;
-    db.collection("usuarios").doc(user.uid).get()
-      .then(doc=>{
-        if(!doc.exists) return;
-        const rol=doc.data().rol;
-        let query;
-        if(rol === 'Defensor' || rol === 'Secretario'){
-          query = db.collection("causas");
-        } else {
-          query = db.collection("causas").where("uid","==",user.uid);
-        }
-        query.get().then(snapshot=>{
-          const total = snapshot.size;
-          const porProceso = {};
-          const porJuzgado = {};
-          const porUsuarioAsignado = {};
-          const porPrioridad = {};
-          const porIntervencion = {};
-          const porRecursos = {};
-          
-          // Para vencimientos y audiencias próximas
-          const hoy = new Date();
-          const unaSemana = new Date(hoy.getTime() + 7 * 24 * 60 * 60 * 1000);
-          const vencimientosProximos = [];
-          const audienciasProximas = [];
-          
-          snapshot.forEach(doc=>{
-            const c = doc.data();
-            
-            // Estadísticas básicas
-            if(c.tipoProceso) porProceso[c.tipoProceso] = (porProceso[c.tipoProceso]||0)+1;
-            if(c.juzgado) porJuzgado[c.juzgado] = (porJuzgado[c.juzgado]||0)+1;
-            if(c.usuarioAsignado) porUsuarioAsignado[c.usuarioAsignado] = (porUsuarioAsignado[c.usuarioAsignado]||0)+1;
-            if(c.prioridad) porPrioridad[c.prioridad] = (porPrioridad[c.prioridad]||0)+1;
-            if(c.intervencion) porIntervencion[c.intervencion] = (porIntervencion[c.intervencion]||0)+1;
-            if(c.recursos) porRecursos[c.recursos] = (porRecursos[c.recursos]||0)+1;
-            
-            // Vencimientos próximos
-            if(c.vencimiento) {
-              const fechaVenc = new Date(c.vencimiento);
-              if(fechaVenc > hoy && fechaVenc < unaSemana) {
-                vencimientosProximos.push({
-                  numCausa: c.numCausa,
-                  fecha: formatearFecha(c.vencimiento),
-                  dias: Math.ceil((fechaVenc - hoy) / (1000 * 60 * 60 * 24))
-                });
-              }
-            }
-            
-            // Audiencias próximas
-            if(c.audiencias) {
-              const fechaAud = new Date(c.audiencias);
-              if(fechaAud > hoy && fechaAud < unaSemana) {
-                audienciasProximas.push({
-                  numCausa: c.numCausa,
-                  fecha: formatearFecha(c.audiencias),
-                  dias: Math.ceil((fechaAud - hoy) / (1000 * 60 * 60 * 24))
-                });
-              }
-            }
-          });
-
-          function mapToHtml(title,obj){
-            if(Object.keys(obj).length === 0) return "";
-            let html = `<h5>${title}</h5><ul>`;
-            for(const [key,val] of Object.entries(obj)) html+=`<li>${key}: ${val}</li>`;
-            html+="</ul>";
-            return html;
-          }
-          
-          function listarEventosProximos(title, eventos) {
-            if(eventos.length === 0) return "";
-            let html = `<h5>${title}</h5><ul>`;
-            eventos.forEach(e => {
-              html += `<li>${e.numCausa}: ${e.fecha} (en ${e.dias} días)</li>`;
-            });
-            html += "</ul>";
-            return html;
-          }
-
-          estadisticaContenido.innerHTML = `
-            <p><strong>Total de causas:</strong> ${total}</p>
-            ${mapToHtml("Por Tipo de Proceso", porProceso)}
-            ${mapToHtml("Por Prioridad", porPrioridad)}
-            ${mapToHtml("Por Intervención", porIntervencion)}
-            ${mapToHtml("Por Recursos", porRecursos)}
-            ${mapToHtml("Por Usuario Asignado", porUsuarioAsignado)}
-            ${listarEventosProximos("Vencimientos próximos (7 días)", vencimientosProximos)}
-            ${listarEventosProximos("Audiencias próximas (7 días)", audienciasProximas)}
-          `;
-        });
-      });
-  }
-
-  auth.onAuthStateChanged(async (user)=>{
+  // Auth state observer
+  auth.onAuthStateChanged(async user=>{
     if(user){
-      loginFormContainer.style.display="none";
-      mainAppContainer.style.display="block";
       try{
-        const doc=await db.collection("usuarios").doc(user.uid).get();
-        if(!doc.exists){
+        const userDoc=await db.collection("usuarios").doc(user.uid).get();
+        if(userDoc.exists){
+          const userData=userDoc.data();
+          mostrarMensaje(`Bienvenido, ${userData.nombre} ${userData.apellido} (${userData.rol})`,false);
+          panelTitulo.textContent=`Panel de ${userData.rol}`;
+          userInfo.textContent=`Usuario: ${userData.nombre} ${userData.apellido} - ${userData.email}`;
+          
+          loginFormContainer.style.display="none";
+          mainAppContainer.style.display="block";
+          document.body.classList.remove('login-page');
+          
+          // Cambiar color de títulos a azul oscuro después del login
+          h1Title.classList.add('logged-in-title');
+          h2Subtitle.classList.add('logged-in-title');
+          
+          initForm();
+          cargarCausas(user.uid);
+          mostrarListado();
+        } else {
           mostrarMensaje("Usuario sin datos en Firestore.",true);
-          return;
         }
-        const datos=doc.data();
-        const rol=datos.rol||"";
-        const nombreCompleto=`${datos.nombre||""} ${datos.apellido||""}`.trim();
-        panelTitulo.textContent=`Panel ${rol}`;
-        userInfo.textContent=`Usuario: ${nombreCompleto} - ${datos.email}`;
-        mostrarMensaje(`Bienvenido ${datos.email} (${rol})`);
-        initForm();
-        cargarCausas(user.uid);
-        mostrarListado();
       }catch(e){
-        mostrarMensaje("Error obteniendo datos usuario: "+e.message,true);
+        mostrarMensaje("Error cargando datos del usuario: "+e.message,true);
       }
     } else {
-      loginFormContainer.style.display="block";
+      loginFormContainer.style.display="flex";
       mainAppContainer.style.display="none";
-      mostrarMensaje("Inicie sesión para editar o registrar causas.");
-      tablaCausasDiv.innerHTML="";
-      formCausa.style.display="none";
-      buscadorInput.style.display="none";
-      estadisticaBox.style.display="none";
-      userInfo.textContent="";
       document.body.classList.add('login-page');
+      mostrarMensaje("Inicie sesión para editar o registrar causas.",false);
+      
+      // Restaurar color original de títulos
+      h1Title.classList.remove('logged-in-title');
+      h2Subtitle.classList.remove('logged-in-title');
     }
+  });
+
+  // Inicialización
+  document.addEventListener("DOMContentLoaded",()=>{
+    mainAppContainer.style.display="none";
+    setupEnterKeyHandlers();
   });
 </script>
 </body>

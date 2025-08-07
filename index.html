@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Administración de Causas</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #f4f7fa;
-      --card: #fff;
-      --primary: #1f3a93;
-      --accent: #e74c3c;
-      --text: #2c3e50;
-      --muted: #7f8c8d;
-      --radius: 10px;
-      --transition: 0.3s;
-   }
-  </style>
-</head>
-<body>
-  <h1>Administración de Causas</h1>
-</body>
-</html>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Administración de Causas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f7fa;
+      --card: #fff;
+      --primary: #1f3a93;
+      --accent: #e74c3c;
+      --text: #2c3e50;
+      --muted: #7f8c8d;
+      --radius: 10px;
+      --transition: 0.3s;
     }
     * {
       box-sizing: border-box;
@@ -35,24 +28,6 @@
       text-align: center;
       padding: 30px;
     }
-    /* Fondo de pantalla solo para la página de inicio (login/registro) */
-body:has(#login-form-container:not([style*="display: none"])) {
-  background-image: url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/3345c49cebcbae98b7e62599d6a6d8d4477a3823/blue.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-    
-    /* Alternativa para navegadores que no soportan :has() */
-    body.login-page {
-      background-image: url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/19642c029d24b99eadf6f4bbb4c33818eab57731/v915-techi-006-k.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-    }
-    
     main {
       padding: 2rem;
       max-width: 900px;
@@ -190,10 +165,6 @@ body:has(#login-form-container:not([style*="display: none"])) {
       font-size: 0.95rem;
       word-wrap: break-word;
     }
-    select[multiple] {
-      height: auto;
-      min-height: 100px;
-    }
     textarea {
       resize: vertical;
       min-height: 80px;
@@ -202,11 +173,6 @@ body:has(#login-form-container:not([style*="display: none"])) {
       font-size: 0.8rem;
       color: var(--muted);
       text-align: right;
-    }
-    .multiselect-selected {
-      font-size: 0.8rem;
-      color: var(--primary);
-      margin-top: 5px;
     }
     h1, h2 {
       color: #003366;
@@ -218,10 +184,6 @@ body:has(#login-form-container:not([style*="display: none"])) {
       margin: 20px auto;
       max-width: 320px;
       text-align: center;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 30px;
-      border-radius: var(--radius);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
     #login-form-container input,
     #login-form-container select {
@@ -246,11 +208,6 @@ body:has(#login-form-container:not([style*="display: none"])) {
       margin-top: 10px;
       font-weight: bold;
       min-height: 24px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 10px;
-      border-radius: var(--radius);
-      max-width: 400px;
-      margin: 10px auto;
     }
     table {
       margin: 20px auto;
@@ -383,7 +340,7 @@ body:has(#login-form-container:not([style*="display: none"])) {
     }
   </style>
 </head>
-<body class="login-page">
+<body>
 
   <h1>Administración de Causas</h1>
   <h2>Defensoría Civil y Comercial 6 - Poder Judicial Misiones</h2>
@@ -403,7 +360,7 @@ body:has(#login-form-container:not([style*="display: none"])) {
     <button class="btn-login" id="btnRegister" aria-label="Registrarse">Registrarse</button>
   </div>
 
-  <div id="mensaje" role="alert" aria-live="polite">Inicie sesión para editar o registrar causas.</div>
+  <div id="mensaje" role="alert" aria-live="polite"></div>
 
   <div id="main-app-container" aria-live="polite" aria-label="Aplicación principal de administración">
     <h3 id="panel-titulo"></h3>
@@ -439,13 +396,14 @@ body:has(#login-form-container:not([style*="display: none"])) {
           <div class="field">
             <label for="tipoProceso">Tipo de Proceso <span class="required-asterisk" title="Obligatorio">*</span></label>
             <select id="tipoProceso" name="tipoProceso" required>
-              <option value="Administrativo">Administrativo</option>              
               <option value="Civil">Civil</option>
+              <option value="Comercial">Comercial</option>
               <option value="Penal">Penal</option>
               <option value="Laboral">Laboral</option>
               <option value="Familia">Familia</option>
               <option value="Violencia Familiar">Violencia Familiar</option>
-              <option value="Contravencional">Contravencional</option>
+              <option value="Contencioso Administrativo">Contencioso Administrativo</option>
+              <option value="Niñez y Adolescencia">Niñez y Adolescencia</option>
               <option value="Paz">Juzgado de Paz</option>
               <option value="Ejecución Fiscal">Ejecución Fiscal</option>
             </select>
@@ -516,9 +474,10 @@ body:has(#login-form-container:not([style*="display: none"])) {
               <option value="Queja">Queja</option>
               <option value="Casación">Casación</option>
               <option value="Inconstitucionalidad">Inconstitucionalidad</option>
-              <option value="Nulidad">Nulidad</option>
+              <option value="Revisión">Revisión</option>
               <option value="Reposición">Reposición</option>
               <option value="Aclaratoria">Aclaratoria</option>
+              <option value="Incidente de Apelación">Incidente de Apelación</option>
               <option value="Recurso Extraordinario">Recurso Extraordinario</option>
               <option value="Recurso de Hecho">Recurso de Hecho</option>
               <option value="Recurso de Inaplicabilidad">Recurso de Inaplicabilidad</option>
@@ -529,24 +488,23 @@ body:has(#login-form-container:not([style*="display: none"])) {
             <label for="radicadoAlzada">Radicado en Alzada</label>
             <select id="radicadoAlzada" name="radicadoAlzada">
               <option value="">No aplica</option>
-              <option>Cámara de Apelaciones en lo Civil, Comercial,de Familia y Fiscal Tributaria- Sala I- Posadas</option>
-              <option>Cámara de Apelaciones en lo Civil, Comercial,de Familia y Fiscal Tributaria- Sala II- Posadas</option>
-              <option>Cámara de Apelaciones en lo Civil, Comercial,de Familia y Fiscal Tributaria- Sala III- Posadas</option>
-              <option>Cámara de Apelaciones en lo Civil, Comercial,de Familia y Fiscal Tributaria- Sala IV- Posadas</option>
-              <option>Cámara de Apelaciones en lo Civil, Comercial,de Familia y Fiscal Tributaria- Sala V- Posadas</option>
-              <option>Cámara de Apelaciones en lo Laboral-Sala I- Posadas</option>
-              <option>Cámara de Apelaciones en lo Laboral-Sala II- Posadas</option>
-              <option>Cámara de Apelaciones en lo Penal y de Menores-Sal I- Posadas</option>
-              <option>Cámara de Apelaciones en lo Penal y de Menores-Sal II- Posadas</option>
-              <option>Superior Tribunal de Justicia</option>
-              <option>Superior Tribunal de Justicia -Secretaria Judicial</option>
+              <option>Cámara de Apelaciones en lo Civil y Comercial - Posadas</option>
+              <option>Cámara de Apelaciones en lo Civil y Comercial - Eldorado</option>
+              <option>Cámara de Apelaciones en lo Laboral - Posadas</option>
+              <option>Cámara de Apelaciones en lo Penal - Posadas</option>
+              <option>Cámara de Apelaciones en lo Contencioso Administrativo - Posadas</option>
+              <option>Cámara de Apelaciones en Familia - Posadas</option>
+              <option>Superior Tribunal de Justicia - Sala I</option>
+              <option>Superior Tribunal de Justicia - Sala II</option>
+              <option>Superior Tribunal de Justicia - Sala III</option>
             </select>
           </div>
 
-         <!-- Campo Medida de Protección de Persona como multiselect -->
+          <!-- Campo Protección de Persona como select simple -->
           <div class="field">
-            <label for="proteccionPersona">Medidas de Protección de Persona (Selección múltiple)</label>
-            <select id="proteccionPersona" name="proteccionPersona" multiple size="4">
+            <label for="proteccionPersona">Protección de Persona</label>
+            <select id="proteccionPersona" name="proteccionPersona">
+              <option value="">Seleccione una protección</option>
               <option value="Medidas Autosatisfactivas">Medidas Autosatisfactivas</option>
               <option value="Prohibición de Acercamiento">Prohibición de Acercamiento</option>
               <option value="Restricción Perimetral">Restricción Perimetral</option>
@@ -561,30 +519,28 @@ body:has(#login-form-container:not([style*="display: none"])) {
               <option value="Tutela">Tutela</option>
               <option value="Guarda">Guarda</option>
             </select>
-            <div id="proteccionPersona-selected" class="multiselect-selected"></div>
           </div>
 
-          <!-- Campo Organismos como multiselect -->
+          <!-- Campo Organismos como select simple -->
           <div class="field">
-            <label for="organismos">Organismos Intervinientes (Selección múltiple)</label>
-            <select id="organismos" name="organismos" multiple size="4">
+            <label for="organismos">Organismos Intervinientes</label>
+            <select id="organismos" name="organismos">
+              <option value="">Seleccione un organismo</option>
               <option value="Ministerio de Desarrollo Social">Ministerio de Desarrollo Social</option>
-              <option value="Ministerio de Salud Misiones">Ministerio de Salud Misiones</option>
               <option value="Secretaría de Niñez, Adolescencia y Familia">Secretaría de Niñez, Adolescencia y Familia</option>
-              <option value="Centro provincial de prevención y asistencia integral para el control de las adicciones">Centro provincial de prevención y asistencia integral para el control de las adicciones</option>
+              <option value="Dirección de Adicciones">Dirección de Adicciones</option>
               <option value="Hospital Escuela de Salud Mental">Hospital Escuela de Salud Mental</option>
               <option value="Centro de Atención Primaria de la Salud (CAPS)">Centro de Atención Primaria de la Salud (CAPS)</option>
               <option value="Defensoría de Niñas, Niños y Adolescentes">Defensoría de Niñas, Niños y Adolescentes</option>
               <option value="Programa Provincial de Asistencia Integral">Programa Provincial de Asistencia Integral</option>
               <option value="Servicio Local de Protección de Derechos">Servicio Local de Protección de Derechos</option>
-              <option value="Secretaria de Adulto Mayor">Secretaria de Adulto Mayor</option>
+              <option value="INADI Delegación Misiones">INADI Delegación Misiones</option>
               <option value="ANSeS">ANSeS</option>
               <option value="PAMI">PAMI</option>
               <option value="Programa ProHuerta">Programa ProHuerta</option>
-              <option value="IPRODHA Vivienda">IPRODHA Vivienda</option>
-              <option value="Municipalidad de Posadas">Municipalidad de Posadas</option>
+              <option value="Secretaría de Vivienda">Secretaría de Vivienda</option>
+              <option value="Municipalidad correspondiente">Municipalidad correspondiente</option>
             </select>
-            <div id="organismos-selected" class="multiselect-selected"></div>
           </div>
 
           <div class="field" style="grid-column: 1/-1">
@@ -654,18 +610,9 @@ body:has(#login-form-container:not([style*="display: none"])) {
   const tituloForm=document.getElementById("tituloForm");
   const formCausa=document.getElementById("formCausa");
   const tablaCausasDiv=document.getElementById("tablaCausas");
-  const proteccionPersonaSelect=document.getElementById("proteccionPersona");
-  const organismosSelect=document.getElementById("organismos");
-  const proteccionPersonaSelected=document.getElementById("proteccionPersona-selected");
-  const organismosSelected=document.getElementById("organismos-selected");
 
   // Lista actualizada de juzgados del Poder Judicial de Misiones
   const juzgadosPorTipo={
-    Administrativo:[
-      "CEJUME - Posadas",
-      "DEUT Defensorias - Posadas",
-      "Legajo Defensoria Civil y Comercial N° 6"
-    ],
     Civil:[
       "Juzgado Civil y Comercial N° 1 - Posadas",
       "Juzgado Civil y Comercial N° 2 - Posadas",
@@ -675,7 +622,28 @@ body:has(#login-form-container:not([style*="display: none"])) {
       "Juzgado Civil y Comercial N° 6 - Posadas",
       "Juzgado Civil y Comercial N° 7 - Posadas",
       "Juzgado Civil y Comercial N° 8 - Posadas",
-      "Juzgado 1 Inst Civil Comercial Laboral Familia y Violencia Fliar- Apostoles"
+      "Juzgado Civil y Comercial N° 1 - Oberá",
+      "Juzgado Civil y Comercial N° 2 - Oberá",
+      "Juzgado Civil y Comercial N° 1 - Eldorado",
+      "Juzgado Civil y Comercial N° 2 - Eldorado",
+      "Juzgado Civil y Comercial N° 1 - Puerto Iguazú",
+      "Juzgado Civil y Comercial N° 1 - Apóstoles",
+      "Juzgado Civil y Comercial N° 1 - San Vicente"
+    ],
+    Comercial:[
+      "Juzgado Civil y Comercial N° 1 - Posadas",
+      "Juzgado Civil y Comercial N° 2 - Posadas",
+      "Juzgado Civil y Comercial N° 3 - Posadas",
+      "Juzgado Civil y Comercial N° 4 - Posadas",
+      "Juzgado Civil y Comercial N° 5 - Posadas",
+      "Juzgado Civil y Comercial N° 6 - Posadas",
+      "Juzgado Civil y Comercial N° 7 - Posadas",
+      "Juzgado Civil y Comercial N° 8 - Posadas",
+      "Juzgado Civil y Comercial N° 1 - Oberá",
+      "Juzgado Civil y Comercial N° 2 - Oberá",
+      "Juzgado Civil y Comercial N° 1 - Eldorado",
+      "Juzgado Civil y Comercial N° 2 - Eldorado",
+      "Juzgado Civil y Comercial N° 1 - Puerto Iguazú"
     ],
     Penal:[
       "Juzgado de Instrucción N° 1 - Posadas",
@@ -685,63 +653,82 @@ body:has(#login-form-container:not([style*="display: none"])) {
       "Juzgado de Instrucción N° 7 - Posadas",
       "Tribunal Penal N° 1 - Posadas",
       "Tribunal Penal N° 2 - Posadas",
-      "Juzgado Correccional y de Menores N° 1 - Posadas",
-      "Juzgado Correccional y de Menores N° 2 - Posadas"
+      "Juzgado de Instrucción N° 1 - Oberá",
+      "Juzgado de Instrucción N° 1 - Eldorado",
+      "Juzgado de Instrucción N° 1 - Puerto Iguazú"
     ],
     Laboral:[
       "Juzgado Laboral N° 1 - Posadas",
       "Juzgado Laboral N° 2 - Posadas",
       "Juzgado Laboral N° 3 - Posadas",
-      "Juzgado Laboral N° 4 - Posadas"
+      "Juzgado Laboral N° 4 - Posadas",
+      "Juzgado Laboral N° 1 - Oberá",
+      "Juzgado Laboral N° 1 - Eldorado"
     ],
-    "Contravencional":[
-      "Juzgado de Paz Contravencional - Posadas"
+    "Contencioso Administrativo":[
+      "Juzgado de Paz Contravencional - Posadas",
+      "Juzgado Contencioso Administrativo N° 1 - Posadas"
     ],
     Familia:[
       "Juzgado de Familia N° 1 - Posadas",
       "Juzgado de Familia N° 2 - Posadas",
       "Juzgado de Familia N° 3 - Posadas",
-      "Juzgado de Familia y Violencia Familiar de Garupá",
-      "Juzgado 1 Inst Civil Comercial Laboral Familia y Violencia Fliar- Apostoles"
+      "Juzgado de Familia N° 1 - Oberá",
+      "Juzgado de Familia N° 1 - Eldorado",
+      "Juzgado de Familia N° 1 - Puerto Iguazú",
+      "Juzgado de Familia y Violencia Familiar de Garupá"
     ],
     "Violencia Familiar":[
       "Juzgado de Violencia Familiar N° 1 - Posadas",
       "Juzgado de Violencia Familiar N° 2 - Posadas",
-      "Juzgado de Familia y Violencia Familiar de Garupá",
-      "Juzgado 1 Inst Civil Comercial Laboral Familia y Violencia Fliar- Apostoles"
+      "Juzgado de Familia y Violencia Familiar de Garupá"
     ],
     "Ejecución Fiscal":[
       "Juzgado de Ejecución Fiscal N° 1 - Posadas",
       "Juzgado de Ejecución Fiscal N° 2 - Posadas"
     ],
+    "Niñez y Adolescencia":[
+      "Juzgado de Niñez y Adolescencia N° 1 - Posadas",
+      "Juzgado de Niñez y Adolescencia N° 2 - Posadas",
+      "Juzgado de Niñez y Adolescencia N° 1 - Oberá",
+      "Juzgado de Niñez y Adolescencia N° 1 - Eldorado"
+    ],
     "Paz":[
-      "Juzgado de Paz Civil Comercial N° 1 - Posadas",
-      "Juzgado de Paz Civil Comercial N° 2 - Posadas",
-      "Juzgado de Paz Villa Cabello - Posadas",
-      "Juzgado de Paz Itaembe Mini - Posadas",
-      "Juzgado de Paz Itaembe Guazu- Posadas",
-      "Juzgado de Paz - Garupá",
-      "Juzgado de Paz - Garupá Fátima",
-      "Juzgado de Paz - Profundidad",
+      "Juzgado de Paz - Posadas",
+      "Juzgado de Paz - Oberá",
+      "Juzgado de Paz - Eldorado",
+      "Juzgado de Paz - Puerto Iguazú",
       "Juzgado de Paz - Apóstoles",
-      "Juzgado de Paz - Azara",
-      "Juzgado de Paz - Candelaria",
-      "Juzgado de Paz - Fachinal",
-      "Juzgado de Paz - Bonpland",
-      "Juzgado de Paz - Cerro Cora",
-      "Juzgado de Paz - Martires",
+      "Juzgado de Paz - San Vicente",
+      "Juzgado de Paz - Leandro N. Alem",
+      "Juzgado de Paz - San Pedro",
+      "Juzgado de Paz - Jardín América",
+      "Juzgado de Paz - Montecarlo",
+      "Juzgado de Paz - Puerto Rico",
+      "Juzgado de Paz - El Soberbio",
+      "Juzgado de Paz - San Javier",
       "Juzgado de Paz - Concepción de la Sierra",
-      "Juzgado de Paz - Colonia Polana",
-      "Juzgado de Paz - Hipolito Yrigoyen",
-      "Juzgado de Paz - San Jose",
-      "Juzgado de Paz - Loreto",
+      "Juzgado de Paz - Candelaria",
       "Juzgado de Paz - Santa Ana",
+      "Juzgado de Paz - Loreto",
       "Juzgado de Paz - San Ignacio",
-      "Juzgado de Paz - Corpus",
+      "Juzgado de Paz - Corpus Christi",
+      "Juzgado de Paz - Gobernador Roca",
       "Juzgado de Paz - Santo Pipó",
-      "Juzgado de Paz - San Jose",
-      "Juzgado de Paz - San María",
-      "Juzgado de Paz - Tres Capones"
+      "Juzgado de Paz - Bernardo de Irigoyen",
+      "Juzgado de Paz - Dos de Mayo",
+      "Juzgado de Paz - San Antonio",
+      "Juzgado de Paz - Colonia Aurora",
+      "Juzgado de Paz - 25 de Mayo",
+      "Juzgado de Paz - Campo Grande",
+      "Juzgado de Paz - Campo Ramón",
+      "Juzgado de Paz - Campo Viera",
+      "Juzgado de Paz - Garuhapé",
+      "Juzgado de Paz - Ruiz de Montoya",
+      "Juzgado de Paz - Puerto Esperanza",
+      "Juzgado de Paz - Wanda",
+      "Juzgado de Paz - Andresito",
+      "Juzgado de Paz - Comandante Andresito"
     ]
   };
 
@@ -752,21 +739,6 @@ body:has(#login-form-container:not([style*="display: none"])) {
   ];
   let causaEnEdicion=null;
 
-  // Actualizar visualización de selecciones múltiples
-  function actualizarSeleccionesMultiples() {
-    // Protección Persona
-    const proteccionSeleccionada = Array.from(proteccionPersonaSelect.selectedOptions)
-      .map(opt => opt.value)
-      .join(', ');
-    proteccionPersonaSelected.textContent = proteccionSeleccionada || 'Ninguna seleccionada';
-    
-    // Organismos
-    const organismosSeleccionados = Array.from(organismosSelect.selectedOptions)
-      .map(opt => opt.value)
-      .join(', ');
-    organismosSelected.textContent = organismosSeleccionados || 'Ninguna seleccionada';
-  }
-
   function mostrarMensaje(msg, esError=false){
     mensaje.textContent=msg;
     mensaje.style.color=esError?"red":"green";
@@ -774,7 +746,6 @@ body:has(#login-form-container:not([style*="display: none"])) {
 
   function cerrarSesion(){
     auth.signOut();
-    document.body.classList.add('login-page');
   }
 
   function initForm(){
@@ -799,11 +770,6 @@ body:has(#login-form-container:not([style*="display: none"])) {
     document.getElementById("estado").value="En trámite";
     document.getElementById("intervencion").value="Ministerio Complementario";
     document.getElementById("counter").textContent="0/1000";
-    
-    // Limpiar selecciones múltiples
-    Array.from(proteccionPersonaSelect.options).forEach(opt => opt.selected = false);
-    Array.from(organismosSelect.options).forEach(opt => opt.selected = false);
-    actualizarSeleccionesMultiples();
   }
 
   function actualizarJuzgados(){
@@ -840,11 +806,8 @@ body:has(#login-form-container:not([style*="display: none"])) {
     const estado=document.getElementById("estado").value;
     const recursos=document.getElementById("recursos").value;
     const radicadoAlzada=document.getElementById("radicadoAlzada").value;
-    
-    // Obtener selecciones múltiples
-    const proteccionPersona = Array.from(proteccionPersonaSelect.selectedOptions).map(opt => opt.value).join(', ');
-    const organismos = Array.from(organismosSelect.selectedOptions).map(opt => opt.value).join(', ');
-    
+    const proteccionPersona=document.getElementById("proteccionPersona").value;
+    const organismos=document.getElementById("organismos").value;
     const observaciones=document.getElementById("observaciones").value;
 
     if(!numCausa || !caratula || !tipoProceso || !juzgado){
@@ -907,25 +870,10 @@ body:has(#login-form-container:not([style*="display: none"])) {
       document.getElementById("estado").value=c.estado||"En trámite";
       document.getElementById("recursos").value=c.recursos||"";
       document.getElementById("radicadoAlzada").value=c.radicadoAlzada||"";
-      
-      // Establecer selecciones múltiples
-      if (c.proteccionPersona) {
-        const protecciones = c.proteccionPersona.split(', ').filter(p => p);
-        Array.from(proteccionPersonaSelect.options).forEach(opt => {
-          opt.selected = protecciones.includes(opt.value);
-        });
-      }
-      
-      if (c.organismos) {
-        const orgs = c.organismos.split(', ').filter(o => o);
-        Array.from(organismosSelect.options).forEach(opt => {
-          opt.selected = orgs.includes(opt.value);
-        });
-      }
-      
+      document.getElementById("proteccionPersona").value=c.proteccionPersona||"";
+      document.getElementById("organismos").value=c.organismos||"";
       document.getElementById("observaciones").value=c.observaciones||"";
       contarPalabras();
-      actualizarSeleccionesMultiples();
     }catch(e){
       alert("Error al editar causa: "+e.message);
     }
@@ -1052,8 +1000,6 @@ body:has(#login-form-container:not([style*="display: none"])) {
 
   selTipo.addEventListener("change", actualizarJuzgados);
   document.getElementById("observaciones").addEventListener("input", contarPalabras);
-  proteccionPersonaSelect.addEventListener("change", actualizarSeleccionesMultiples);
-  organismosSelect.addEventListener("change", actualizarSeleccionesMultiples);
 
   btnRegister.addEventListener("click",async()=>{
     const email=emailInput.value.trim();
@@ -1090,7 +1036,6 @@ body:has(#login-form-container:not([style*="display: none"])) {
     }
     try{
       await auth.signInWithEmailAndPassword(email,password);
-      document.body.classList.remove('login-page');
     } catch(e){
       mostrarMensaje(e.message,true);
     }
@@ -1219,50 +1164,11 @@ body:has(#login-form-container:not([style*="display: none"])) {
           const porProceso = {};
           const porJuzgado = {};
           const porUsuarioAsignado = {};
-          const porPrioridad = {};
-          const porIntervencion = {};
-          const porRecursos = {};
-          
-          // Para vencimientos y audiencias próximas
-          const hoy = new Date();
-          const unaSemana = new Date(hoy.getTime() + 7 * 24 * 60 * 60 * 1000);
-          const vencimientosProximos = [];
-          const audienciasProximas = [];
-          
           snapshot.forEach(doc=>{
             const c = doc.data();
-            
-            // Estadísticas básicas
             if(c.tipoProceso) porProceso[c.tipoProceso] = (porProceso[c.tipoProceso]||0)+1;
             if(c.juzgado) porJuzgado[c.juzgado] = (porJuzgado[c.juzgado]||0)+1;
             if(c.usuarioAsignado) porUsuarioAsignado[c.usuarioAsignado] = (porUsuarioAsignado[c.usuarioAsignado]||0)+1;
-            if(c.prioridad) porPrioridad[c.prioridad] = (porPrioridad[c.prioridad]||0)+1;
-            if(c.intervencion) porIntervencion[c.intervencion] = (porIntervencion[c.intervencion]||0)+1;
-            if(c.recursos) porRecursos[c.recursos] = (porRecursos[c.recursos]||0)+1;
-            
-            // Vencimientos próximos
-            if(c.vencimiento) {
-              const fechaVenc = new Date(c.vencimiento);
-              if(fechaVenc > hoy && fechaVenc < unaSemana) {
-                vencimientosProximos.push({
-                  numCausa: c.numCausa,
-                  fecha: formatearFecha(c.vencimiento),
-                  dias: Math.ceil((fechaVenc - hoy) / (1000 * 60 * 60 * 24))
-                });
-              }
-            }
-            
-            // Audiencias próximas
-            if(c.audiencias) {
-              const fechaAud = new Date(c.audiencias);
-              if(fechaAud > hoy && fechaAud < unaSemana) {
-                audienciasProximas.push({
-                  numCausa: c.numCausa,
-                  fecha: formatearFecha(c.audiencias),
-                  dias: Math.ceil((fechaAud - hoy) / (1000 * 60 * 60 * 24))
-                });
-              }
-            }
           });
 
           function mapToHtml(title,obj){
@@ -1272,26 +1178,12 @@ body:has(#login-form-container:not([style*="display: none"])) {
             html+="</ul>";
             return html;
           }
-          
-          function listarEventosProximos(title, eventos) {
-            if(eventos.length === 0) return "";
-            let html = `<h5>${title}</h5><ul>`;
-            eventos.forEach(e => {
-              html += `<li>${e.numCausa}: ${e.fecha} (en ${e.dias} días)</li>`;
-            });
-            html += "</ul>";
-            return html;
-          }
 
           estadisticaContenido.innerHTML = `
             <p><strong>Total de causas:</strong> ${total}</p>
             ${mapToHtml("Por Tipo de Proceso", porProceso)}
-            ${mapToHtml("Por Prioridad", porPrioridad)}
-            ${mapToHtml("Por Intervención", porIntervencion)}
-            ${mapToHtml("Por Recursos", porRecursos)}
+            ${mapToHtml("Por Juzgado", porJuzgado)}
             ${mapToHtml("Por Usuario Asignado", porUsuarioAsignado)}
-            ${listarEventosProximos("Vencimientos próximos (7 días)", vencimientosProximos)}
-            ${listarEventosProximos("Audiencias próximas (7 días)", audienciasProximas)}
           `;
         });
       });
@@ -1328,7 +1220,6 @@ body:has(#login-form-container:not([style*="display: none"])) {
       buscadorInput.style.display="none";
       estadisticaBox.style.display="none";
       userInfo.textContent="";
-      document.body.classList.add('login-page');
     }
   });
 </script>

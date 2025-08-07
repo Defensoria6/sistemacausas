@@ -31,7 +31,7 @@
     
     /* Fondo de pantalla solo para la página de inicio (login/registro) */
     body:has(#login-form-container:not([style*="display: none"])) {
-      background-image: url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/19642c029d24b99eadf6f4bbb4c33818eab57731/v915-techi-006-k.jpg');
+      background-image: url(https://github.com/Defensoria6/sistemacausas/blob/main/d6_wallpaper_v2.png?raw=true);
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -40,7 +40,7 @@
     
     /* Alternativa para navegadores que no soportan :has() */
     body.login-page {
-      background-image: url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/19642c029d24b99eadf6f4bbb4c33818eab57731/v915-techi-006-k.jpg');
+      background-image: url(https://github.com/Defensoria6/sistemacausas/blob/main/d6_wallpaper_v2.png?raw=true);
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -82,8 +82,8 @@
     #btnImprimir {
       background-color: #27ae60;
     }
-    #btn-datos-parte {background-color: #3498db;
-    color: white;
+    #btn-datos-parte {background-color: #1E90FF;
+    color: #002244;
     border: none;
     padding: 10px 15px;
     border-radius: var(--radius);
@@ -223,7 +223,7 @@
       margin-top: 5px;
     }
     h1, h2 {
-      color: #003366;
+      color: #87CEEB;
     }
     #login-form-container {
       display: flex;
@@ -427,7 +427,6 @@
       <a href="https://www.jusmisiones.gov.ar/gestionexpedientes/" target="_blank" class="btn-siged" aria-label="Ir a SIGED PJM">SIGED PJM</a>
       <button id="btnVerListado" aria-label="Ver listado de causas">Ver Listado de Causas</button>
       <button id="btnNuevoRegistro" aria-label="Nuevo registro de causa">Nuevo Registro</button>
-      <button id="btnDatosParte" class="btn-datos-parte" onclick="window.open('https://defensoria6.github.io/datosparte/', '_blank')" aria-label="Abrir datos de parte">Datos de Parte</button>
       <button id="btnBuscar" aria-label="Mostrar campo de búsqueda en listado">Buscar</button>
       <button id="btnImprimir" aria-label="Imprimir listado de causas">Imprimir</button>
       <button id="btnEstadistica" aria-label="Mostrar/ocultar estadísticas">Estadística</button>

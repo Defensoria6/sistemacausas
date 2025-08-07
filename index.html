@@ -28,15 +28,14 @@
       text-align: center;
       padding: 30px;
     }
-    
     /* Fondo de pantalla solo para la página de inicio (login/registro) */
-    body:has(#login-form-container:not([style*="display: none"])) {
-      background-image: url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/3345c49cebcbae98b7e62599d6a6d8d4477a3823/blue.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-    }
+body:has(#login-form-container:not([style*="display: none"])) {
+  background-image: url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/3345c49cebcbae98b7e62599d6a6d8d4477a3823/blue.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
     
     /* Alternativa para navegadores que no soportan :has() */
     body.login-page {

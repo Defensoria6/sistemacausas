@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Administración de Causas</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <style>
     :root {
       --bg: #f4f7fa;
@@ -393,6 +394,104 @@
         width: 100%;
       }
     }
+
+    /* Estilos del Chatbot */
+    #toggle-chatbot-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1001;
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    #toggle-chatbot-button:hover {
+      transform: scale(1.1);
+    }
+    #chatbot-container {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: var(--card);
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 300px;
+      height: 400px;
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+    }
+    #chat-header {
+      padding: 10px;
+      background: var(--primary);
+      color: white;
+      border-top-left-radius: var(--radius);
+      border-top-right-radius: var(--radius);
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+    }
+    #chat-input-area {
+      padding: 10px;
+      display: flex;
+      border-top: 1px solid #eee;
+    }
+    #chat-input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+    }
+    #chat-send {
+      margin-left: 10px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .message {
+      padding: 8px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+    .user-message {
+      background-color: #e0f7fa;
+      margin-left: auto;
+      text-align: right;
+    }
+    .bot-message {
+      background-color: #f1f8e9;
+      margin-right: auto;
+      text-align: left;
+    }
+    .typing-indicator {
+        font-style: italic;
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
   </style>
 </head>
 <body class="login-page">
@@ -482,8 +581,8 @@
               <option>Patrocinante Demandado</option>
               <option>Patrocinante Tercero</option>
               <option>Asesor de Incapaces</option>
-              <option>Defensor de Ausente</option>
-              <option>Defensor Oficial Asesor Letrado</option>
+              <option value="Defensor de Ausente">Defensor de Ausente</option>
+              <option value="Defensor Oficial Asesor Letrado">Defensor Oficial Asesor Letrado</option>
             </select>
           </div>
           <div class="field">
@@ -613,6 +712,19 @@
     <div id="estadisticaContenido"></div>
   </div>
 
+  <button id="toggle-chatbot-button" style="position: fixed; bottom: 20px; left: 20px; background: var(--primary); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 1.5rem; cursor: pointer; z-index: 1001; display: flex; align-items: center; justify-content: center; padding: 0;">
+    <span class="material-symbols-outlined">auto_fix</span>
+  </button>
+  <div id="chatbot-container">
+    <div id="chat-header">Chatbot de Análisis</div>
+    <div id="chat-body"></div>
+    <div id="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Pregunta sobre las causas..." />
+      <button id="chat-send">Enviar</button>
+    </div>
+  </div>
+
+
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -664,6 +776,15 @@
   const organismosSelect=document.getElementById("organismos");
   const proteccionPersonaSelected=document.getElementById("proteccionPersona-selected");
   const organismosSelected=document.getElementById("organismos-selected");
+
+  // Chatbot elements
+  const CHATBOT_URL = 'URL_DE_TU_CLOUD_FUNCTION_AQUI'; // Reemplaza esto con la URL de tu Cloud Function
+  const chatbotContainer = document.getElementById('chatbot-container');
+  const chatHeader = document.getElementById('chat-header');
+  const chatBody = document.getElementById('chat-body');
+  const chatInput = document.getElementById('chat-input');
+  const chatSend = document.getElementById('chat-send');
+  const toggleChatbotButton = document.getElementById('toggle-chatbot-button');
 
   // Referencias a títulos para cambio de color
   const h1Title = document.querySelector('h1');
@@ -1309,6 +1430,67 @@
   document.getElementById("observaciones").addEventListener("input",contarPalabras);
   proteccionPersonaSelect.addEventListener("change",actualizarSeleccionesMultiples);
   organismosSelect.addEventListener("change",actualizarSeleccionesMultiples);
+
+  // Funcionalidad del Chatbot
+  toggleChatbotButton.addEventListener('click', () => {
+      chatbotContainer.style.display = 'flex';
+      toggleChatbotButton.style.display = 'none';
+  });
+  chatHeader.addEventListener('click', () => {
+      chatbotContainer.style.display = 'none';
+      toggleChatbotButton.style.display = 'block';
+  });
+
+  chatSend.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+          sendMessage();
+      }
+  });
+
+  async function sendMessage() {
+      const message = chatInput.value.trim();
+      if (message === '') return;
+  
+      appendMessage('user', message);
+      chatInput.value = '';
+      
+      appendMessage('bot', 'Escribiendo...', true);
+      
+      try {
+          const response = await fetch(CHATBOT_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message })
+          });
+          const data = await response.json();
+          removeTypingIndicator();
+          appendMessage('bot', data.text);
+      } catch (error) {
+          console.error('Error al enviar el mensaje:', error);
+          removeTypingIndicator();
+          appendMessage('bot', 'Lo siento, no pude procesar tu solicitud.');
+      }
+  }
+
+  function appendMessage(sender, text, isTyping = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message', sender + '-message');
+      messageDiv.textContent = text;
+      if (isTyping) {
+          messageDiv.id = 'typing-indicator';
+          messageDiv.classList.add('typing-indicator');
+      }
+      chatBody.appendChild(messageDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function removeTypingIndicator() {
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) {
+          indicator.remove();
+      }
+  }
 
   // Configurar manejadores de Enter
   setupEnterKeyHandlers();

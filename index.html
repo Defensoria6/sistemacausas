@@ -264,6 +264,43 @@
       max-width: 400px;
       margin: 10px auto;
     }
+    /* Estilos para los nuevos botones debajo del login */
+    .access-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 1.5rem auto;
+      max-width: 400px;
+      width: 100%;
+    }
+    .access-buttons a {
+      flex: 1 1 120px; /* Tamaño flexible para los botones */
+      height: 38px;
+      font-size: 0.9rem;
+      border-radius: var(--radius);
+      text-align: center;
+      white-space: nowrap;
+      cursor: pointer;
+      border: none;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #3498db; /* Un color por defecto para los nuevos botones */
+      transition: background-color 0.3s;
+    }
+    .access-buttons a:hover {
+      background-color: #2980b9;
+    }
+    .access-buttons a.btn-siged { background-color: #4B0082; }
+    .access-buttons a.btn-arca { background-color: #4B0082; }
+    .access-buttons a.btn-anses { background-color: #4B0082; }
+    .access-buttons a.btn-electoral { background-color: #4B0082; }
+    .access-buttons a.btn-whatsapp { background-color: #4B0082; }
+    .access-buttons a.btn-whatsapp:hover { background-color: #4B0082; }
+    
     table {
       margin: 20px auto;
       border-collapse: collapse;
@@ -393,6 +430,9 @@
       #login-form-container .btn-login {
         width: 100%;
       }
+      .access-buttons a {
+          flex: 1 1 100px; /* Ajuste para pantallas pequeñas */
+      }
     }
 
     /* Estilos del Chatbot */
@@ -514,6 +554,14 @@
     <button class="btn-login" id="btnRegister" aria-label="Registrarse">Registrarse</button>
   </div>
 
+  <div class="access-buttons" id="access-buttons-container">
+    <a href="https://www.jusmisiones.gov.ar/gestionexpedientes/" target="_blank" class="btn-siged">SIGED PJM</a>
+    <a href="https://www.arca.gob.ar/" target="_blank" class="btn-arca">ARCA</a>
+    <a href="https://www.anses.gob.ar/" target="_blank" class="btn-anses">ANSES</a>
+    <a href="https://www.electoral.gob.ar/" target="_blank" class="btn-electoral">PJN Cámara Electoral</a>
+    <a href="https://web.whatsapp.com/" target="_blank" class="btn-whatsapp">Whatsapp</a>
+  </div>
+  
   <div id="mensaje" role="alert" aria-live="polite">Inicie sesión para editar o registrar causas.</div>
 
   <div id="main-app-container" aria-live="polite" aria-label="Aplicación principal de administración">
@@ -580,7 +628,6 @@
               <option>Patrocinante Actor</option>
               <option>Patrocinante Demandado</option>
               <option>Patrocinante Tercero</option>
-              <option>Asesor de Incapaces</option>
               <option value="Defensor de Ausente">Defensor de Ausente</option>
               <option value="Defensor Oficial Asesor Letrado">Defensor Oficial Asesor Letrado</option>
             </select>
@@ -785,6 +832,9 @@
   const chatInput = document.getElementById('chat-input');
   const chatSend = document.getElementById('chat-send');
   const toggleChatbotButton = document.getElementById('toggle-chatbot-button');
+  
+  // Nuevo elemento para los botones de acceso
+  const accessButtonsContainer = document.getElementById("access-buttons-container");
 
   // Referencias a títulos para cambio de color
   const h1Title = document.querySelector('h1');
@@ -1508,6 +1558,8 @@
           
           loginFormContainer.style.display="none";
           mainAppContainer.style.display="block";
+          // Ocultar los botones de acceso al iniciar sesión
+          accessButtonsContainer.style.display = "none";
           document.body.classList.remove('login-page');
           
           // Cambiar color de títulos a azul oscuro después del login
@@ -1526,6 +1578,8 @@
     } else {
       loginFormContainer.style.display="flex";
       mainAppContainer.style.display="none";
+      // Mostrar los botones de acceso al cerrar sesión
+      accessButtonsContainer.style.display = "flex";
       document.body.classList.add('login-page');
       mostrarMensaje("Inicie sesión para editar o registrar causas.",false);
       

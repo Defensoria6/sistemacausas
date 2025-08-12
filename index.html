@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Administración de Causas - Sistema Moderno</title>
+  <title>Administración de Causas - Sistema Mejorado</title>
   
   <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -105,6 +105,17 @@ body {
   }
 }
 
+@keyframes expandCard {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 500px;
+    opacity: 1;
+  }
+}
+
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
@@ -113,6 +124,11 @@ body {
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
 }
 
 .fade-in-up {
@@ -177,11 +193,17 @@ body {
   overflow: hidden;
   transition: all var(--transition-normal);
   animation: fadeInUp 0.8s ease-out;
+  cursor: pointer;
 }
 
 .stat-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-xl);
+}
+
+.stat-card.clickable:hover {
+  cursor: pointer;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
 }
 
 .stat-card::before {
@@ -264,6 +286,197 @@ body {
 
 .stat-change.negative {
   color: var(--danger);
+}
+
+/* Expansión de tarjetas */
+.stat-card-expanded {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  animation: expandCard 0.3s ease-out;
+  overflow: hidden;
+}
+
+.expandable-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 0;
+}
+
+.expandable-content.expanded {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.vencimiento-item {
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  background: white;
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--primary);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.vencimiento-item:hover {
+  transform: translateX(5px);
+  box-shadow: var(--shadow-md);
+}
+
+.vencimiento-fecha {
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 0.9rem;
+}
+
+.vencimiento-expediente {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0.25rem 0;
+}
+
+.vencimiento-detalle {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Secciones de estadísticas detalladas */
+.estadisticas-detalladas {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.estadistica-categoria {
+  margin-bottom: 2rem;
+  border: 1px solid var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.estadistica-categoria:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.categoria-header {
+  background: var(--bg-tertiary);
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--transition-fast);
+}
+
+.categoria-header:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.categoria-header i {
+  transition: transform var(--transition-fast);
+}
+
+.categoria-header.active i {
+  transform: rotate(180deg);
+}
+
+.categoria-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.categoria-count {
+  background: var(--primary);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.categoria-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.categoria-content.expanded {
+  max-height: 1000px;
+}
+
+.categoria-lista {
+  padding: 1rem 1.5rem;
+}
+
+.expediente-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.expediente-item:hover {
+  border-color: var(--primary);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-sm);
+}
+
+.expediente-info {
+  flex: 1;
+}
+
+.expediente-numero {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.expediente-caratula {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.expediente-meta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.meta-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.meta-badge.estado {
+  background: var(--bg-primary);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.meta-badge.prioridad {
+  background: var(--warning);
+  color: white;
 }
 
 /* Gráficos */
@@ -407,6 +620,30 @@ body {
 .btn-secondary {
   background: linear-gradient(135deg, var(--secondary), #94a3b8);
   color: var(--text-inverse);
+}
+
+.btn-print {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.btn-print:hover {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Botones de impresión específicos */
+.print-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: rgba(139, 92, 246, 0.05);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(139, 92, 246, 0.1);
 }
 
 /* Controles principales */
@@ -652,6 +889,62 @@ body {
   margin-right: auto;
 }
 
+/* Badges y elementos dinámicos */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge.primary {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+}
+
+.badge.success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.badge.warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+}
+
+.badge.secondary {
+  background: rgba(107, 114, 128, 0.1);
+  color: var(--secondary);
+}
+
+.priority-alta {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.priority-media {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.priority-baja {
+  color: var(--success);
+  font-weight: 500;
+}
+
+.priority-ninguna {
+  color: var(--text-muted);
+}
+
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  margin: 0 0.25rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .app-container {
@@ -671,7 +964,7 @@ body {
     grid-template-columns: 1fr;
   }
   
-  .main-controls {
+  .main-controls, .print-controls {
     flex-direction: column;
   }
   
@@ -692,11 +985,16 @@ body {
   }
 }
 
-/* Animaciones adicionales */
-.pulse {
-  animation: pulse 2s infinite;
+/* Estados ocultos */
+.hidden {
+  display: none !important;
 }
 
+.visible {
+  display: block;
+}
+
+/* Efectos adicionales */
 .loading-spinner {
   display: inline-block;
   width: 20px;
@@ -711,23 +1009,6 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Estados ocultos */
-.hidden {
-  display: none !important;
-}
-
-.visible {
-  display: block;
-}
-
-/* Efectos glassmorphism */
-.glass {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-/* Contador de caracteres */
 .char-counter {
   font-size: 0.8rem;
   color: var(--text-muted);
@@ -735,20 +1016,69 @@ body {
   margin-top: 0.5rem;
 }
 
-/* Selección múltiple */
 .multiselect-info {
   font-size: 0.8rem;
   color: var(--primary);
   margin-top: 0.5rem;
 }
 
-/* Requerido */
 .required {
   color: var(--danger);
   font-weight: bold;
   margin-left: 0.25rem;
 }
-  </style>
+
+/* Estilos para impresión */
+ {
+  .chatbot-toggle,
+  .chatbot-container,
+  .main-controls,
+  .print-controls {
+    display: none !important;
+  }
+  
+  .app-container {
+    box-shadow: none;
+    border: none;
+    margin: 0;
+    padding: 1rem;
+  }
+  
+  body {
+    background: white !important;
+  }
+  
+  .stat-card, .chart-container, .estadisticas-detalladas {
+    break-inside: avoid;
+  }
+}
+
+/* Mejoras visuales */
+.shimmer-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+.expandable-indicator {
+  transition: transform 0.3s ease;
+}
+
+.expandable-indicator.expanded {
+  transform: rotate(180deg);
+}
+
+</style>
 </head>
 <body>
 
@@ -764,7 +1094,7 @@ body {
 
   <!-- Dashboard de Estadísticas -->
   <section class="dashboard hidden" id="dashboard-section">
-    <div class="stat-card">
+    <div class="stat-card clickable" data-category="proceso">
       <div class="stat-header">
         <div class="stat-icon">
           <i class="fas fa-folder-open"></i>
@@ -775,37 +1105,152 @@ body {
       <div class="stat-change positive" id="causas-change">+12% este mes</div>
     </div>
 
-    <div class="stat-card success">
+    <div class="stat-card success clickable" data-category="intervencion">
       <div class="stat-header">
         <div class="stat-icon">
           <i class="fas fa-check-circle"></i>
         </div>
       </div>
       <div class="stat-value" id="causas-finalizadas">0</div>
-      <div class="stat-label">Finalizadas</div>
-      <div class="stat-change positive" id="finalizadas-change">+8% este mes</div>
+      <div class="stat-label">Por Intervención</div>
+      <div class="stat-change positive" id="finalizadas-change">Ver detalles</div>
     </div>
 
-    <div class="stat-card warning">
+    <div class="stat-card warning clickable expandable" data-category="vencimientos">
       <div class="stat-header">
         <div class="stat-icon">
           <i class="fas fa-exclamation-triangle"></i>
         </div>
+        <i class="fas fa-chevron-down expandable-indicator"></i>
       </div>
       <div class="stat-value" id="causas-vencimiento">0</div>
       <div class="stat-label">Próximos Vencimientos</div>
-      <div class="stat-change negative" id="vencimiento-change">3 esta semana</div>
-    </div>
-
-    <div class="stat-card info">
-      <div class="stat-header">
-        <div class="stat-icon">
-          <i class="fas fa-clock"></i>
+      <div class="stat-change negative" id="vencimiento-change">Hacer clic para detalles</div>
+      
+      <div class="expandable-content" id="vencimientos-content">
+        <div class="stat-card-expanded">
+          <h4 style="margin-bottom: 1rem; color: var(--primary);">
+            <i class="fas fa-calendar-alt"></i> Próximos Vencimientos
+          </h4>
+          <div id="vencimientos-lista">
+            <!-- Se llenará dinámicamente -->
+          </div>
         </div>
       </div>
-      <div class="stat-value" id="causas-tramite">0</div>
-      <div class="stat-label">En Trámite</div>
-      <div class="stat-change positive" id="tramite-change">85% activas</div>
+    </div>
+
+    <div class="stat-card info clickable" data-category="recursos">
+      <div class="stat-header">
+        <div class="stat-icon">
+          <i class="fas fa-balance-scale"></i>
+        </div>
+      </div>
+      <div class="stat-value" id="causas-recursos">0</div>
+      <div class="stat-label">Con Recursos</div>
+      <div class="stat-change positive" id="recursos-change">Ver recursos</div>
+    </div>
+
+    <div class="stat-card clickable" data-category="usuario">
+      <div class="stat-header">
+        <div class="stat-icon">
+          <i class="fas fa-user-friends"></i>
+        </div>
+      </div>
+      <div class="stat-value" id="causas-usuario">0</div>
+      <div class="stat-label">Por Usuario</div>
+      <div class="stat-change positive" id="usuario-change">Ver asignaciones</div>
+    </div>
+  </section>
+
+  <!-- Estadísticas Detalladas -->
+  <section class="estadisticas-detalladas hidden" id="estadisticas-detalladas">
+    <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">
+      <i class="fas fa-chart-bar"></i> Estadísticas Detalladas
+    </h2>
+
+    <!-- Controles de impresión -->
+    <div class="print-controls">
+      <button class="btn btn-print" onclick="imprimirRegistroNuevo()">
+        <i class="fas fa-plus"></i> Imprimir Registro Nuevo
+      </button>
+      <button class="btn btn-print" onclick="imprimirListado()">
+        <i class="fas fa-list"></i> Imprimir Listado
+      </button>
+      <button class="btn btn-print" onclick="imprimirEstadisticas()">
+        <i class="fas fa-chart-bar"></i> Imprimir Estadísticas
+      </button>
+    </div>
+
+    <div class="estadistica-categoria" id="categoria-proceso">
+      <div class="categoria-header" onclick="toggleCategoria('proceso')">
+        <div class="categoria-title">
+          <i class="fas fa-folder-open"></i>
+          <span>Por Tipo de Proceso</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <span class="categoria-count" id="count-proceso">0</span>
+          <i class="fas fa-chevron-down expandable-indicator"></i>
+        </div>
+      </div>
+      <div class="categoria-content" id="content-proceso">
+        <div class="categoria-lista" id="lista-proceso">
+          <!-- Se llenará dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <div class="estadistica-categoria" id="categoria-intervencion">
+      <div class="categoria-header" onclick="toggleCategoria('intervencion')">
+        <div class="categoria-title">
+          <i class="fas fa-hands-helping"></i>
+          <span>Por Tipo de Intervención</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <span class="categoria-count" id="count-intervencion">0</span>
+          <i class="fas fa-chevron-down expandable-indicator"></i>
+        </div>
+      </div>
+      <div class="categoria-content" id="content-intervencion">
+        <div class="categoria-lista" id="lista-intervencion">
+          <!-- Se llenará dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <div class="estadistica-categoria" id="categoria-recursos">
+      <div class="categoria-header" onclick="toggleCategoria('recursos')">
+        <div class="categoria-title">
+          <i class="fas fa-balance-scale"></i>
+          <span>Con Recursos Interpuestos</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <span class="categoria-count" id="count-recursos">0</span>
+          <i class="fas fa-chevron-down expandable-indicator"></i>
+        </div>
+      </div>
+      <div class="categoria-content" id="content-recursos">
+        <div class="categoria-lista" id="lista-recursos">
+          <!-- Se llenará dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <div class="estadistica-categoria" id="categoria-usuario">
+      <div class="categoria-header" onclick="toggleCategoria('usuario')">
+        <div class="categoria-title">
+          <i class="fas fa-user-friends"></i>
+          <span>Por Usuario Asignado</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <span class="categoria-count" id="count-usuario">0</span>
+          <i class="fas fa-chevron-down expandable-indicator"></i>
+        </div>
+      </div>
+      <div class="categoria-content" id="content-usuario">
+        <div class="categoria-lista" id="lista-usuario">
+          <!-- Se llenará dinámicamente -->
+        </div>
+      </div>
     </div>
   </section>
 
@@ -836,19 +1281,19 @@ body {
     </h2>
     
     <div class="form-group">
-      <input type="text" id="nombre" class="form-input" placeholder="Nombre" autocomplete="given-name" />
+      <input type="text" id="nombre" class="form-input login-field" placeholder="Nombre" autocomplete="given-name" />
     </div>
     
     <div class="form-group">
-      <input type="text" id="apellido" class="form-input" placeholder="Apellido" autocomplete="family-name" />
+      <input type="text" id="apellido" class="form-input login-field" placeholder="Apellido" autocomplete="family-name" />
     </div>
     
     <div class="form-group">
-      <input type="email" id="email" class="form-input" placeholder="Correo Electrónico" autocomplete="username" />
+      <input type="email" id="email" class="form-input login-field" placeholder="Correo Electrónico" autocomplete="username" />
     </div>
     
     <div class="form-group">
-      <input type="password" id="password" class="form-input" placeholder="Contraseña (6 caracteres)" 
+      <input type="password" id="password" class="form-input login-field" placeholder="Contraseña (6 caracteres)" 
              title="Únicamente seis caracteres alfanuméricos" pattern="[a-zA-Z0-9]{6}" maxlength="6" autocomplete="current-password" />
     </div>
     
@@ -1201,6 +1646,7 @@ const elements = {
   dashboardSection: document.getElementById("dashboard-section"),
   chartsSection: document.getElementById("charts-section"),
   formSection: document.getElementById("form-section"),
+  estadisticasDetalladas: document.getElementById("estadisticas-detalladas"),
   
   // Mensajes y UI
   mensaje: document.getElementById("mensaje"),
@@ -1239,6 +1685,12 @@ const elements = {
   causasFinalizadas: document.getElementById("causas-finalizadas"),
   causasVencimiento: document.getElementById("causas-vencimiento"),
   causasTramite: document.getElementById("causas-tramite"),
+  causasRecursos: document.getElementById("causas-recursos"),
+  causasUsuario: document.getElementById("causas-usuario"),
+  
+  // Vencimientos
+  vencimientosContent: document.getElementById("vencimientos-content"),
+  vencimientosLista: document.getElementById("vencimientos-lista"),
   
   // Chatbot
   chatbotToggle: document.getElementById("chatbot-toggle"),
@@ -1309,13 +1761,566 @@ const juzgadosPorTipo = {
   ]
 };
 
+// Datos de ejemplo para demostración
+const datosEjemplo = [
+  {
+    id: '1',
+    numCausa: 'EXP-2024-001',
+    caratula: 'MARTINEZ, JUAN C/ LOPEZ, MARIA S/ DIVORCIO VINCULAR',
+    tipoProceso: 'Familia',
+    juzgado: 'Juzgado de Familia N° 1 - Posadas',
+    fechaInicio: '2024-01-15',
+    intervencion: 'Ministerio Principal',
+    estado: 'En trámite',
+    prioridad: 'Media',
+    recursos: 'Apelación',
+    usuarioAsignado: 'user1',
+    vencimiento: '2024-12-30T10:00',
+    observaciones: 'Causa en tramitación normal'
+  },
+  {
+    id: '2',
+    numCausa: 'EXP-2024-002',
+    caratula: 'GARCIA, PEDRO C/ ESTADO PROVINCIAL S/ AMPARO',
+    tipoProceso: 'Administrativo',
+    juzgado: 'CEJUME - Posadas',
+    fechaInicio: '2024-02-01',
+    intervencion: 'Patrocinante Actor',
+    estado: 'En Alzada',
+    prioridad: 'Alta',
+    recursos: 'Inconstitucionalidad',
+    usuarioAsignado: 'user2',
+    vencimiento: '2024-12-25T14:30',
+    observaciones: 'Causa compleja con recursos pendientes'
+  },
+  {
+    id: '3',
+    numCausa: 'EXP-2024-003',
+    caratula: 'RODRIGUEZ, ANA C/ EMPRESA XYZ S.A. S/ DESPIDO',
+    tipoProceso: 'Laboral',
+    juzgado: 'Juzgado Laboral N° 2 - Posadas',
+    fechaInicio: '2024-03-10',
+    intervencion: 'Patrocinante Actor',
+    estado: 'Finalizado',
+    prioridad: 'Baja',
+    recursos: '',
+    usuarioAsignado: 'user1',
+    vencimiento: '',
+    observaciones: 'Causa finalizada con acuerdo'
+  }
+];
+
 // Inicialización
 document.addEventListener('DOMContentLoaded', function() {
   initializeApp();
   setupEventListeners();
   setupFormValidation();
   setupCharts();
+  setupLoginEnterKey();
+  setupStatCardsClickable();
 });
+
+// Configurar Enter en login
+function setupLoginEnterKey() {
+  const loginFields = document.querySelectorAll('.login-field');
+  loginFields.forEach(field => {
+    field.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        handleLogin();
+      }
+    });
+  });
+}
+
+// Configurar tarjetas estadísticas clickeables
+function setupStatCardsClickable() {
+  const statCards = document.querySelectorAll('.stat-card[data-category]');
+  statCards.forEach(card => {
+    card.addEventListener('click', function() {
+      const category = this.dataset.category;
+      
+      if (category === 'vencimientos') {
+        toggleVencimientos();
+      } else {
+        showCategoriaDetalle(category);
+      }
+    });
+  });
+}
+
+// Toggle vencimientos
+function toggleVencimientos() {
+  const content = elements.vencimientosContent;
+  const indicator = document.querySelector('[data-category="vencimientos"] .expandable-indicator');
+  
+  if (content.classList.contains('expanded')) {
+    content.classList.remove('expanded');
+    indicator.classList.remove('expanded');
+  } else {
+    content.classList.add('expanded');
+    indicator.classList.add('expanded');
+    loadProximosVencimientos();
+  }
+}
+
+// Cargar próximos vencimientos
+function loadProximosVencimientos() {
+  const now = new Date();
+  const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  
+  const vencimientos = causasData.filter(c => {
+    if (c.vencimiento) {
+      const vencimiento = new Date(c.vencimiento);
+      return vencimiento >= now && vencimiento <= nextWeek;
+    }
+    return false;
+  });
+
+  if (vencimientos.length === 0) {
+    elements.vencimientosLista.innerHTML = '<div class="vencimiento-item">No hay vencimientos próximos</div>';
+    return;
+  }
+
+  elements.vencimientosLista.innerHTML = vencimientos.map(causa => {
+    const vencimiento = new Date(causa.vencimiento);
+    const fecha = vencimiento.toLocaleDateString('es-AR');
+    const hora = vencimiento.toLocaleTimeString('es-AR', {hour: '2-digit', minute: '2-digit'});
+    
+    return `
+      <div class="vencimiento-item">
+        <div class="vencimiento-fecha">${fecha} - ${hora}</div>
+        <div class="vencimiento-expediente">${causa.numCausa}</div>
+        <div class="vencimiento-detalle">${causa.caratula}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Mostrar categoría detalle
+function showCategoriaDetalle(category) {
+  elements.estadisticasDetalladas.classList.remove('hidden');
+  updateEstadisticasDetalladas();
+  
+  // Scroll to the specific category
+  const categoryElement = document.getElementById(`categoria-${category}`);
+  if (categoryElement) {
+    setTimeout(() => {
+      categoryElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Auto-expand the category
+      toggleCategoria(category);
+    }, 500);
+  }
+}
+
+// Toggle categoría
+function toggleCategoria(categoria) {
+  const content = document.getElementById(`content-${categoria}`);
+  const header = document.querySelector(`#categoria-${categoria} .categoria-header`);
+  const indicator = header.querySelector('.expandable-indicator');
+  
+  if (content.classList.contains('expanded')) {
+    content.classList.remove('expanded');
+    header.classList.remove('active');
+    indicator.classList.remove('expanded');
+  } else {
+    content.classList.add('expanded');
+    header.classList.add('active');
+    indicator.classList.add('expanded');
+    loadCategoriaData(categoria);
+  }
+}
+
+// Cargar datos de categoría
+function loadCategoriaData(categoria) {
+  const listaElement = document.getElementById(`lista-${categoria}`);
+  
+  switch(categoria) {
+    case 'proceso':
+      loadProcesoData(listaElement);
+      break;
+    case 'intervencion':
+      loadIntervencionData(listaElement);
+      break;
+    case 'recursos':
+      loadRecursosData(listaElement);
+      break;
+    case 'usuario':
+      loadUsuarioData(listaElement);
+      break;
+  }
+}
+
+function loadProcesoData(container) {
+  const procesoGroups = {};
+  causasData.forEach(causa => {
+    const tipo = causa.tipoProceso || 'Sin clasificar';
+    if (!procesoGroups[tipo]) {
+      procesoGroups[tipo] = [];
+    }
+    procesoGroups[tipo].push(causa);
+  });
+
+  container.innerHTML = Object.entries(procesoGroups).map(([tipo, causas]) => `
+    <div style="margin-bottom: 2rem;">
+      <h4 style="color: var(--primary); margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: var(--radius-sm);">
+        ${tipo} (${causas.length})
+      </h4>
+      ${causas.map(causa => createExpedienteItem(causa)).join('')}
+    </div>
+  `).join('');
+}
+
+function loadIntervencionData(container) {
+  const intervencionGroups = {};
+  causasData.forEach(causa => {
+    const intervencion = causa.intervencion || 'Sin asignar';
+    if (!intervencionGroups[intervencion]) {
+      intervencionGroups[intervencion] = [];
+    }
+    intervencionGroups[intervencion].push(causa);
+  });
+
+  container.innerHTML = Object.entries(intervencionGroups).map(([intervencion, causas]) => `
+    <div style="margin-bottom: 2rem;">
+      <h4 style="color: var(--primary); margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: var(--radius-sm);">
+        ${intervencion} (${causas.length})
+      </h4>
+      ${causas.map(causa => createExpedienteItem(causa)).join('')}
+    </div>
+  `).join('');
+}
+
+function loadRecursosData(container) {
+  const conRecursos = causasData.filter(causa => causa.recursos && causa.recursos.trim() !== '');
+  
+  if (conRecursos.length === 0) {
+    container.innerHTML = '<div class="expediente-item">No hay expedientes con recursos interpuestos</div>';
+    return;
+  }
+
+  const recursosGroups = {};
+  conRecursos.forEach(causa => {
+    const recurso = causa.recursos;
+    if (!recursosGroups[recurso]) {
+      recursosGroups[recurso] = [];
+    }
+    recursosGroups[recurso].push(causa);
+  });
+
+  container.innerHTML = Object.entries(recursosGroups).map(([recurso, causas]) => `
+    <div style="margin-bottom: 2rem;">
+      <h4 style="color: var(--primary); margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: var(--radius-sm);">
+        ${recurso} (${causas.length})
+      </h4>
+      ${causas.map(causa => createExpedienteItem(causa)).join('')}
+    </div>
+  `).join('');
+}
+
+function loadUsuarioData(container) {
+  const usuarioGroups = {};
+  causasData.forEach(causa => {
+    const usuario = causa.usuarioAsignado || 'Sin asignar';
+    if (!usuarioGroups[usuario]) {
+      usuarioGroups[usuario] = [];
+    }
+    usuarioGroups[usuario].push(causa);
+  });
+
+  container.innerHTML = Object.entries(usuarioGroups).map(([usuario, causas]) => `
+    <div style="margin-bottom: 2rem;">
+      <h4 style="color: var(--primary); margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: var(--radius-sm);">
+        ${usuario} (${causas.length})
+      </h4>
+      ${causas.map(causa => createExpedienteItem(causa)).join('')}
+    </div>
+  `).join('');
+}
+
+function createExpedienteItem(causa) {
+  return `
+    <div class="expediente-item">
+      <div class="expediente-info">
+        <div class="expediente-numero">${causa.numCausa}</div>
+        <div class="expediente-caratula">${(causa.caratula || 'Sin carátula').substring(0, 80)}${(causa.caratula || '').length > 80 ? '...' : ''}</div>
+      </div>
+      <div class="expediente-meta">
+        <span class="meta-badge estado">${causa.estado || 'N/A'}</span>
+        <span class="meta-badge prioridad">${causa.prioridad || 'N/A'}</span>
+      </div>
+    </div>
+  `;
+}
+
+// Funciones de impresión
+function imprimirRegistroNuevo() {
+  // Crear ventana para registro nuevo
+  const printWindow = window.open('', '_blank');
+  const formHtml = generateFormPrintContent();
+  
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Registro Nuevo - Expediente</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          .form-field { margin-bottom: 20px; }
+          .form-label { font-weight: bold; margin-bottom: 5px; display: block; }
+          .form-input { width: 100%; padding: 8px; border: 1px solid #ccc; }
+          .header { text-align: center; margin-bottom: 30px; }
+           { body { margin: 0; padding: 10px; } }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Nuevo Expediente</h1>
+          <h2>Defensoría Civil y Comercial 6 - Poder Judicial Misiones</h2>
+        </div>
+        ${formHtml}
+      </body>
+    </html>
+  `);
+  
+  printWindow.document.close();
+  printWindow.print();
+}
+
+function imprimirListado() {
+  // Imprimir tabla actual
+  const tableContent = elements.tablaCausas.innerHTML;
+  const printWindow = window.open('', '_blank');
+  
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Listado de Causas</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+          th { background-color: #f5f5f5; font-weight: bold; }
+          .header { text-align: center; margin-bottom: 30px; }
+           { body { margin: 0; padding: 10px; font-size: 12px; } }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Listado de Causas</h1>
+          <h2>Defensoría Civil y Comercial 6 - Poder Judicial Misiones</h2>
+          <p>Fecha: ${new Date().toLocaleDateString('es-AR')}</p>
+          <p>Total de causas: ${causasData.length}</p>
+        </div>
+        ${tableContent}
+      </body>
+    </html>
+  `);
+  
+  printWindow.document.close();
+  printWindow.print();
+}
+
+function imprimirEstadisticas() {
+  // Generar reporte de estadísticas
+  const printWindow = window.open('', '_blank');
+  const estadisticasHtml = generateEstadisticasPrintContent();
+  
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Estadísticas del Sistema</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          .stat-item { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+          .stat-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 10px; }
+          .stat-value { font-size: 24px; font-weight: bold; color: #6366f1; }
+          .header { text-align: center; margin-bottom: 30px; }
+          .detail-section { margin: 30px 0; }
+          .detail-title { font-size: 16px; font-weight: bold; margin: 20px 0 10px 0; }
+          .detail-list { margin-left: 20px; }
+           { body { margin: 0; padding: 10px; } }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Estadísticas del Sistema</h1>
+          <h2>Defensoría Civil y Comercial 6 - Poder Judicial Misiones</h2>
+          <p>Fecha de generación: ${new Date().toLocaleDateString('es-AR')} - ${new Date().toLocaleTimeString('es-AR')}</p>
+        </div>
+        ${estadisticasHtml}
+      </body>
+    </html>
+  `);
+  
+  printWindow.document.close();
+  printWindow.print();
+}
+
+function generateFormPrintContent() {
+  return `
+    <form>
+      <div class="form-field">
+        <label class="form-label">N° Expediente *</label>
+        <input class="form-input" type="text" placeholder="Ingrese número de expediente">
+      </div>
+      
+      <div class="form-field">
+        <label class="form-label">Carátula Completa *</label>
+        <textarea class="form-input" rows="3" placeholder="Ingrese carátula completa"></textarea>
+      </div>
+      
+      <div class="form-field">
+        <label class="form-label">Tipo de Proceso *</label>
+        <select class="form-input">
+          <option>Administrativo</option>
+          <option>Civil</option>
+          <option>Penal</option>
+          <option>Laboral</option>
+          <option>Familia</option>
+          <option>Violencia Familiar</option>
+          <option>Paz</option>
+        </select>
+      </div>
+      
+      <div class="form-field">
+        <label class="form-label">Juzgado *</label>
+        <input class="form-input" type="text" placeholder="Seleccione juzgado">
+      </div>
+      
+      <div class="form-field">
+        <label class="form-label">Fecha de Inicio</label>
+        <input class="form-input" type="date">
+      </div>
+      
+      <div class="form-field">
+        <label class="form-label">Intervención</label>
+        <select class="form-input">
+          <option>Ministerio Complementario</option>
+          <option>Ministerio Principal</option>
+          <option>Patrocinante Actor</option>
+          <option>Patrocinante Demandado</option>
+          <option>Patrocinante Tercero</option>
+        </select>
+      </div>
+      
+      <div class="form-field">
+        <label class="form-label">Estado</label>
+        <select class="form-input">
+          <option>En trámite</option>
+          <option>Finalizado</option>
+          <option>Archivado</option>
+          <option>En Alzada</option>
+        </select>
+      </div>
+      
+      <div class="form-field">
+        <label class="form-label">Prioridad de Trabajo</label>
+        <select class="form-input">
+          <option>Alta</option>
+          <option>Media</option>
+          <option>Baja</option>
+          <option>Ninguna</option>
+        </select>
+      </div>
+      
+      <div class="form-field">
+        <label class="form-label">Observaciones</label>
+        <textarea class="form-input" rows="4" placeholder="Ingrese observaciones"></textarea>
+      </div>
+    </form>
+  `;
+}
+
+function generateEstadisticasPrintContent() {
+  const total = causasData.length;
+  const finalizadas = causasData.filter(c => c.estado === 'Finalizado').length;
+  const enTramite = causasData.filter(c => c.estado === 'En trámite').length;
+  const conRecursos = causasData.filter(c => c.recursos && c.recursos.trim() !== '').length;
+
+  // Agrupar por tipo de proceso
+  const tiposProceso = {};
+  causasData.forEach(causa => {
+    const tipo = causa.tipoProceso || 'Sin clasificar';
+    tiposProceso[tipo] = (tiposProceso[tipo] || 0) + 1;
+  });
+
+  // Agrupar por prioridad
+  const prioridades = {};
+  causasData.forEach(causa => {
+    const prioridad = causa.prioridad || 'Sin asignar';
+    prioridades[prioridad] = (prioridades[prioridad] || 0) + 1;
+  });
+
+  return `
+    <div class="stat-item">
+      <div class="stat-title">Total de Causas</div>
+      <div class="stat-value">${total}</div>
+    </div>
+    
+    <div class="stat-item">
+      <div class="stat-title">Causas Finalizadas</div>
+      <div class="stat-value">${finalizadas}</div>
+    </div>
+    
+    <div class="stat-item">
+      <div class="stat-title">Causas en Trámite</div>
+      <div class="stat-value">${enTramite}</div>
+    </div>
+    
+    <div class="stat-item">
+      <div class="stat-title">Causas con Recursos</div>
+      <div class="stat-value">${conRecursos}</div>
+    </div>
+    
+    <div class="detail-section">
+      <div class="detail-title">Distribución por Tipo de Proceso:</div>
+      <div class="detail-list">
+        ${Object.entries(tiposProceso).map(([tipo, count]) => `
+          <div>${tipo}: ${count} causas</div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <div class="detail-section">
+      <div class="detail-title">Distribución por Prioridad:</div>
+      <div class="detail-list">
+        ${Object.entries(prioridades).map(([prioridad, count]) => `
+          <div>${prioridad}: ${count} causas</div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// Actualizar estadísticas detalladas
+function updateEstadisticasDetalladas() {
+  // Actualizar contadores
+  const tiposCounts = {};
+  causasData.forEach(causa => {
+    const tipo = causa.tipoProceso || 'Sin clasificar';
+    tiposCounts[tipo] = (tiposCounts[tipo] || 0) + 1;
+  });
+  document.getElementById('count-proceso').textContent = Object.keys(tiposCounts).length;
+
+  const intervencionCounts = {};
+  causasData.forEach(causa => {
+    const intervencion = causa.intervencion || 'Sin asignar';
+    intervencionCounts[intervencion] = (intervencionCounts[intervencion] || 0) + 1;
+  });
+  document.getElementById('count-intervencion').textContent = Object.keys(intervencionCounts).length;
+
+  const conRecursos = causasData.filter(c => c.recursos && c.recursos.trim() !== '').length;
+  document.getElementById('count-recursos').textContent = conRecursos;
+
+  const usuarioCounts = {};
+  causasData.forEach(causa => {
+    const usuario = causa.usuarioAsignado || 'Sin asignar';
+    usuarioCounts[usuario] = (usuarioCounts[usuario] || 0) + 1;
+  });
+  document.getElementById('count-usuario').textContent = Object.keys(usuarioCounts).length;
+}
+
+// Hacer toggleCategoria disponible globalmente
+window.toggleCategoria = toggleCategoria;
 
 // Inicializar aplicación
 function initializeApp() {
@@ -1324,6 +2329,10 @@ function initializeApp() {
       loadUserData(user);
     } else {
       showLoginSection();
+      // Cargar datos de ejemplo para demostración
+      causasData = datosEjemplo;
+      updateStatistics();
+      updateEstadisticasDetalladas();
     }
   });
   
@@ -1450,6 +2459,7 @@ function showLoginSection() {
   elements.dashboardSection.classList.add('hidden');
   elements.chartsSection.classList.add('hidden');
   elements.formSection.classList.add('hidden');
+  elements.estadisticasDetalladas.classList.add('hidden');
 }
 
 function showMainApp() {
@@ -1462,6 +2472,7 @@ function showMainApp() {
 function showNuevoRegistro() {
   elements.formSection.classList.remove('hidden');
   elements.tablaCausas.classList.add('hidden');
+  elements.estadisticasDetalladas.classList.add('hidden');
   elements.tituloForm.innerHTML = '<i class="fas fa-folder-plus"></i> Nuevo Expediente';
   elements.formCausa.reset();
   editingCausa = null;
@@ -1471,6 +2482,7 @@ function showNuevoRegistro() {
 function showListado() {
   elements.formSection.classList.add('hidden');
   elements.tablaCausas.classList.remove('hidden');
+  elements.estadisticasDetalladas.classList.add('hidden');
   displayCausas();
 }
 
@@ -1482,11 +2494,17 @@ function toggleBuscador() {
 }
 
 function toggleEstadisticas() {
-  elements.dashboardSection.classList.toggle('hidden');
-  elements.chartsSection.classList.toggle('hidden');
-  if (!elements.dashboardSection.classList.contains('hidden')) {
+  const isVisible = !elements.estadisticasDetalladas.classList.contains('hidden');
+  
+  if (isVisible) {
+    elements.estadisticasDetalladas.classList.add('hidden');
+  } else {
+    elements.formSection.classList.add('hidden');
+    elements.tablaCausas.classList.add('hidden');
+    elements.estadisticasDetalladas.classList.remove('hidden');
     updateStatistics();
     updateCharts();
+    updateEstadisticasDetalladas();
   }
 }
 
@@ -1499,6 +2517,7 @@ async function loadCausas() {
       ...doc.data()
     }));
     updateStatistics();
+    updateEstadisticasDetalladas();
     displayCausas();
   } catch (error) {
     showMessage('Error al cargar causas', 'error');
@@ -1510,6 +2529,7 @@ function updateStatistics() {
   const total = causasData.length;
   const finalizadas = causasData.filter(c => c.estado === 'Finalizado').length;
   const enTramite = causasData.filter(c => c.estado === 'En trámite').length;
+  const conRecursos = causasData.filter(c => c.recursos && c.recursos.trim() !== '').length;
   
   // Próximos vencimientos (próximos 7 días)
   const now = new Date();
@@ -1526,7 +2546,8 @@ function updateStatistics() {
   animateValue(elements.totalCausas, 0, total, 1000);
   animateValue(elements.causasFinalizadas, 0, finalizadas, 1200);
   animateValue(elements.causasVencimiento, 0, proximosVencimientos, 800);
-  animateValue(elements.causasTramite, 0, enTramite, 1500);
+  animateValue(elements.causasRecursos, 0, conRecursos, 1500);
+  animateValue(elements.causasUsuario, 0, enTramite, 1300);
 }
 
 // Animación de números
@@ -1758,6 +2779,7 @@ window.editCausa = function(causaId) {
   updateJuzgados();
   elements.formSection.classList.remove('hidden');
   elements.tablaCausas.classList.add('hidden');
+  elements.estadisticasDetalladas.classList.add('hidden');
 }
 
 // Eliminar causa
@@ -1781,24 +2803,39 @@ async function handleGuardar() {
   const causaData = Object.fromEntries(formData.entries());
   
   // Agregar metadatos
-  causaData.usuarioCreador = currentUser.uid;
-  causaData.fechaModificacion = firebase.firestore.FieldValue.serverTimestamp();
+  causaData.usuarioCreador = currentUser?.uid || 'demo';
+  causaData.fechaModificacion = firebase.firestore ? firebase.firestore.FieldValue.serverTimestamp() : new Date().toISOString();
   
   try {
     showLoading(elements.btnGuardar);
     
     if (editingCausa) {
-      await db.collection('causas').doc(editingCausa.id).update(causaData);
+      if (db) {
+        await db.collection('causas').doc(editingCausa.id).update(causaData);
+      } else {
+        // Modo demo
+        const index = causasData.findIndex(c => c.id === editingCausa.id);
+        if (index !== -1) {
+          causasData[index] = { ...causasData[index], ...causaData };
+        }
+      }
       showMessage('Causa actualizada exitosamente', 'success');
     } else {
-      causaData.fechaCreacion = firebase.firestore.FieldValue.serverTimestamp();
-      await db.collection('causas').add(causaData);
+      causaData.fechaCreacion = firebase.firestore ? firebase.firestore.FieldValue.serverTimestamp() : new Date().toISOString();
+      if (db) {
+        await db.collection('causas').add(causaData);
+      } else {
+        // Modo demo
+        causaData.id = 'demo-' + Date.now();
+        causasData.unshift(causaData);
+      }
       showMessage('Causa creada exitosamente', 'success');
     }
     
     elements.formCausa.reset();
     editingCausa = null;
-    loadCausas();
+    updateStatistics();
+    updateEstadisticasDetalladas();
     elements.formSection.classList.add('hidden');
     
   } catch (error) {
@@ -1831,7 +2868,7 @@ function setupFormValidation() {
 }
 
 function updateCharCounter() {
-  const text = elements.observaciones.value;
+  const text = elements.observaciones?.value || '';
   const count = text.length;
   const maxCount = 1000;
   
@@ -1862,25 +2899,37 @@ function setupMultiselect() {
 
 // Actualizar juzgados según tipo de proceso
 function updateJuzgados() {
-  const tipo = elements.tipoProceso.value;
+  const tipo = elements.tipoProceso?.value;
   const juzgados = juzgadosPorTipo[tipo] || [];
   
-  elements.juzgado.innerHTML = juzgados
-    .map(j => `<option value="${j}">${j}</option>`)
-    .join('');
+  if (elements.juzgado) {
+    elements.juzgado.innerHTML = juzgados
+      .map(j => `<option value="${j}">${j}</option>`)
+      .join('');
+  }
 }
 
 // Cargar usuarios en select
 async function loadUsuariosSelect() {
   try {
-    const snapshot = await db.collection('usuarios').get();
-    const usuarios = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-    
-    elements.usuarioAsignado.innerHTML = '<option value="">Sin asignar</option>' +
-      usuarios.map(u => `<option value="${u.id}">${u.nombre} ${u.apellido}</option>`).join('');
+    if (db) {
+      const snapshot = await db.collection('usuarios').get();
+      const usuarios = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      elements.usuarioAsignado.innerHTML = '<option value="">Sin asignar</option>' +
+        usuarios.map(u => `<option value="${u.id}">${u.nombre} ${u.apellido}</option>`).join('');
+    } else {
+      // Modo demo
+      elements.usuarioAsignado.innerHTML = `
+        <option value="">Sin asignar</option>
+        <option value="user1">Juan Pérez</option>
+        <option value="user2">María González</option>
+        <option value="user3">Carlos Rodríguez</option>
+      `;
+    }
   } catch (error) {
     console.error('Error al cargar usuarios:', error);
   }
@@ -2048,97 +3097,15 @@ function hideLoading(button, defaultText) {
     if (icon) icon.className = icon.className.replace('fa-check', 'fa-save');
   }, 1000);
 }
-
-// CSS adicional para elementos dinámicos
-const additionalCSS = `
-.badge {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.badge.primary {
-  background: rgba(99, 102, 241, 0.1);
-  color: var(--primary);
-}
-
-.badge.success {
-  background: rgba(16, 185, 129, 0.1);
-  color: var(--success);
-}
-
-.badge.warning {
-  background: rgba(245, 158, 11, 0.1);
-  color: var(--warning);
-}
-
-.badge.secondary {
-  background: rgba(107, 114, 128, 0.1);
-  color: var(--secondary);
-}
-
-.priority-alta {
-  color: var(--danger);
-  font-weight: 700;
-}
-
-.priority-media {
-  color: var(--warning);
-  font-weight: 600;
-}
-
-.priority-baja {
-  color: var(--success);
-  font-weight: 500;
-}
-
-.priority-ninguna {
-  color: var(--text-muted);
-}
-
-.btn-sm {
-  padding: 0.375rem 0.75rem;
-  font-size: 0.75rem;
-  margin: 0 0.25rem;
-}
-
- {
-  .chatbot-toggle,
-  .chatbot-container,
-  .main-controls {
-    display: none !important;
-  }
-  
-  .app-container {
-    box-shadow: none;
-    border: none;
-    margin: 0;
-    padding: 1rem;
-  }
-  
-  body {
-    background: white !important;
-  }
-}
-`;
-
-// Agregar CSS adicional
-const style = document.createElement('style');
-style.textContent = additionalCSS;
-document.head.appendChild(style);
 </script>
 
 </body>
 </html>
     <script id="html_badge_script1">
         window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDqwR49SWE%2Fzqgf%2FWaoEY68i%2FEVdjsej57ldwziUTAeSQWNvQVg39El%2F1bpliMtNcBU0IL4uo%2B6YapiwnVAf33KvSQ9Fnf3e72a9wwM2ELO5jxum5xrtoKqI5UODv8CriDlca1e5dGPGfjU0H%2BE15kJ29bdIBPks811vwJ4XK7%2BMcaLDtFgTow1nAp4D%2BOeU6RfHw5kdaA7NaYBaj5YdrOBx%2BiNMF5RHgmKdJ0nvM8q%2FOU49thZq7TK76m29pQpIrk8VFy0qu27N2VvR6ocX%2F421ohV4Jv07KDxXRWpWkTdI84TSJh8V2Elv8%2BBLHLDATCCZmEj6gMnMSrq957xE8ap7cDEDp7tbE5QevZicWdgZWZhNHdlxArA0zK2OCajmUNCFC4ly%2BOEE9XA9aWkzTVe5LdD9QT%2FdRsbiwu%2F%2FxSg2AiIvdCCvtJxwczyhxjDbALEGFwVMJLlEx4WxuIHAC3RlgusUiDS0Rf9J4SmZCGpNXnQlsN8MkfU9ZIyYzHTzw3pnftiXlw0XYmFpU%2BiFbHKI%3D";
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDseoffjiZ91j%2BhYBexxFyO5G%2F8VAGg5s2EfyHC7oca%2FXv95F5S6jo0NsMIi1oagHjlhLVwMP4KlXW1fOGqmrPp9tug7h2CQIQXTSJSPhvA5t2tJh7jJ8QuMG9CD%2F%2FJsiTKYH6HOG30NlAHBhR%2BFrTuqDn3lwgWBh%2F%2BmtybVmAQ4cP%2BIOeV4%2Bl2%2B6kl%2FjCbWViEtsf6Jm8FrJqDTA4zbX7etVEiJiFESQgeFu7x3eoSwyvFa%2BdnBOWUfDbDGJzQA%2BDXv1gW%2FNz%2Fu%2ByBEEEzB8epXZ3Oaaw9Ro%2BM4ps1PYLblenrt8E8Jc8BNWczjHOM8H3Hanyr2iieCFij%2FZwaeTSNY%2FLorCbSYIbtuO9WjXT6AOVSNlQ5O4Lo1olavU5O1UkF6D4aLAko9J8UOALkd49%2F3lsNRWTp0Js5DSqEWbvzOPMK9Zty%2FPdagUiT12%2FJgB9MpZRnwejyEHPnhNeoZvaopp8ldgZOJph8cmfqKVaxaI7ZED8MLju940ReY4guU1gQ%3D%3D";
         window.__genspark_locale = "es-ES";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDqwR49SWE/zqgf/WaoEY68i/EVdjsej57ldwziUTAeSQWNvQVg39El/1bpliMtNcBU0IL4uo+6YapiwnVAf33KvSQ9Fnf3e72a9wwM2ELO5jxum5xrtoKqI5UODv8CriDlca1e5dGPGfjU0H+E15kJ29bdIBPks811vwJ4XK7+McaLDtFgTow1nAp4D+OeU6RfHw5kdaA7NaYBaj5YdrOBx+iNMF5RHgmKdJ0nvM8q/OU49thZq7TK76m29pQpIrk8VFy0qu27N2VvR6ocX/421ohV4Jv07KDxXRWpWkTdI84TSJh8V2Elv8+BLHLDATCCZmEj6gMnMSrq957xE8ap7cDEDp7tbE5QevZicWdgZWZhNHdlxArA0zK2OCajmUNCFC4ly+OEE9XA9aWkzTVe5LdD9QT/dRsbiwu//xSg2AiIvdCCvtJxwczyhxjDbALEGFwVMJLlEx4WxuIHAC3RlgusUiDS0Rf9J4SmZCGpNXnQlsN8MkfU9ZIyYzHTzw3pnftiXlw0XYmFpU+iFbHKI=";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDseoffjiZ91j+hYBexxFyO5G/8VAGg5s2EfyHC7oca/Xv95F5S6jo0NsMIi1oagHjlhLVwMP4KlXW1fOGqmrPp9tug7h2CQIQXTSJSPhvA5t2tJh7jJ8QuMG9CD//JsiTKYH6HOG30NlAHBhR+FrTuqDn3lwgWBh/+mtybVmAQ4cP+IOeV4+l2+6kl/jCbWViEtsf6Jm8FrJqDTA4zbX7etVEiJiFESQgeFu7x3eoSwyvFa+dnBOWUfDbDGJzQA+DXv1gW/Nz/u+yBEEEzB8epXZ3Oaaw9Ro+M4ps1PYLblenrt8E8Jc8BNWczjHOM8H3Hanyr2iieCFij/ZwaeTSNY/LorCbSYIbtuO9WjXT6AOVSNlQ5O4Lo1olavU5O1UkF6D4aLAko9J8UOALkd49/3lsNRWTp0Js5DSqEWbvzOPMK9Zty/PdagUiT12/JgB9MpZRnwejyEHPnhNeoZvaopp8ldgZOJph8cmfqKVaxaI7ZED8MLju940ReY4guU1gQ==";
     </script>
     
         <script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>

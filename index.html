@@ -60,8 +60,12 @@
     }
     .logout-btn:hover {background: #990000;}
 
-    main {flex: 1; padding: 0; display: flex;}
-    iframe {width: 100%; height: 100%; border: none; background: white;}
+    main {flex: 1; padding: 0; display: flex; flex-direction: column;}
+    iframe {
+      width: 100%; border: none; background: white;
+      min-height: 500px; 
+      overflow: auto;   /* scroll interno */
+    }
 
     /* Botón hamburguesa */
     .menu-toggle {
@@ -156,7 +160,7 @@
       </div>
     </header>
     <main>
-      <iframe id="content-frame" src="https://defensoria6.github.io/registro-causas/"></iframe>
+      <iframe id="content-frame" src="https://defensoria6.github.io/registro-causas/" onload="resizeIframe(this)"></iframe>
     </main>
   </div>
 
@@ -186,7 +190,8 @@
     }
 
     function loadPage(url, element){
-      document.getElementById('content-frame').src = url;
+      const iframe = document.getElementById('content-frame');
+      iframe.src = url;
       if(element) document.getElementById('active-section').innerText = element.innerText;
       closeMenu();
     }
@@ -197,6 +202,19 @@
     function closeMenu(){
       document.getElementById('mobile-nav').classList.remove('active');
     }
+
+    // Ajusta altura del iframe al contenido
+    function resizeIframe(iframe) {
+      try {
+        iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+      } catch (e) {
+        iframe.style.height = window.innerHeight - document.querySelector('header').offsetHeight + 'px';
+      }
+    }
+    window.addEventListener('resize', () => {
+      const iframe = document.getElementById('content-frame');
+      resizeIframe(iframe);
+    });
   </script>
 </body>
 </html>

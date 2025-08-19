@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portal Defensoría</title>
+  <title>Portal Defensoría Civil y Comercial 6</title>
   <style>
     * {box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif;}
     body {height: 100vh; display: flex; flex-direction: column;}
@@ -115,13 +115,181 @@
     }
     .sidebar.collapsed nav a:hover::after {opacity: 1;}
 
-    main {flex: 1; display: flex;}
+    main {flex: 1; display: flex; position: relative;}
     iframe {flex: 1; border: none; background: white; min-height: 500px;}
+
+    /* CHATBOT STYLES */
+    #chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: #0066cc;
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transition: all 0.3s ease;
+      display: none;
+    }
+
+    #chatbot-toggle:hover {
+      background: #004999;
+      transform: scale(1.1);
+    }
+
+    #chatbot-container {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #chatbot-header {
+      background: #0066cc;
+      color: white;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #chatbot-header h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    #chatbot-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      width: 25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #chatbot-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background: #f8f9fa;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .message.bot {flex-direction: row;}
+    .message.user {flex-direction: row-reverse;}
+
+    .message-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .message.bot .message-avatar {background: #0066cc; color: white;}
+    .message.user .message-avatar {background: #28a745; color: white;}
+
+    .message-content {
+      background: white;
+      padding: 10px 15px;
+      border-radius: 18px;
+      max-width: 250px;
+      word-wrap: break-word;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .message.user .message-content {background: #0066cc; color: white;}
+
+    #chatbot-input-container {
+      padding: 15px;
+      background: white;
+      border-top: 1px solid #e9ecef;
+      display: flex;
+      gap: 10px;
+    }
+
+    #chatbot-input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    #chatbot-send {
+      background: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    #chatbot-send:hover {background: #004999;}
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .quick-action {
+      background: #e9ecef;
+      border: 1px solid #ddd;
+      border-radius: 15px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quick-action:hover {background: #0066cc; color: white;}
 
     @media (max-width: 480px) {
       header h1 {font-size: 0.95rem;}
       .top-user-info .user-details {font-size: 0.8rem; max-width: 58vw;}
       .top-user-info button {font-size: 0.75rem; padding: 0.3rem 0.5rem;}
+      #chatbot-container {
+        width: calc(100vw - 40px);
+        height: 400px;
+        bottom: 90px;
+        right: 20px;
+      }
+      #chatbot-toggle {width: 50px; height: 50px; font-size: 20px;}
     }
   </style>
 </head>
@@ -147,10 +315,8 @@
       </form>
       <p class="notice">
         En caso de algún inconveniente, problema de funcionalidad, dudas o consultas sobre el sistema:<br>
-        Comuníquese al email: 
-        <a href="https://correo.jusmisiones.gov.ar/#1" target="_blank">
-          rcfioravante@jusmisiones.gov.ar
-        </a><br><br>
+        Comuníquese al email:
+        <a href="https://correo.jusmisiones.gov.ar/#1" target="_blank">rcfioravante@jusmisiones.gov.ar</a><br><br>
         Incluya en el mensaje los siguientes datos: Nombre y Apellido, Email y Rol de Usuario registrado en el sistema.<br>
         En breve estaremos en contacto.
       <h3>Uso exclusivo con acceso remoto</h3>
@@ -183,15 +349,36 @@
         <iframe id="content-frame" src="https://defensoria6.github.io/registro-causas/"></iframe>
       </main>
     </div>
+
+    <!-- CHATBOT -->
+    <button id="chatbot-toggle" onclick="toggleChatbot()">💬</button>
+
+    <div id="chatbot-container">
+      <div id="chatbot-header">
+        <h3>💬 Asistente SeisBot</h3>
+        <button id="chatbot-close" onclick="toggleChatbot()">×</button>
+      </div>
+
+      <div id="chatbot-messages"></div>
+
+      <div id="chatbot-input-container">
+        <input type="text" id="chatbot-input" placeholder="Escribe tu consulta..." onkeypress="handleChatbotKeyPress(event)">
+        <button id="chatbot-send" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
   </div>
 
   <script>
+    let chatbotOpen = false;
+    let currentUser = '';
+
     function login(){
       const user = document.getElementById('username').value.trim();
       const email = document.getElementById('email').value.trim();
       const role = document.getElementById('role').value.trim();
       const pass = document.getElementById('password').value.trim();
       if(user && email && role && pass){
+        currentUser = user;
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('app').style.display = 'flex';
         const line = "<strong>" + user + "</strong> — " + email + " — <strong>Rol: " + role + "</strong>";
@@ -199,10 +386,19 @@
         info.innerHTML = line;
         info.setAttribute('title', user + " | " + email + " | Rol: " + role);
         document.getElementById('active-section').innerText = "Registro Causas";
+
+        // Mostrar el chatbot después del login
+        document.getElementById('chatbot-toggle').style.display = 'block';
+
+        // Inicializar el chatbot con mensaje de bienvenida
+        setTimeout(() => {
+          initializeChatbot();
+        }, 1000);
       } else {
         alert('Complete todos los campos: usuario, email, rol y contraseña');
       }
     }
+
     function logout(){
       document.getElementById('app').style.display = 'none';
       document.getElementById('login-container').style.display = 'flex';
@@ -210,15 +406,347 @@
       document.getElementById('email').value =
       document.getElementById('role').value =
       document.getElementById('password').value = '';
+
+      // Ocultar el chatbot
+      document.getElementById('chatbot-toggle').style.display = 'none';
+      document.getElementById('chatbot-container').style.display = 'none';
+      chatbotOpen = false;
+
+      // Limpiar mensajes del chatbot
+      document.getElementById('chatbot-messages').innerHTML = '';
     }
+
     function loadPage(url, element){
       const iframe = document.getElementById('content-frame');
       iframe.src = url;
       if(element) document.getElementById('active-section').innerText = element.getAttribute("data-title");
     }
+
     document.getElementById('sidebar').addEventListener('click', function(e) {
       if(e.target.tagName !== "A") this.classList.toggle('collapsed');
     });
+
+    // --- CHATBOT ---
+    function toggleChatbot() {
+      chatbotOpen = !chatbotOpen;
+      const container = document.getElementById('chatbot-container');
+      container.style.display = chatbotOpen ? 'flex' : 'none';
+
+      if (chatbotOpen && document.getElementById('chatbot-messages').children.length === 0) {
+        initializeChatbot();
+      }
+    }
+
+    function initializeChatbot() {
+      const welcomeMessage = `¡Hola ${currentUser}! 👋 Soy SeisBot, tu asistente virtual del Sistema de Defensoría Civil y Comercial 6.
+
+Estoy aquí para ayudarte con:
+
+🔍 <b>Búsqueda de datos</b> en causas, partes y medidas de protección
+📂 <b>Navegación por secciones</b> del portal
+📅 <b>Audiencias y calendario</b>
+⏰ <b>Vencimientos y plazos</b>
+📊 <b>Estadísticas del sistema</b>
+💬 <b>Atención al público</b>
+
+¿En qué puedo asistirte hoy?`;
+
+      addBotMessage(welcomeMessage, true);
+    }
+
+    function addBotMessage(message, showQuickActions = false) {
+      const messagesContainer = document.getElementById('chatbot-messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message bot';
+
+      messageDiv.innerHTML = `
+        <div class="message-avatar">💬</div>
+        <div class="message-content">
+          ${message.replace(/\n/g, '<br>')}
+          ${showQuickActions ? getQuickActions() : ''}
+        </div>
+      `;
+
+      messagesContainer.appendChild(messageDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function addUserMessage(message) {
+      const messagesContainer = document.getElementById('chatbot-messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message user';
+
+      messageDiv.innerHTML = `
+        <div class="message-avatar">👤</div>
+        <div class="message-content">${message}</div>
+      `;
+
+      messagesContainer.appendChild(messageDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function getQuickActions() {
+      return `
+        <div class="quick-actions">
+          <div class="quick-action" onclick="handleQuickAction('buscar-causa')">📑 Causas</div>
+          <div class="quick-action" onclick="handleQuickAction('buscar-partes')">👥 Partes</div>
+          <div class="quick-action" onclick="handleQuickAction('proteccion-personas')">🛡️ Protección</div>
+          <div class="quick-action" onclick="handleQuickAction('audiencias')">📅 Audiencias</div>
+          <div class="quick-action" onclick="handleQuickAction('vencimientos')">⏰ Vencimientos</div>
+          <div class="quick-action" onclick="handleQuickAction('estadistica')">📊 Estadística</div>
+          <div class="quick-action" onclick="handleQuickAction('atencion-publico')">💬 Público</div>
+          <div class="quick-action" onclick="handleQuickAction('ir-seccion')">📂 Ir a sección</div>
+          <div class="quick-action" onclick="handleQuickAction('ayuda')">❓ Ayuda</div>
+        </div>
+      `;
+    }
+
+    function handleQuickAction(action) {
+      let response = '';
+
+      switch(action) {
+        case 'buscar-causa':
+          addUserMessage('📑 Buscar causa');
+          response = `En <b>Registro Causas</b> podés:
+          
+🔍 Buscar por número de expediente  
+👥 Buscar por nombre de las partes  
+📅 Filtrar por fechas  
+📋 Ver el estado de cada causa  
+
+¿Querés abrir <b>Registro Causas</b>?`;
+          break;
+
+        case 'buscar-partes':
+          addUserMessage('👥 Datos Partes');
+          response = `En <b>Datos Partes</b> podés:
+
+🔍 Buscar por nombre o apellido  
+🆔 Buscar por DNI  
+🏠 Consultar domicilios  
+⚖️ Ver situación legal de cada parte  
+
+¿Querés abrir <b>Datos Partes</b>?`;
+          break;
+
+        case 'proteccion-personas':
+          addUserMessage('🛡️ Protección Personas');
+          response = `En <b>Protección Personas</b> podés:
+
+📝 Registrar nuevas medidas  
+🔍 Buscar por nombre, DNI o causa  
+📅 Ver vencimientos de medidas  
+⚖️ Modificar o prorrogar medidas  
+
+¿Querés abrir <b>Protección Personas</b>?`;
+          break;
+
+        case 'audiencias':
+          addUserMessage('📅 Audiencias');
+          response = `En el <b>Calendario</b> podés:
+
+📅 Ver todas las audiencias programadas  
+⏰ Consultar audiencias de hoy o esta semana  
+🔍 Buscar por causa o parte  
+🔔 Configurar recordatorios  
+
+¿Querés abrir el <b>Calendario</b>?`;
+          break;
+
+        case 'vencimientos':
+          addUserMessage('⏰ Vencimientos');
+          response = `En <b>Vencimientos</b> podés:
+
+📋 Revisar términos procesales  
+📅 Ver fechas límite próximas  
+🔔 Configurar alertas  
+📊 Analizar vencimientos por causa o globales  
+
+¿Querés abrir la sección de <b>Vencimientos</b>?`;
+          break;
+
+        case 'estadistica':
+          addUserMessage('📊 Estadística');
+          response = `En <b>Estadística</b> podés:
+
+📊 Consultar cantidad de causas  
+📈 Ver plazos vencidos o vigentes  
+👥 Estadísticas de partes  
+⚖️ Indicadores de gestión  
+
+¿Querés abrir <b>Estadística</b>?`;
+          break;
+
+        case 'atencion-publico':
+          addUserMessage('💬 Atención Público');
+          response = `En <b>Atención al Público</b> podés:
+
+📨 Registrar nuevas consultas  
+📋 Ver historial de consultas  
+👥 Relacionar con causas y partes  
+📊 Generar reportes de atención  
+
+¿Querés abrir <b>Atención Público</b>?`;
+          break;
+
+        case 'ir-seccion':
+          addUserMessage('📂 Ir a sección');
+          response = `Decime a cuál sección querés ir:
+
+• <b>Registro Causas</b>  
+• <b>Datos Partes</b>  
+• <b>Protección Personas</b>  
+• <b>Calendario</b>  
+• <b>Estadística</b>  
+• <b>Atención Público</b>`;
+          break;
+
+        case 'ayuda':
+          addUserMessage('❓ Ayuda');
+          response = `Comandos útiles:
+
+📑 <b>"Buscar causa 123/2024"</b>  
+👥 <b>"Buscar parte Juan Pérez"</b> o <b>"DNI 12345678"</b>  
+🛡️ <b>"Medidas de protección de [Nombre]"</b>  
+📅 <b>"Audiencias de hoy"</b>  
+⏰ <b>"Vencimientos próximos"</b>  
+📊 <b>"Ver estadísticas"</b>  
+📂 <b>"Ir a [sección]"</b>`;
+          break;
+      }
+
+      setTimeout(() => addBotMessage(response), 400);
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chatbot-input');
+      const message = input.value.trim();
+
+      if (message) {
+        addUserMessage(message);
+        input.value = '';
+        setTimeout(() => processUserMessage(message), 400);
+      }
+    }
+
+    function processUserMessage(message) {
+      const lowerMessage = message.toLowerCase();
+      let response = '';
+
+      // BÚSQUEDAS (intención)
+      if (lowerMessage.includes('buscar') || lowerMessage.includes('encontrar')) {
+        // Específico por dominio
+        if (lowerMessage.includes('causa') || lowerMessage.includes('expediente')) {
+          loadPage('https://defensoria6.github.io/registro-causas/', null);
+          document.getElementById('active-section').innerText = "Registro Causas";
+          response = `✅ Abrí <b>Registro Causas</b>. Allí podés buscar por número de expediente, partes o fechas.`;
+        } else if (lowerMessage.includes('parte') || lowerMessage.includes('persona') || lowerMessage.includes('dni')) {
+          loadPage('https://defensoria6.github.io/datospartes/', null);
+          document.getElementById('active-section').innerText = "Datos Partes";
+          response = `✅ Abrí <b>Datos Partes</b>. Buscá por nombre, apellido o DNI.`;
+        } else if (lowerMessage.includes('protección') || lowerMessage.includes('medida')) {
+          loadPage('https://defensoria6.github.io/proteccion-personas/', null);
+          document.getElementById('active-section').innerText = "Protección Personas";
+          response = `✅ Abrí <b>Protección Personas</b>. Podés buscar medidas por nombre/DNI o causa.`;
+        } else if (lowerMessage.includes('audiencia') || lowerMessage.includes('calendario') || lowerMessage.includes('agenda')) {
+          loadPage('https://defensoria6.github.io/calendario/', null);
+          document.getElementById('active-section').innerText = "Calendario";
+          response = `✅ Abrí el <b>Calendario</b>. Filtrá por fecha, causa o parte.`;
+        } else if (lowerMessage.includes('estad') || lowerMessage.includes('reporte') || lowerMessage.includes('indicador')) {
+          loadPage('https://defensoria6.github.io/estadistica-sistema/', null);
+          document.getElementById('active-section').innerText = "Estadística";
+          response = `✅ Abrí <b>Estadística</b>. Visualizá reportes e indicadores de gestión.`;
+        } else if (lowerMessage.includes('público') || lowerMessage.includes('consulta')) {
+          loadPage('https://defensoria6.github.io/atencion-publico/', null);
+          document.getElementById('active-section').innerText = "Atención Público";
+          response = `✅ Abrí <b>Atención Público</b>. Registrá y consultá atenciones.`;
+        } else {
+          response = `🔍 ¿Qué deseás buscar?
+
+• <b>Causas</b> (número, partes, fecha)  
+• <b>Partes</b> (nombre, apellido, DNI)  
+• <b>Medidas de protección</b> (nombre, DNI, causa)  
+• <b>Audiencias</b> (fecha, causa, parte)  
+• <b>Estadísticas</b> (indicadores, periodos)  
+• <b>Atención al público</b> (consultas, historial)`;
+        }
+
+      // NAVEGACIÓN rápida por texto
+      } else if (lowerMessage.includes('ir a') || lowerMessage.includes('abrir') || lowerMessage.includes('sección')) {
+        if (lowerMessage.includes('registro') || lowerMessage.includes('causa')) {
+          loadPage('https://defensoria6.github.io/registro-causas/', null);
+          document.getElementById('active-section').innerText = "Registro Causas";
+          response = `✅ Te dirigí a <b>Registro Causas</b>.`;
+        } else if (lowerMessage.includes('datos') || lowerMessage.includes('partes')) {
+          loadPage('https://defensoria6.github.io/datospartes/', null);
+          document.getElementById('active-section').innerText = "Datos Partes";
+          response = `✅ Te dirigí a <b>Datos Partes</b>.`;
+        } else if (lowerMessage.includes('protección') || lowerMessage.includes('medida')) {
+          loadPage('https://defensoria6.github.io/proteccion-personas/', null);
+          document.getElementById('active-section').innerText = "Protección Personas";
+          response = `✅ Te dirigí a <b>Protección Personas</b>.`;
+        } else if (lowerMessage.includes('calendario') || lowerMessage.includes('audien')) {
+          loadPage('https://defensoria6.github.io/calendario/', null);
+          document.getElementById('active-section').innerText = "Calendario";
+          response = `✅ Te dirigí al <b>Calendario</b>.`;
+        } else if (lowerMessage.includes('estad')) {
+          loadPage('https://defensoria6.github.io/estadistica-sistema/', null);
+          document.getElementById('active-section').innerText = "Estadística";
+          response = `✅ Te dirigí a <b>Estadística</b>.`;
+        } else if (lowerMessage.includes('atención') || lowerMessage.includes('público')) {
+          loadPage('https://defensoria6.github.io/atencion-publico/', null);
+          document.getElementById('active-section').innerText = "Atención Público";
+          response = `✅ Te dirigí a <b>Atención Público</b>.`;
+        } else {
+          response = `📂 Indicá la sección: <b>Registro Causas</b>, <b>Datos Partes</b>, <b>Protección Personas</b>, <b>Calendario</b>, <b>Estadística</b> o <b>Atención Público</b>.`;
+        }
+
+      // AUDIENCIAS / CALENDARIO
+      } else if (lowerMessage.includes('audiencia')) {
+        loadPage('https://defensoria6.github.io/calendario/', null);
+        document.getElementById('active-section').innerText = "Calendario";
+        response = `📅 Abrí el <b>Calendario</b> para ver y filtrar audiencias.`;
+
+      // VENCIMIENTOS
+      } else if (lowerMessage.includes('vencimiento') || lowerMessage.includes('plazo')) {
+        response = `⏰ Vencimientos:
+• Próximos 7 días
+• Este mes
+• Por causa
+• Alertas automáticas
+
+¿Querés abrir el <b>Calendario</b> para revisar fechas?`;
+
+      // SALUDO / AYUDA
+      } else if (lowerMessage.includes('hola') || lowerMessage.includes('ayuda') || lowerMessage.includes('help')) {
+        response = `¡Hola! 👋 Puedo ayudarte a:
+• Buscar <b>causas</b>, <b>partes</b> y <b>medidas de protección</b>
+• Ver <b>audiencias</b> y <b>vencimientos</b>
+• Navegar a cualquier <b>sección</b> del portal
+• Consultar <b>estadísticas</b> o <b>atención al público</b>
+
+Probá: <b>"Buscar causa 123/2024"</b> o <b>"Ir a Protección Personas"</b>.`;
+
+      // RESPUESTA GENÉRICA
+      } else {
+        response = `🤔 No entendí bien: "${message}".
+
+Podés pedirme:
+• <b>"Buscar causa 123/2024"</b>
+• <b>"Buscar parte Juan Pérez"</b> o <b>"DNI 12345678"</b>
+• <b>"Medidas de protección vigentes"</b>
+• <b>"Audiencias de hoy"</b>
+• <b>"Ir a Estadística"</b>`;
+      }
+
+      addBotMessage(response);
+    }
+
+    function handleChatbotKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
   </script>
 </body>
 </html>

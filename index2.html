@@ -6,137 +6,87 @@
   <title>Portal Defensoría</title>
   <style>
     * {box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif;}
-    body {background: #f9f9f9; color: #333;}
-    
+    body {background: #f9f9f9; color: #333; height: 100vh; display: flex; flex-direction: column;}
+
     /* Login */
     #login-container {
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      height: 100vh; 
-      text-align: center;
-      padding: 1rem;
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; text-align: center; padding: 1rem;
     }
     #login-box {
-      background: white; 
-      padding: 2rem; 
-      border-radius: 12px; 
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-      width: 100%; 
-      max-width: 400px;
+      background: white; padding: 2rem; border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%; max-width: 400px;
     }
     #login-box h1 {font-size: 1.3rem; margin-bottom: 0.5rem;}
     #login-box h3 {font-size: 0.95rem; color: #555; margin-bottom: 1.5rem;}
     #login-box h2 {margin-bottom: 1rem;}
     #login-box input, #login-box select {
-      width: 100%; 
-      padding: 0.75rem; 
-      margin: 0.5rem 0; 
-      border: 1px solid #ccc; 
-      border-radius: 8px;
+      width: 100%; padding: 0.75rem; margin: 0.5rem 0;
+      border: 1px solid #ccc; border-radius: 8px; font-size: 1rem;
     }
     #login-box button {
-      width: 100%; 
-      padding: 0.75rem; 
-      background: #0066cc; 
-      color: white; 
-      border: none; 
-      border-radius: 8px; 
-      cursor: pointer;
+      width: 100%; padding: 0.75rem; background: #0066cc;
+      color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;
     }
     #login-box button:hover {background: #004999;}
     #login-box p.notice {
-      font-size: 0.8rem; 
-      color: #777; 
-      margin-top: 1rem;
+      font-size: 0.8rem; color: #777; margin-top: 1rem; line-height: 1.3;
     }
 
-    /* Layout App */
-    #app {display: none; min-height: 100vh; display: flex; flex-direction: column;}
+    /* App Layout */
+    #app {display: none; flex: 1; flex-direction: column; min-height: 100vh;}
     header {
-      background: #0066cc; 
-      color: white; 
-      padding: 0.75rem 1rem; 
-      display: flex; 
-      flex-wrap: wrap; 
-      justify-content: space-between; 
-      align-items: center;
+      background: #0066cc; color: white; padding: 0.75rem 1rem;
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
       gap: 1rem;
     }
     header h1 {font-size: 1.25rem;}
 
-    .left-panel {display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;}
+    .left-panel {display: flex; align-items: center; gap: 1rem;}
     nav {display: flex; flex-wrap: wrap; gap: 0.5rem;}
     nav a {
-      color: white; 
-      text-decoration: none; 
-      font-size: 1rem; 
-      padding: 0.6rem 1rem; 
-      border-radius: 8px; 
-      background: rgba(255,255,255,0.1); 
-      transition: background 0.2s;
+      color: white; text-decoration: none; font-size: 1rem;
+      padding: 0.6rem 1rem; border-radius: 8px;
+      background: rgba(255,255,255,0.1); transition: background 0.2s;
     }
     nav a:hover {background: rgba(255,255,255,0.3);}
 
-    .right-panel {
-      display: flex; 
-      flex-direction: column; 
-      align-items: flex-end; 
-      gap: 0.5rem;
-      flex: 1;
-    }
-    .user-info {
-      font-size: 0.9rem; 
-      text-align: right; 
-      white-space: pre-line;
-    }
+    .right-panel {display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;}
+    .user-info {font-size: 0.9rem; text-align: right; white-space: pre-line;}
     .logout-btn {
-      background: #cc0000; 
-      color: white; 
-      border: none; 
-      padding: 0.5rem 1rem; 
-      border-radius: 6px; 
-      cursor: pointer;
+      background: #cc0000; color: white; border: none; padding: 0.5rem 1rem;
+      border-radius: 6px; cursor: pointer; font-size: 0.9rem;
     }
     .logout-btn:hover {background: #990000;}
 
-    main {flex: 1; padding: 1rem;}
-    iframe {
-      width: 100%; 
-      height: 80vh; 
-      border: none; 
-      border-radius: 12px; 
-      background: white;
-    }
+    main {flex: 1; padding: 0; display: flex;}
+    iframe {width: 100%; height: 100%; border: none; background: white;}
 
     /* Botón hamburguesa */
     .menu-toggle {
-      display: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      background: none;
-      border: none;
-      color: white;
+      display: none; font-size: 1.5rem; cursor: pointer;
+      background: none; border: none; color: white;
     }
     .mobile-nav {
-      display: none;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+      display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;
     }
 
-    /* Responsive ajustes */
+    /* Responsive */
     @media (max-width: 768px) {
-      nav {display: none;} /* Oculto nav normal en móvil */
+      nav {display: none;} /* oculto menú normal */
       .menu-toggle {display: block;}
       .mobile-nav.active {display: flex;}
-      .left-panel {flex-direction: row; align-items: center;}
+      header {flex-direction: column; align-items: flex-start;}
+      .left-panel {width: 100%; justify-content: space-between;}
       .right-panel {align-items: flex-start; width: 100%;}
       .user-info {text-align: left;}
     }
 
     @media (max-width: 480px) {
       header h1 {font-size: 1rem;}
+      nav a, .mobile-nav a {font-size: 0.9rem; padding: 0.5rem;}
+      .logout-btn {padding: 0.4rem 0.8rem; font-size: 0.8rem;}
     }
   </style>
 </head>
@@ -160,7 +110,10 @@
         <input type="password" id="password" placeholder="Contraseña">
         <button type="submit">Entrar</button>
       </form>
-      <p class="notice">Uso exclusivo y restringido únicamente al Personal de la Defensoría Civil y Comercial 6 - Poder Judicial de Misiones</p>
+      <p class="notice">
+        Uso exclusivo y restringido únicamente al Personal de la Defensoría Civil y Comercial 6<br>
+        Poder Judicial de Misiones
+      </p>
     </div>
   </div>
 
@@ -237,4 +190,3 @@
   </script>
 </body>
 </html>
-

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Defensoría</title>
+  <style>
+    * {box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif;}
+    body {background: #f9f9f9; color: #333;}
+    
+    /* Login */
+    #login-container {display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;}
+    #login-box {background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px;}
+    #login-box h1 {font-size: 1.3rem; margin-bottom: 0.5rem;}
+    #login-box h3 {font-size: 0.95rem; color: #555; margin-bottom: 1.5rem;}
+    #login-box h2 {margin-bottom: 1rem;}
+    #login-box input, #login-box select {width: 100%; padding: 0.75rem; margin: 0.5rem 0; border: 1px solid #ccc; border-radius: 8px;}
+    #login-box button {width: 100%; padding: 0.75rem; background: #0066cc; color: white; border: none; border-radius: 8px; cursor: pointer;}
+    #login-box button:hover {background: #004999;}
+
+    /* Layout */
+    #app {display: none; min-height: 100vh; display: flex; flex-direction: column;}
+    header {background: #0066cc; color: white; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;}
+    header h1 {font-size: 1.25rem; margin-right: 1rem;}
+
+    .left-panel {display: flex; align-items: center; gap: 2rem;}
+    nav {display: flex; gap: 0.75rem;}
+    nav a {color: white; text-decoration: none; font-size: 1rem; padding: 0.5rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.1); transition: background 0.2s;}
+    nav a:hover {background: rgba(255,255,255,0.3);}
+
+    .user-info {font-size: 0.9rem; text-align: right; margin-right: 1rem; white-space: pre-line;}
+    .logout-btn {background: #cc0000; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;}
+    .logout-btn:hover {background: #990000;}
+
+    main {flex: 1; padding: 1.5rem;}
+    iframe {width: 100%; height: 80vh; border: none; border-radius: 12px; background: white;}
+
+    @media (max-width: 600px) {
+      nav {flex-wrap: wrap; gap: 0.5rem;}
+      nav a {font-size: 0.9rem; padding: 0.4rem 0.75rem;}
+      header h1 {font-size: 1rem;}
+      .user-info {font-size: 0.8rem;}
+    }
+  </style>
+</head>
+<body>
+  <!-- Login -->
+  <div id="login-container">
+    <div id="login-box">
+      <h1>Sistema de Administración de Causas Judiciales</h1>
+      <h3>Defensoría Civil y Comercial 6 - Poder Judicial de Misiones</h3>
+      <h2>Iniciar Sesión</h2>
+      <input type="text" id="username" placeholder="Usuario (Nombre Apellido)">
+      <input type="email" id="email" placeholder="Email">
+      <select id="role">
+        <option value="">Seleccione rol de usuario</option>
+        <option value="Administrador">Administrador</option>
+        <option value="Defensor">Defensor</option>
+        <option value="Secretario">Secretario</option>
+        <option value="Empleado">Empleado</option>
+      </select>
+      <input type="password" id="password" placeholder="Contraseña">
+      <button onclick="login()">Entrar</button>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div id="app">
+    <header>
+      <div class="left-panel">
+        <h1>Portal Defensoría</h1>
+        <nav>
+          <a href="#" onclick="loadPage('https://defensoria6.github.io/registro-causas/')">Registro Causas</a>
+          <a href="#" onclick="loadPage('https://defensoria6.github.io/datospartes/')">Datos Partes</a>
+          <a href="#" onclick="loadPage('https://defensoria6.github.io/proteccion-personas/')">Protección Personas</a>
+          <a href="#" onclick="loadPage('https://defensoria6.github.io/calendario/')">Calendario</a>
+          <a href="#" onclick="loadPage('https://defensoria6.github.io/estadistica-sistema/')">Estadística</a>
+          <a href="#" onclick="loadPage('https://defensoria6.github.io/atencion-publico/')">Atención Público</a>
+        </nav>
+      </div>
+      <div class="right-panel">
+        <div class="user-info" id="user-info"></div>
+        <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+      </div>
+    </header>
+    <main>
+      <iframe id="content-frame" src="https://defensoria6.github.io/registro-causas/"></iframe>
+    </main>
+  </div>
+
+  <script>
+    function login(){
+      const user = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const role = document.getElementById('role').value;
+      const pass = document.getElementById('password').value;
+      if(user && email && role && pass){ // Simple validación
+        document.getElementById('login-container').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
+        document.getElementById('user-info').innerText = user + "\n" + email + "\nRol: " + role;
+      } else {
+        alert('Complete todos los campos: usuario, email, rol y contraseña');
+      }
+    }
+
+    function logout(){
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('login-container').style.display = 'flex';
+      document.getElementById('username').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('role').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function loadPage(url){
+      document.getElementById('content-frame').src = url;
+    }
+  </script>
+</body>
+</html>

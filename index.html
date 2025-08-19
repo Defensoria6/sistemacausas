@@ -8,7 +8,7 @@
     * {box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif;}
     body {height: 100vh; display: flex; flex-direction: column;}
 
-    /* LOGIN: fondo con imagen */
+    /* LOGIN */
     #login-container {
       flex: 1;
       display: flex;
@@ -28,7 +28,6 @@
       text-align: center;
     }
 
-    /* Formulario y mensaje de contacto */
     #login-box h1 {font-size: 1.3rem; margin-bottom: 0.5rem;}
     #login-box h3 {font-size: 0.95rem; color: #555; margin-bottom: 1.5rem;}
     #login-box h2 {margin-bottom: 1rem;}
@@ -50,29 +49,24 @@
     /* APP */
     #app {display: none; flex: 1; flex-direction: column; min-height: 100vh;}
 
-    /* ====== HEADER angosto y responsivo ====== */
+    /* HEADER angosto */
     header {
       background: #0066cc;
       color: white;
-      padding: 0.4rem 0.75rem;          /* más angosto */
+      padding: 0.4rem 0.75rem;
       display: flex;
       align-items: center;
       gap: 0.75rem;
     }
-    header h1 {
-      font-size: 1.05rem;               /* título compacto */
-      font-weight: 600;
-    }
+    header h1 {font-size: 1.05rem; font-weight: 600;}
 
     .top-user-info {
-      margin-left: auto;                /* empuja a la derecha */
+      margin-left: auto;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      min-width: 0;                     /* permite elipsis */
+      min-width: 0;
     }
-
-    /* Info de usuario en UNA sola línea con elipsis si no entra */
     .top-user-info .user-details {
       text-align: right;
       font-size: 0.85rem;
@@ -80,39 +74,25 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 65vw;                  /* espacio flexible para móviles */
+      max-width: 65vw;
     }
     .top-user-info .user-details strong {font-weight: 700;}
-
     .top-user-info button {
-      background: #cc0000;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      padding: 0.35rem 0.6rem;          /* botón compacto */
-      cursor: pointer;
-      font-size: 0.8rem;
-      flex: 0 0 auto;
+      background: #cc0000; color: white; font-weight: bold;
+      border: none; border-radius: 6px; padding: 0.35rem 0.6rem;
+      cursor: pointer; font-size: 0.8rem; flex: 0 0 auto;
     }
     .top-user-info button:hover {background: #990000;}
 
-    /* Ajustes de sidebar/iframe (sin cambios de lógica) */
     .layout {display: flex; flex: 1;}
     .sidebar {
       display: flex; flex-direction: column;
-      width: 220px;
-      background: #0066cc; color: white;
-      padding: 1rem 0.5rem;
-      height: calc(100vh - 60px);
+      width: 220px; background: #0066cc; color: white;
+      padding: 1rem 0.5rem; height: calc(100vh - 60px);
       transition: width 0.3s ease; cursor: pointer;
-      position: relative;
     }
     .sidebar.collapsed {width: 70px;}
-    .sidebar h2 {
-      font-size: 1rem; margin-bottom: 1rem; text-align: center;
-      transition: opacity 0.3s ease;
-    }
+    .sidebar h2 {font-size: 1rem; margin-bottom: 1rem; text-align: center; transition: opacity 0.3s;}
     .sidebar.collapsed h2 {opacity: 0;}
     .sidebar nav a {
       display: flex; align-items: center; gap: 10px;
@@ -131,18 +111,13 @@
       padding: 4px 8px; border-radius: 4px;
       white-space: nowrap;
       opacity: 0; pointer-events: none;
-      transition: opacity 0.2s;
-      margin-left: 8px; font-size: 0.8rem;
+      transition: opacity 0.2s; margin-left: 8px; font-size: 0.8rem;
     }
     .sidebar.collapsed nav a:hover::after {opacity: 1;}
 
     main {flex: 1; display: flex;}
-    iframe {
-      flex: 1; border: none; background: white; min-height: 500px;
-      overflow: auto;
-    }
+    iframe {flex: 1; border: none; background: white; min-height: 500px;}
 
-    /* Responsivo extra: si el ancho es muy chico, baja un poco la fuente para que se mantenga en una línea */
     @media (max-width: 480px) {
       header h1 {font-size: 0.95rem;}
       .top-user-info .user-details {font-size: 0.8rem; max-width: 58vw;}
@@ -172,7 +147,10 @@
       </form>
       <p class="notice">
         En caso de algún inconveniente, problema de funcionalidad, dudas o consultas sobre el sistema:<br>
-        Comuníquese al email: <a href="mailto:rcfioravante@jusmisiones.gov.ar">rcfioravante@jusmisiones.gov.ar</a><br><br>
+        Comuníquese al email: 
+        <a href="https://correo.jusmisiones.gov.ar/#1" target="_blank">
+          rcfioravante@jusmisiones.gov.ar
+        </a><br><br>
         Incluya en el mensaje los siguientes datos: Nombre y Apellido, Email y Rol de Usuario registrado en el sistema.<br>
         En breve estaremos en contacto.
       <h3>Uso exclusivo con acceso remoto</h3>
@@ -216,19 +194,15 @@
       if(user && email && role && pass){
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('app').style.display = 'flex';
-
-        // UNA SOLA LÍNEA: Usuario — email — Rol
         const line = "<strong>" + user + "</strong> — " + email + " — <strong>Rol: " + role + "</strong>";
         const info = document.getElementById('user-info');
         info.innerHTML = line;
-        info.setAttribute('title', user + " | " + email + " | Rol: " + role); // tooltip completo
-
+        info.setAttribute('title', user + " | " + email + " | Rol: " + role);
         document.getElementById('active-section').innerText = "Registro Causas";
       } else {
         alert('Complete todos los campos: usuario, email, rol y contraseña');
       }
     }
-
     function logout(){
       document.getElementById('app').style.display = 'none';
       document.getElementById('login-container').style.display = 'flex';
@@ -237,24 +211,13 @@
       document.getElementById('role').value =
       document.getElementById('password').value = '';
     }
-
     function loadPage(url, element){
       const iframe = document.getElementById('content-frame');
       iframe.src = url;
       if(element) document.getElementById('active-section').innerText = element.getAttribute("data-title");
     }
-
     document.getElementById('sidebar').addEventListener('click', function(e) {
       if(e.target.tagName !== "A") this.classList.toggle('collapsed');
-    });
-
-    window.addEventListener('resize', () => {
-      const iframe = document.getElementById('content-frame');
-      try {
-        iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
-      } catch (err) {
-        iframe.style.height = window.innerHeight + 'px';
-      }
     });
   </script>
 </body>

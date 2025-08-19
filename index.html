@@ -43,7 +43,7 @@
     }
     header h1 {font-size: 1.25rem;}
 
-    .left-panel {display: flex; align-items: center; gap: 1rem;}
+    .left-panel {display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;}
     nav {display: flex; flex-wrap: wrap; gap: 0.5rem;}
     nav a {
       color: white; text-decoration: none; font-size: 1rem;
@@ -67,20 +67,30 @@
     .menu-toggle {
       display: none; font-size: 1.5rem; cursor: pointer;
       background: none; border: none; color: white;
+      font-weight: bold;
     }
     .mobile-nav {
       display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;
     }
+    .mobile-nav a {
+      color: white; font-weight: bold;
+      text-decoration: none; padding: 0.5rem; border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+    }
+    .mobile-nav a:hover {background: rgba(255,255,255,0.3);}
 
     /* Responsive */
-    @media (max-width: 768px) {
-      nav {display: none;} /* oculto menú normal */
-      .menu-toggle {display: block;}
-      .mobile-nav.active {display: flex;}
+    @media (max-width: 1024px) {
       header {flex-direction: column; align-items: flex-start;}
       .left-panel {width: 100%; justify-content: space-between;}
       .right-panel {align-items: flex-start; width: 100%;}
       .user-info {text-align: left;}
+    }
+
+    @media (max-width: 768px) {
+      nav {display: none;} /* oculto menú normal */
+      .menu-toggle {display: block;}
+      .mobile-nav.active {display: flex;}
     }
 
     @media (max-width: 480px) {
@@ -122,7 +132,7 @@
     <header>
       <div class="left-panel">
         <h1 id="active-section">Portal Defensoría</h1>
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <button class="menu-toggle" onclick="toggleMenu()">☰ Menú</button>
         <nav>
           <a href="#" onclick="loadPage('https://defensoria6.github.io/registro-causas/', this)">Registro Causas</a>
           <a href="#" onclick="loadPage('https://defensoria6.github.io/datospartes/', this)">Datos Partes</a>

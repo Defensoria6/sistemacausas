@@ -47,23 +47,57 @@
       padding: 1rem;
     }
 
-    /* APP (mantiene todo igual) */
+    /* APP */
     #app {display: none; flex: 1; flex-direction: column; min-height: 100vh;}
+
+    /* ====== HEADER angosto y responsivo ====== */
     header {
-      background: #0066cc; color: white; padding: 0.75rem 1rem;
-      display: flex; justify-content: space-between; align-items: center;
+      background: #0066cc;
+      color: white;
+      padding: 0.4rem 0.75rem;          /* más angosto */
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
-    header h1 {font-size: 1.25rem;}
-    .top-user-info {display: flex; align-items: center; gap: 1rem;}
-    .top-user-info .user-details {text-align: right; font-size: 0.9rem; line-height: 1.4;}
-    .top-user-info .user-details strong {font-weight: bold;}
+    header h1 {
+      font-size: 1.05rem;               /* título compacto */
+      font-weight: 600;
+    }
+
+    .top-user-info {
+      margin-left: auto;                /* empuja a la derecha */
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-width: 0;                     /* permite elipsis */
+    }
+
+    /* Info de usuario en UNA sola línea con elipsis si no entra */
+    .top-user-info .user-details {
+      text-align: right;
+      font-size: 0.85rem;
+      line-height: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 65vw;                  /* espacio flexible para móviles */
+    }
+    .top-user-info .user-details strong {font-weight: 700;}
+
     .top-user-info button {
-      background: #cc0000; color: white; font-weight: bold;
-      border: none; border-radius: 6px;
-      padding: 0.5rem 1rem; cursor: pointer;
+      background: #cc0000;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      padding: 0.35rem 0.6rem;          /* botón compacto */
+      cursor: pointer;
+      font-size: 0.8rem;
+      flex: 0 0 auto;
     }
     .top-user-info button:hover {background: #990000;}
 
+    /* Ajustes de sidebar/iframe (sin cambios de lógica) */
     .layout {display: flex; flex: 1;}
     .sidebar {
       display: flex; flex-direction: column;
@@ -107,6 +141,13 @@
       flex: 1; border: none; background: white; min-height: 500px;
       overflow: auto;
     }
+
+    /* Responsivo extra: si el ancho es muy chico, baja un poco la fuente para que se mantenga en una línea */
+    @media (max-width: 480px) {
+      header h1 {font-size: 0.95rem;}
+      .top-user-info .user-details {font-size: 0.8rem; max-width: 58vw;}
+      .top-user-info button {font-size: 0.75rem; padding: 0.3rem 0.5rem;}
+    }
   </style>
 </head>
 <body>
@@ -144,7 +185,7 @@
     <header>
       <h1 id="active-section">Portal Defensoría</h1>
       <div class="top-user-info">
-        <div class="user-details" id="user-info"></div>
+        <div class="user-details" id="user-info" title=""></div>
         <button onclick="logout()">Cerrar Sesión</button>
       </div>
     </header>
@@ -175,10 +216,13 @@
       if(user && email && role && pass){
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('app').style.display = 'flex';
-        document.getElementById('user-info').innerHTML =
-          "<strong>" + user + "</strong><br>" +
-          email + "<br>" +
-          "<strong>Rol: " + role + "</strong>";
+
+        // UNA SOLA LÍNEA: Usuario — email — Rol
+        const line = "<strong>" + user + "</strong> — " + email + " — <strong>Rol: " + role + "</strong>";
+        const info = document.getElementById('user-info');
+        info.innerHTML = line;
+        info.setAttribute('title', user + " | " + email + " | Rol: " + role); // tooltip completo
+
         document.getElementById('active-section').innerText = "Registro Causas";
       } else {
         alert('Complete todos los campos: usuario, email, rol y contraseña');

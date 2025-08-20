@@ -12,11 +12,30 @@
     #login-container {
       flex: 1;
       display: flex;
+      height: 100vh;
+      background: none;
+      padding: 0;
+    }
+    .login-left {
+      flex: 1;
+      display: flex;
       justify-content: center;
       align-items: center;
-      padding: 1rem;
+      background: black;
+    }
+    .login-left iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .login-right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       background: url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/c43141ef2569c0b4a6af8b013d2a27d871d2ea4f/fondo.jpg') no-repeat center center;
       background-size: cover;
+      padding: 1rem;
     }
     #login-box {
       background: rgba(255, 255, 255, 0.85);
@@ -279,48 +298,78 @@
 
     .quick-action:hover {background: #0066cc; color: white;}
 
-    @media (max-width: 480px) {
-      header h1 {font-size: 0.95rem;}
-      .top-user-info .user-details {font-size: 0.8rem; max-width: 58vw;}
-      .top-user-info button {font-size: 0.75rem; padding: 0.3rem 0.5rem;}
-      #chatbot-container {
-        width: calc(100vw - 40px);
-        height: 400px;
-        bottom: 90px;
-        right: 20px;
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      #login-container {
+        flex-direction: column;
+        height: auto;
       }
-      #chatbot-toggle {width: 50px; height: 50px; font-size: 20px;}
+      .login-left, .login-right {
+        flex: none;
+        width: 100%;
+        height: auto;
+      }
+      .login-left iframe {
+        height: 250px;
+      }
+      .login-right {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .login-left iframe {
+        height: 200px;
+      }
+      #login-box {
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem;
+        border-radius: 0;
+        box-shadow: none;
+      }
     }
   </style>
 </head>
 <body>
   <!-- LOGIN -->
   <div id="login-container">
-    <div id="login-box">
-      <h1>Sistema de Administración de Causas Judiciales</h1>
-      <h3>Defensoría Civil y Comercial 6 - Poder Judicial de Misiones</h3>
-      <h2>Iniciar Sesión</h2>
-      <form id="login-form" onsubmit="event.preventDefault(); login();">
-        <input type="text" id="username" placeholder="Usuario (Nombre Apellido)">
-        <input type="email" id="email" placeholder="Email">
-        <select id="role">
-          <option value="">Seleccione rol de usuario</option>
-          <option value="Administrador">Administrador</option>
-          <option value="Defensor">Defensor</option>
-          <option value="Secretario">Secretario</option>
-          <option value="Empleado">Empleado</option>
-        </select>
-        <input type="password" id="password" placeholder="Contraseña">
-        <button type="submit">Entrar</button>
-      </form>
-      <p class="notice">
-        En caso de algún inconveniente, problema de funcionalidad, dudas o consultas sobre el sistema:<br>
-        Comuníquese al email:
-        <a href="https://correo.jusmisiones.gov.ar/#1" target="_blank">rcfioravante@jusmisiones.gov.ar</a><br><br>
-        Incluya en el mensaje los siguientes datos: Nombre y Apellido, Email y Rol de Usuario registrado en el sistema.<br>
-        En breve estaremos en contacto.
-      <h3>Uso exclusivo con acceso remoto</h3>
-      </p>
+    <div class="login-left">
+      <iframe width="100%" height="100%" 
+        src="https://www.youtube.com/embed/6B-dWqw1tQA" 
+        title="Video Institucional" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="login-right">
+      <div id="login-box">
+        <h1>Sistema de Administración de Causas Judiciales</h1>
+        <h3>Defensoría Civil y Comercial 6 - Poder Judicial de Misiones</h3>
+        <h2>Iniciar Sesión</h2>
+        <form id="login-form" onsubmit="event.preventDefault(); login();">
+          <input type="text" id="username" placeholder="Usuario (Nombre Apellido)">
+          <input type="email" id="email" placeholder="Email">
+          <select id="role">
+            <option value="">Seleccione rol de usuario</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Defensor">Defensor</option>
+            <option value="Secretario">Secretario</option>
+            <option value="Empleado">Empleado</option>
+          </select>
+          <input type="password" id="password" placeholder="Contraseña">
+          <button type="submit">Entrar</button>
+        </form>
+        <p class="notice">
+          En caso de algún inconveniente, problema de funcionalidad, dudas o consultas sobre el sistema:<br>
+          Comuníquese al email:
+          <a href="https://correo.jusmisiones.gov.ar/#1" target="_blank">rcfioravante@jusmisiones.gov.ar</a><br><br>
+          Incluya en el mensaje los siguientes datos: Nombre y Apellido, Email y Rol de Usuario registrado en el sistema.<br>
+          En breve estaremos en contacto.
+        <h3>Uso exclusivo con acceso remoto</h3>
+        </p>
+      </div>
     </div>
   </div>
 

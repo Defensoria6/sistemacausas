@@ -8,13 +8,15 @@
     * {box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
     body {height: 100vh; display: flex; flex-direction: column;}
 
-    /* LOGIN MODERNO */
+    /* LOGIN MODERNO - PANEL ÚNICO */
     #login-container {
       flex: 1;
       display: flex;
+      justify-content: center;
+      align-items: center;
       height: 100vh;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 0;
+      padding: 20px;
       position: relative;
       overflow: hidden;
     }
@@ -92,34 +94,6 @@
       }
     }
 
-    .login-left {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      z-index: 2;
-      position: relative;
-    }
-    .login-left iframe {
-      width: 90%;
-      height: 80%;
-      border: none;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .login-right {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-      z-index: 2;
-      position: relative;
-    }
-
     #login-box {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px);
@@ -133,6 +107,8 @@
       transform: translateY(20px);
       opacity: 0;
       animation: slideIn 0.8s ease-out forwards;
+      z-index: 2;
+      position: relative;
     }
 
     @keyframes slideIn {
@@ -292,16 +268,32 @@
       }
     }
 
-    #login-box p.notice {
-      font-size: 0.85rem;
-      color: #444;
-      margin-top: 1.5rem;
-      line-height: 1.5;
-      background: rgba(241, 241, 241, 0.8);
-      border: 1px solid rgba(204, 204, 204, 0.5);
-      border-radius: 12px;
-      padding: 1rem;
-      backdrop-filter: blur(5px);
+    /* Animación de carga */
+    .loading {
+      position: relative;
+    }
+
+    .loading .button-text {
+      opacity: 0.7;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid transparent;
+      border-top: 2px solid #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     /* APP */
@@ -513,92 +505,43 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      transition: background 0.3s;
     }
 
-    #chatbot-send:hover {background: #004999;}
+    #chatbot-send:hover {
+      background: #004999;
+    }
 
     .quick-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 10px;
+      margin: 10px 0;
     }
 
     .quick-action {
-      background: #e9ecef;
-      border: 1px solid #ddd;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
       border-radius: 15px;
       padding: 6px 12px;
       font-size: 12px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s;
     }
 
     .quick-action:hover {background: #0066cc; color: white;}
 
     /* RESPONSIVE OPTIMIZADO */
     @media (max-width: 1200px) {
-      .login-right {
-        flex: 1.2;
-        padding: 1.5rem;
-      }
       #login-box {
         max-width: 500px;
         padding: 35px;
       }
     }
 
-    @media (max-width: 1024px) {
-      #login-container {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
-      }
-      .login-left, .login-right {
-        flex: none;
-        width: 100%;
-        height: auto;
-      }
-      .login-left {
-        min-height: 280px;
-        padding: 15px;
-        order: 1;
-      }
-      .login-left iframe {
-        height: 250px;
-        width: 95%;
-      }
-      .login-right {
-        padding: 20px;
-        order: 2;
-        min-height: calc(100vh - 280px);
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        padding-top: 30px;
-      }
-      #login-box {
-        max-width: 600px;
-        width: 100%;
-        margin: 0 auto;
-        padding: 30px;
-      }
-    }
-
     @media (max-width: 768px) {
-      .login-left {
-        min-height: 220px;
-        padding: 10px;
-      }
-      .login-left iframe {
-        height: 200px;
-        width: 98%;
-      }
-      .login-right {
+      #login-container {
         padding: 15px;
-        padding-top: 20px;
-        min-height: calc(100vh - 220px);
       }
       #login-box {
         padding: 25px 20px;
@@ -624,16 +567,8 @@
     }
 
     @media (max-width: 600px) {
-      .login-left {
-        min-height: 180px;
-      }
-      .login-left iframe {
-        height: 160px;
-      }
-      .login-right {
+      #login-container {
         padding: 10px;
-        padding-top: 15px;
-        min-height: calc(100vh - 180px);
       }
       #login-box {
         padding: 20px 15px;
@@ -669,24 +604,11 @@
         margin-top: 15px;
         padding-top: 15px;
       }
-      #login-box p.notice {
-        font-size: 0.8rem;
-        padding: 0.8rem;
-        margin-top: 1rem;
-      }
     }
 
     @media (max-width: 480px) {
-      .login-left {
-        min-height: 150px;
-      }
-      .login-left iframe {
-        height: 130px;
-      }
-      .login-right {
+      #login-container {
         padding: 8px;
-        padding-top: 12px;
-        min-height: calc(100vh - 150px);
       }
       #login-box {
         padding: 18px 12px;
@@ -718,17 +640,11 @@
       .register-toggle {
         font-size: 0.85rem;
       }
-      #login-box p.notice {
-        font-size: 0.75rem;
-        padding: 0.7rem;
-        line-height: 1.4;
-      }
     }
 
     @media (max-width: 360px) {
-      .login-right {
+      #login-container {
         padding: 5px;
-        padding-top: 10px;
       }
       #login-box {
         padding: 15px 10px;
@@ -753,35 +669,70 @@
       }
     }
 
-    /* Animación de carga */
-    .loading {
-      display: none;
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s ease-in-out infinite;
-      margin-right: 10px;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
+    /* Responsive para la aplicación */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 60px;
+      }
+      .sidebar h2 {
+        display: none;
+      }
+      .sidebar nav a span {
+        display: none;
+      }
+      .sidebar nav a::after {
+        opacity: 1;
+        position: fixed;
+        left: 70px;
+        background: #333;
+        z-index: 1001;
+      }
+      .top-user-info .user-details {
+        max-width: 40vw;
+        font-size: 0.75rem;
+      }
+      #chatbot-container {
+        width: 300px;
+        height: 400px;
+        right: 10px;
+        bottom: 80px;
       }
     }
 
-    .login-button.loading .loading {
-      display: inline-block;
-    }
-
-    .login-button.loading .button-text {
-      opacity: 0.7;
+    @media (max-width: 480px) {
+      header {
+        padding: 0.3rem 0.5rem;
+      }
+      header h1 {
+        font-size: 0.9rem;
+      }
+      .top-user-info .user-details {
+        max-width: 30vw;
+        font-size: 0.7rem;
+      }
+      .top-user-info button {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.7rem;
+      }
+      #chatbot-container {
+        width: calc(100vw - 20px);
+        height: 350px;
+        right: 10px;
+        left: 10px;
+        bottom: 80px;
+      }
+      #chatbot-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        bottom: 15px;
+        right: 15px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- LOGIN -->
+  <!-- LOGIN CONTAINER -->
   <div id="login-container">
     <!-- Fondo animado -->
     <div class="background-animation">
@@ -793,97 +744,74 @@
       <div class="bubble"></div>
     </div>
 
-    <div class="login-left">
-      <iframe
-        width="100%"
-        height="100%"
-        src="https://www.youtube.com/embed/mOsk64DvzFc"
-        title="Video Institucional"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-        referrerpolicy="strict-origin-when-cross-origin"
-        loading="lazy">
-      </iframe>
-    </div>
-    <div class="login-right">
-      <div id="login-box">
-        <h1>Sistema de Administración de Causas Judiciales</h1>
-        <h3>Defensoría Civil y Comercial 6 - Poder Judicial de Misiones</h3>
-        <h2>Iniciar Sesión</h2>
+    <!-- Panel único de login -->
+    <div id="login-box">
+      <h1>Sistema de Administración de Causas Judiciales</h1>
+      <h3>Defensoría Civil y Comercial 6 - Poder Judicial de Misiones</h3>
+      <h2>Iniciar Sesión</h2>
+      
+      <!-- Formulario de Login -->
+      <form id="login-form" onsubmit="event.preventDefault(); login();">
+        <div class="form-group">
+          <input type="text" id="username" placeholder="Usuario (Nombre Apellido)" required>
+        </div>
+        <div class="form-group">
+          <input type="email" id="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <select id="role" required>
+            <option value="">Seleccione rol de usuario</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Defensor">Defensor</option>
+            <option value="Secretario">Secretario</option>
+            <option value="Empleado">Empleado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input type="password" id="password" placeholder="Contraseña" required>
+        </div>
+        <button type="submit" class="login-button">
+          <div class="loading"></div>
+          <span class="button-text">Entrar</span>
+        </button>
+      </form>
+
+      <!-- Sección de Registro -->
+      <div class="register-section">
+        <button type="button" class="register-toggle" onclick="toggleRegister()">
+          ¿No tienes cuenta? Regístrate aquí
+        </button>
         
-        <!-- Formulario de Login -->
-        <form id="login-form" onsubmit="event.preventDefault(); login();">
+        <form id="register-form" onsubmit="event.preventDefault(); register();">
+          <h3 style="margin-bottom: 15px; color: #333;">Crear Nueva Cuenta</h3>
           <div class="form-group">
-            <input type="text" id="username" placeholder="Usuario (Nombre Apellido)" required>
+            <input type="text" id="reg-username" placeholder="Nombre Completo" required>
           </div>
           <div class="form-group">
-            <input type="email" id="email" placeholder="Email" required>
+            <input type="email" id="reg-email" placeholder="Email" required>
           </div>
           <div class="form-group">
-            <select id="role" required>
+            <select id="reg-role" required>
               <option value="">Seleccione rol de usuario</option>
-              <option value="Administrador">Administrador</option>
-              <option value="Defensor">Defensor</option>
-              <option value="Secretario">Secretario</option>
+              <option value="Usuario">Usuario</option>
               <option value="Empleado">Empleado</option>
+              <option value="Secretario">Secretario</option>
             </select>
           </div>
           <div class="form-group">
-            <input type="password" id="password" placeholder="Contraseña" required>
+            <input type="password" id="reg-password" placeholder="Contraseña" required>
+          </div>
+          <div class="form-group">
+            <input type="password" id="reg-confirm-password" placeholder="Confirmar Contraseña" required>
           </div>
           <button type="submit" class="login-button">
             <div class="loading"></div>
-            <span class="button-text">Entrar</span>
+            <span class="button-text">Registrarse</span>
+          </button>
+          <button type="button" class="register-toggle" onclick="toggleRegister()" style="margin-top: 10px;">
+            ¿Ya tienes cuenta? Inicia sesión
           </button>
         </form>
-
-        <!-- Sección de Registro -->
-        <div class="register-section">
-          <button type="button" class="register-toggle" onclick="toggleRegister()">
-            ¿No tienes cuenta? Regístrate aquí
-          </button>
-          
-          <form id="register-form" onsubmit="event.preventDefault(); register();">
-            <h3 style="margin-bottom: 15px; color: #333;">Crear Nueva Cuenta</h3>
-            <div class="form-group">
-              <input type="text" id="reg-username" placeholder="Nombre Completo" required>
-            </div>
-            <div class="form-group">
-              <input type="email" id="reg-email" placeholder="Email" required>
-            </div>
-            <div class="form-group">
-              <select id="reg-role" required>
-                <option value="">Seleccione rol de usuario</option>
-                <option value="Usuario">Usuario</option>
-                <option value="Empleado">Empleado</option>
-                <option value="Secretario">Secretario</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <input type="password" id="reg-password" placeholder="Contraseña" required>
-            </div>
-            <div class="form-group">
-              <input type="password" id="reg-confirm-password" placeholder="Confirmar Contraseña" required>
-            </div>
-            <button type="submit" class="login-button">
-              <div class="loading"></div>
-              <span class="button-text">Registrarse</span>
-            </button>
-            <button type="button" class="register-toggle" onclick="toggleRegister()" style="margin-top: 10px;">
-              ¿Ya tienes cuenta? Inicia sesión
-            </button>
-          </form>
-        </div>
-
-        <p class="notice">
-          En caso de algún inconveniente, problema de funcionalidad, dudas o consultas sobre el sistema:<br>
-          Comuníquese al email:
-          <a href="https://correo.jusmisiones.gov.ar/#1" target="_blank">rcfioravante@jusmisiones.gov.ar</a><br><br>
-          Incluya en el mensaje los siguientes datos: Nombre y Apellido, Email y Rol de Usuario registrado en el sistema.<br>
-          En breve estaremos en contacto.
-        <h3>Uso exclusivo con acceso remoto</h3>
-        </p>
       </div>
     </div>
   </div>
@@ -1207,61 +1135,15 @@ Estoy aquí para ayudarte con:
     window.addEventListener('load', function() {
       const formGroups = document.querySelectorAll('.form-group');
       formGroups.forEach((group, index) => {
+        group.style.opacity = '0';
+        group.style.transform = 'translateY(20px)';
         setTimeout(() => {
-          group.style.opacity = '0';
-          group.style.transform = 'translateX(-20px)';
           group.style.transition = 'all 0.5s ease';
-          
-          setTimeout(() => {
-            group.style.opacity = '1';
-            group.style.transform = 'translateX(0)';
-          }, 100);
-        }, index * 200);
+          group.style.opacity = '1';
+          group.style.transform = 'translateY(0)';
+        }, 200 + (index * 100));
       });
     });
-
-    // Efecto de partículas en el cursor (opcional)
-    document.addEventListener('mousemove', function(e) {
-      if (Math.random() > 0.95) {
-        createParticle(e.clientX, e.clientY);
-      }
-    });
-
-    function createParticle(x, y) {
-      const particle = document.createElement('div');
-      particle.style.position = 'fixed';
-      particle.style.left = x + 'px';
-      particle.style.top = y + 'px';
-      particle.style.width = '4px';
-      particle.style.height = '4px';
-      particle.style.background = 'rgba(102, 126, 234, 0.6)';
-      particle.style.borderRadius = '50%';
-      particle.style.pointerEvents = 'none';
-      particle.style.zIndex = '1000';
-      particle.style.animation = 'particleFade 1s ease-out forwards';
-      
-      document.body.appendChild(particle);
-      
-      setTimeout(() => {
-        particle.remove();
-      }, 1000);
-    }
-
-    // Agregar keyframes para las partículas
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes particleFade {
-        0% {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-        100% {
-          opacity: 0;
-          transform: translateY(-50px) scale(0);
-        }
-      }
-    `;
-    document.head.appendChild(style);
   </script>
 </body>
 </html>

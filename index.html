@@ -5,64 +5,303 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal Defensoría Civil y Comercial 6</title>
   <style>
-    * {box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif;}
+    * {box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
     body {height: 100vh; display: flex; flex-direction: column;}
 
-    /* LOGIN */
+    /* LOGIN MODERNO */
     #login-container {
       flex: 1;
       display: flex;
       height: 100vh;
-      background: none;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       padding: 0;
+      position: relative;
+      overflow: hidden;
     }
+
+    /* Fondo animado con burbujas */
+    .background-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .bubble {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .bubble:nth-child(1) {
+      width: 80px;
+      height: 80px;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .bubble:nth-child(2) {
+      width: 120px;
+      height: 120px;
+      left: 20%;
+      animation-delay: 2s;
+    }
+
+    .bubble:nth-child(3) {
+      width: 60px;
+      height: 60px;
+      left: 35%;
+      animation-delay: 4s;
+    }
+
+    .bubble:nth-child(4) {
+      width: 100px;
+      height: 100px;
+      left: 50%;
+      animation-delay: 1s;
+    }
+
+    .bubble:nth-child(5) {
+      width: 90px;
+      height: 90px;
+      left: 70%;
+      animation-delay: 3s;
+    }
+
+    .bubble:nth-child(6) {
+      width: 70px;
+      height: 70px;
+      left: 85%;
+      animation-delay: 5s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10%, 90% {
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-100px) rotate(180deg);
+      }
+    }
+
     .login-left {
       flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: black;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      z-index: 2;
+      position: relative;
     }
     .login-left iframe {
-      width: 100%;
-      height: 100%;
+      width: 90%;
+      height: 80%;
       border: none;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
+
     .login-right {
       flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/c43141ef2569c0b4a6af8b013d2a27d871d2ea4f/fondo.jpg') no-repeat center center;
-      background-size: cover;
-      padding: 1rem;
-    }
-    #login-box {
-      background: rgba(255, 255, 255, 0.85);
       padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 420px;
-      text-align: center;
+      z-index: 2;
+      position: relative;
     }
 
-    #login-box h1 {font-size: 1.3rem; margin-bottom: 0.5rem;}
-    #login-box h3 {font-size: 0.95rem; color: #555; margin-bottom: 1.5rem;}
-    #login-box h2 {margin-bottom: 1rem;}
+    #login-box {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: slideIn 0.8s ease-out forwards;
+    }
+
+    @keyframes slideIn {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    #login-box h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      animation: titleGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+      from {
+        filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.3));
+      }
+      to {
+        filter: drop-shadow(0 0 15px rgba(118, 75, 162, 0.5));
+      }
+    }
+
+    #login-box h3 {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+    }
+
+    #login-box h2 {
+      margin-bottom: 1.5rem;
+      color: #333;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
     #login-box input, #login-box select {
-      width: 100%; padding: 0.75rem; margin: 0.5rem 0;
-      border: 1px solid #ccc; border-radius: 8px; font-size: 1rem;
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid #e1e5e9;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.8);
+      outline: none;
+      margin: 0;
     }
+
+    #login-box input:focus, #login-box select:focus {
+      border-color: #667eea;
+      background: rgba(255, 255, 255, 1);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.1);
+    }
+
+    #login-box input::placeholder {
+      color: #999;
+      transition: all 0.3s ease;
+    }
+
+    #login-box input:focus::placeholder {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+
     #login-box button {
-      width: 100%; padding: 0.75rem; background: #0066cc;
-      color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      margin-top: 10px;
     }
-    #login-box button:hover {background: #004999;}
+
+    #login-box button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    #login-box button:hover::before {
+      left: 100%;
+    }
+
+    #login-box button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    #login-box button:active {
+      transform: translateY(0);
+    }
+
+    /* Botón de registro */
+    .register-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e1e5e9;
+    }
+
+    .register-toggle {
+      background: none;
+      border: none;
+      color: #667eea;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: underline;
+      transition: color 0.3s ease;
+    }
+
+    .register-toggle:hover {
+      color: #764ba2;
+    }
+
+    #register-form {
+      display: none;
+      margin-top: 20px;
+    }
+
+    #register-form.show {
+      display: block;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     #login-box p.notice {
-      font-size: 0.85rem; color: #444; margin-top: 1.5rem; line-height: 1.5;
-      background: #f1f1f1; border: 1px solid #ccc; border-radius: 8px;
+      font-size: 0.85rem;
+      color: #444;
+      margin-top: 1.5rem;
+      line-height: 1.5;
+      background: rgba(241, 241, 241, 0.8);
+      border: 1px solid rgba(204, 204, 204, 0.5);
+      border-radius: 12px;
       padding: 1rem;
+      backdrop-filter: blur(5px);
     }
 
     /* APP */
@@ -298,42 +537,262 @@
 
     .quick-action:hover {background: #0066cc; color: white;}
 
-    /* RESPONSIVE */
+    /* RESPONSIVE OPTIMIZADO */
+    @media (max-width: 1200px) {
+      .login-right {
+        flex: 1.2;
+        padding: 1.5rem;
+      }
+      #login-box {
+        max-width: 500px;
+        padding: 35px;
+      }
+    }
+
     @media (max-width: 1024px) {
       #login-container {
         flex-direction: column;
         height: auto;
+        min-height: 100vh;
       }
       .login-left, .login-right {
         flex: none;
         width: 100%;
         height: auto;
       }
+      .login-left {
+        min-height: 280px;
+        padding: 15px;
+        order: 1;
+      }
       .login-left iframe {
         height: 250px;
+        width: 95%;
       }
       .login-right {
-        padding: 1rem;
+        padding: 20px;
+        order: 2;
+        min-height: calc(100vh - 280px);
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 30px;
+      }
+      #login-box {
+        max-width: 600px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .login-left {
+        min-height: 220px;
+        padding: 10px;
+      }
+      .login-left iframe {
+        height: 200px;
+        width: 98%;
+      }
+      .login-right {
+        padding: 15px;
+        padding-top: 20px;
+        min-height: calc(100vh - 220px);
+      }
+      #login-box {
+        padding: 25px 20px;
+        border-radius: 15px;
+        max-width: 100%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      }
+      #login-box h1 {
+        font-size: 1.6rem;
+        line-height: 1.2;
+      }
+      #login-box h3 {
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+      }
+      .form-group {
+        margin-bottom: 18px;
+      }
+      #login-box input, #login-box select {
+        padding: 14px 18px;
+        font-size: 0.95rem;
       }
     }
 
     @media (max-width: 600px) {
+      .login-left {
+        min-height: 180px;
+      }
       .login-left iframe {
-        height: 200px;
+        height: 160px;
+      }
+      .login-right {
+        padding: 10px;
+        padding-top: 15px;
+        min-height: calc(100vh - 180px);
       }
       #login-box {
-        width: 100%;
-        max-width: 100%;
-        padding: 1rem;
-        border-radius: 0;
-        box-shadow: none;
+        padding: 20px 15px;
+        border-radius: 12px;
+        margin: 0;
+        max-height: none;
+        overflow-y: auto;
       }
+      #login-box h1 {
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+      }
+      #login-box h3 {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+      #login-box h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      #login-box input, #login-box select {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+      }
+      #login-box button {
+        padding: 12px;
+        font-size: 1rem;
+      }
+      .register-section {
+        margin-top: 15px;
+        padding-top: 15px;
+      }
+      #login-box p.notice {
+        font-size: 0.8rem;
+        padding: 0.8rem;
+        margin-top: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-left {
+        min-height: 150px;
+      }
+      .login-left iframe {
+        height: 130px;
+      }
+      .login-right {
+        padding: 8px;
+        padding-top: 12px;
+        min-height: calc(100vh - 150px);
+      }
+      #login-box {
+        padding: 18px 12px;
+        border-radius: 10px;
+      }
+      #login-box h1 {
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+      }
+      #login-box h3 {
+        font-size: 0.85rem;
+        margin-bottom: 0.8rem;
+      }
+      #login-box h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+      }
+      .form-group {
+        margin-bottom: 12px;
+      }
+      #login-box input, #login-box select {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+      }
+      #login-box button {
+        padding: 10px;
+        font-size: 0.95rem;
+      }
+      .register-toggle {
+        font-size: 0.85rem;
+      }
+      #login-box p.notice {
+        font-size: 0.75rem;
+        padding: 0.7rem;
+        line-height: 1.4;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .login-right {
+        padding: 5px;
+        padding-top: 10px;
+      }
+      #login-box {
+        padding: 15px 10px;
+        border-radius: 8px;
+      }
+      #login-box h1 {
+        font-size: 1.1rem;
+      }
+      #login-box h3 {
+        font-size: 0.8rem;
+      }
+      #login-box h2 {
+        font-size: 1.1rem;
+      }
+      #login-box input, #login-box select {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+      }
+      #login-box button {
+        padding: 8px;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Animación de carga */
+    .loading {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .login-button.loading .loading {
+      display: inline-block;
+    }
+
+    .login-button.loading .button-text {
+      opacity: 0.7;
     }
   </style>
 </head>
 <body>
   <!-- LOGIN -->
   <div id="login-container">
+    <!-- Fondo animado -->
+    <div class="background-animation">
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+    </div>
+
     <div class="login-left">
       <iframe
         width="100%"
@@ -352,19 +811,71 @@
         <h1>Sistema de Administración de Causas Judiciales</h1>
         <h3>Defensoría Civil y Comercial 6 - Poder Judicial de Misiones</h3>
         <h2>Iniciar Sesión</h2>
+        
+        <!-- Formulario de Login -->
         <form id="login-form" onsubmit="event.preventDefault(); login();">
-          <input type="text" id="username" placeholder="Usuario (Nombre Apellido)">
-          <input type="email" id="email" placeholder="Email">
-          <select id="role">
-            <option value="">Seleccione rol de usuario</option>
-            <option value="Administrador">Administrador</option>
-            <option value="Defensor">Defensor</option>
-            <option value="Secretario">Secretario</option>
-            <option value="Empleado">Empleado</option>
-          </select>
-          <input type="password" id="password" placeholder="Contraseña">
-          <button type="submit">Entrar</button>
+          <div class="form-group">
+            <input type="text" id="username" placeholder="Usuario (Nombre Apellido)" required>
+          </div>
+          <div class="form-group">
+            <input type="email" id="email" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <select id="role" required>
+              <option value="">Seleccione rol de usuario</option>
+              <option value="Administrador">Administrador</option>
+              <option value="Defensor">Defensor</option>
+              <option value="Secretario">Secretario</option>
+              <option value="Empleado">Empleado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="password" id="password" placeholder="Contraseña" required>
+          </div>
+          <button type="submit" class="login-button">
+            <div class="loading"></div>
+            <span class="button-text">Entrar</span>
+          </button>
         </form>
+
+        <!-- Sección de Registro -->
+        <div class="register-section">
+          <button type="button" class="register-toggle" onclick="toggleRegister()">
+            ¿No tienes cuenta? Regístrate aquí
+          </button>
+          
+          <form id="register-form" onsubmit="event.preventDefault(); register();">
+            <h3 style="margin-bottom: 15px; color: #333;">Crear Nueva Cuenta</h3>
+            <div class="form-group">
+              <input type="text" id="reg-username" placeholder="Nombre Completo" required>
+            </div>
+            <div class="form-group">
+              <input type="email" id="reg-email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+              <select id="reg-role" required>
+                <option value="">Seleccione rol de usuario</option>
+                <option value="Usuario">Usuario</option>
+                <option value="Empleado">Empleado</option>
+                <option value="Secretario">Secretario</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="password" id="reg-password" placeholder="Contraseña" required>
+            </div>
+            <div class="form-group">
+              <input type="password" id="reg-confirm-password" placeholder="Confirmar Contraseña" required>
+            </div>
+            <button type="submit" class="login-button">
+              <div class="loading"></div>
+              <span class="button-text">Registrarse</span>
+            </button>
+            <button type="button" class="register-toggle" onclick="toggleRegister()" style="margin-top: 10px;">
+              ¿Ya tienes cuenta? Inicia sesión
+            </button>
+          </form>
+        </div>
+
         <p class="notice">
           En caso de algún inconveniente, problema de funcionalidad, dudas o consultas sobre el sistema:<br>
           Comuníquese al email:
@@ -396,6 +907,7 @@
           <a href="#" onclick="loadPage('https://defensoria6.github.io/calendario/', this)" data-title="Calendario">📅 <span>Calendario</span></a>
           <a href="#" onclick="loadPage('https://defensoria6.github.io/estadistica-sistema/', this)" data-title="Estadística">📊 <span>Estadística</span></a>
           <a href="#" onclick="loadPage('https://defensoria6.github.io/atencion-publico/', this)" data-title="Atención Público">💬 <span>Atención Público</span></a>
+          <a href="#" onclick="loadPage('https://defensoria6.github.io/documentos/', this)" data-title="Documentos">📄 <span>Documentos</span></a>
         </nav>
       </div>
       <main>
@@ -424,32 +936,113 @@
   <script>
     let chatbotOpen = false;
     let currentUser = '';
+    let isRegisterMode = false;
+
+    function toggleRegister() {
+      isRegisterMode = !isRegisterMode;
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      
+      if (isRegisterMode) {
+        loginForm.style.display = 'none';
+        registerForm.classList.add('show');
+      } else {
+        loginForm.style.display = 'block';
+        registerForm.classList.remove('show');
+      }
+    }
+
+    function register() {
+      const button = document.querySelector('#register-form .login-button');
+      const buttonText = button.querySelector('.button-text');
+      
+      // Mostrar estado de carga
+      button.classList.add('loading');
+      buttonText.textContent = 'Registrando...';
+      
+      const user = document.getElementById('reg-username').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const role = document.getElementById('reg-role').value.trim();
+      const pass = document.getElementById('reg-password').value.trim();
+      const confirmPass = document.getElementById('reg-confirm-password').value.trim();
+      
+      setTimeout(() => {
+        button.classList.remove('loading');
+        buttonText.textContent = 'Registrarse';
+        
+        if (!user || !email || !role || !pass || !confirmPass) {
+          alert('Complete todos los campos para el registro');
+          return;
+        }
+        
+        if (pass !== confirmPass) {
+          alert('Las contraseñas no coinciden');
+          return;
+        }
+        
+        if (pass.length < 6) {
+          alert('La contraseña debe tener al menos 6 caracteres');
+          return;
+        }
+        
+        // Simular registro exitoso
+        alert('¡Registro exitoso! Ahora puede iniciar sesión con sus credenciales.');
+        
+        // Limpiar formulario de registro
+        document.getElementById('reg-username').value = '';
+        document.getElementById('reg-email').value = '';
+        document.getElementById('reg-role').value = '';
+        document.getElementById('reg-password').value = '';
+        document.getElementById('reg-confirm-password').value = '';
+        
+        // Volver al formulario de login
+        toggleRegister();
+        
+        // Pre-llenar datos en el login
+        document.getElementById('username').value = user;
+        document.getElementById('email').value = email;
+        document.getElementById('role').value = role;
+      }, 1500);
+    }
 
     function login(){
+      const button = document.querySelector('#login-form .login-button');
+      const buttonText = button.querySelector('.button-text');
+      
+      // Mostrar estado de carga
+      button.classList.add('loading');
+      buttonText.textContent = 'Iniciando sesión...';
+      
       const user = document.getElementById('username').value.trim();
       const email = document.getElementById('email').value.trim();
       const role = document.getElementById('role').value.trim();
       const pass = document.getElementById('password').value.trim();
-      if(user && email && role && pass){
-        currentUser = user;
-        document.getElementById('login-container').style.display = 'none';
-        document.getElementById('app').style.display = 'flex';
-        const line = "<strong>" + user + "</strong> — " + email + " — <strong>Rol: " + role + "</strong>";
-        const info = document.getElementById('user-info');
-        info.innerHTML = line;
-        info.setAttribute('title', user + " | " + email + " | Rol: " + role);
-        document.getElementById('active-section').innerText = "Registro Causas";
+      
+      setTimeout(() => {
+        button.classList.remove('loading');
+        buttonText.textContent = 'Entrar';
+        
+        if(user && email && role && pass){
+          currentUser = user;
+          document.getElementById('login-container').style.display = 'none';
+          document.getElementById('app').style.display = 'flex';
+          const line = "<strong>" + user + "</strong> — " + email + " — <strong>Rol: " + role + "</strong>";
+          const info = document.getElementById('user-info');
+          info.innerHTML = line;
+          info.setAttribute('title', user + " | " + email + " | Rol: " + role);
+          document.getElementById('active-section').innerText = "Registro Causas";
 
-        // Mostrar el chatbot después del login
-        document.getElementById('chatbot-toggle').style.display = 'block';
+          // Mostrar el chatbot después del login
+          document.getElementById('chatbot-toggle').style.display = 'block';
 
-        // Inicializar el chatbot con mensaje de bienvenida
-        setTimeout(() => {
-          initializeChatbot();
-        }, 1000);
-      } else {
-        alert('Complete todos los campos: usuario, email, rol y contraseña');
-      }
+          // Inicializar el chatbot con mensaje de bienvenida
+          setTimeout(() => {
+            initializeChatbot();
+          }, 1000);
+        } else {
+          alert('Complete todos los campos: usuario, email, rol y contraseña');
+        }
+      }, 1500);
     }
 
     function logout(){
@@ -467,6 +1060,11 @@
 
       // Limpiar mensajes del chatbot
       document.getElementById('chatbot-messages').innerHTML = '';
+      
+      // Volver al modo login si estaba en registro
+      if (isRegisterMode) {
+        toggleRegister();
+      }
     }
 
     function loadPage(url, element){
@@ -498,301 +1096,105 @@ Estoy aquí para ayudarte con:
 🔍 <b>Búsqueda de datos</b> en causas, partes y medidas de protección
 📂 <b>Navegación por secciones</b> del portal
 📅 <b>Audiencias y calendario</b>
-⏰ <b>Vencimientos y plazos</b>
 📊 <b>Estadísticas del sistema</b>
 💬 <b>Atención al público</b>
 
-¿En qué puedo asistirte hoy?`;
+¿En qué puedo ayudarte hoy?`;
 
-      addBotMessage(welcomeMessage, true);
+      addMessage('bot', welcomeMessage);
+      
+      // Agregar acciones rápidas
+      const quickActions = [
+        'Buscar causa',
+        'Ver calendario',
+        'Estadísticas',
+        'Ayuda navegación'
+      ];
+      
+      addQuickActions(quickActions);
     }
 
-    function addBotMessage(message, showQuickActions = false) {
+    function addMessage(sender, message) {
       const messagesContainer = document.getElementById('chatbot-messages');
       const messageDiv = document.createElement('div');
-      messageDiv.className = 'message bot';
-
-      messageDiv.innerHTML = `
-        <div class="message-avatar">💬</div>
-        <div class="message-content">
-          ${message.replace(/\n/g, '<br>')}
-          ${showQuickActions ? getQuickActions() : ''}
-        </div>
-      `;
-
+      messageDiv.className = `message ${sender}`;
+      
+      const avatar = document.createElement('div');
+      avatar.className = 'message-avatar';
+      avatar.textContent = sender === 'bot' ? '🤖' : '👤';
+      
+      const content = document.createElement('div');
+      content.className = 'message-content';
+      content.innerHTML = message;
+      
+      messageDiv.appendChild(avatar);
+      messageDiv.appendChild(content);
       messagesContainer.appendChild(messageDiv);
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    function addUserMessage(message) {
+    function addQuickActions(actions) {
       const messagesContainer = document.getElementById('chatbot-messages');
-      const messageDiv = document.createElement('div');
-      messageDiv.className = 'message user';
-
-      messageDiv.innerHTML = `
-        <div class="message-avatar">👤</div>
-        <div class="message-content">${message}</div>
-      `;
-
-      messagesContainer.appendChild(messageDiv);
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'quick-actions';
+      
+      actions.forEach(action => {
+        const button = document.createElement('button');
+        button.className = 'quick-action';
+        button.textContent = action;
+        button.onclick = () => handleQuickAction(action);
+        actionsDiv.appendChild(button);
+      });
+      
+      messagesContainer.appendChild(actionsDiv);
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-
-    function getQuickActions() {
-      return `
-        <div class="quick-actions">
-          <div class="quick-action" onclick="handleQuickAction('buscar-causa')">📑 Causas</div>
-          <div class="quick-action" onclick="handleQuickAction('buscar-partes')">👥 Partes</div>
-          <div class="quick-action" onclick="handleQuickAction('proteccion-personas')">🛡️ Protección</div>
-          <div class="quick-action" onclick="handleQuickAction('audiencias')">📅 Audiencias</div>
-          <div class="quick-action" onclick="handleQuickAction('vencimientos')">⏰ Vencimientos</div>
-          <div class="quick-action" onclick="handleQuickAction('estadistica')">📊 Estadística</div>
-          <div class="quick-action" onclick="handleQuickAction('atencion-publico')">💬 Público</div>
-          <div class="quick-action" onclick="handleQuickAction('ir-seccion')">📂 Ir a sección</div>
-          <div class="quick-action" onclick="handleQuickAction('ayuda')">❓ Ayuda</div>
-        </div>
-      `;
     }
 
     function handleQuickAction(action) {
-      let response = '';
-
-      switch(action) {
-        case 'buscar-causa':
-          addUserMessage('📑 Buscar causa');
-          response = `En <b>Registro Causas</b> podés:
-          
-🔍 Buscar por número de expediente  
-👥 Buscar por nombre de las partes  
-📅 Filtrar por fechas  
-📋 Ver el estado de cada causa  
-
-¿Querés abrir <b>Registro Causas</b>?`;
-          break;
-
-        case 'buscar-partes':
-          addUserMessage('👥 Datos Partes');
-          response = `En <b>Datos Partes</b> podés:
-
-🔍 Buscar por nombre o apellido  
-🆔 Buscar por DNI  
-🏠 Consultar domicilios  
-⚖️ Ver situación legal de cada parte  
-
-¿Querés abrir <b>Datos Partes</b>?`;
-          break;
-
-        case 'proteccion-personas':
-          addUserMessage('🛡️ Protección Personas');
-          response = `En <b>Protección Personas</b> podés:
-
-📝 Registrar nuevas medidas  
-🔍 Buscar por nombre, DNI o causa  
-📅 Ver vencimientos de medidas  
-⚖️ Modificar o prorrogar medidas  
-
-¿Querés abrir <b>Protección Personas</b>?`;
-          break;
-
-        case 'audiencias':
-          addUserMessage('📅 Audiencias');
-          response = `En el <b>Calendario</b> podés:
-
-📅 Ver todas las audiencias programadas  
-⏰ Consultar audiencias de hoy o esta semana  
-🔍 Buscar por causa o parte  
-🔔 Configurar recordatorios  
-
-¿Querés abrir el <b>Calendario</b>?`;
-          break;
-
-        case 'vencimientos':
-          addUserMessage('⏰ Vencimientos');
-          response = `En <b>Vencimientos</b> podés:
-
-📋 Revisar términos procesales  
-📅 Ver fechas límite próximas  
-🔔 Configurar alertas  
-📊 Analizar vencimientos por causa o globales  
-
-¿Querés abrir la sección de <b>Vencimientos</b>?`;
-          break;
-
-        case 'estadistica':
-          addUserMessage('📊 Estadística');
-          response = `En <b>Estadística</b> podés:
-
-📊 Consultar cantidad de causas  
-📈 Ver plazos vencidos o vigentes  
-👥 Estadísticas de partes  
-⚖️ Indicadores de gestión  
-
-¿Querés abrir <b>Estadística</b>?`;
-          break;
-
-        case 'atencion-publico':
-          addUserMessage('💬 Atención Público');
-          response = `En <b>Atención al Público</b> podés:
-
-📨 Registrar nuevas consultas  
-📋 Ver historial de consultas  
-👥 Relacionar con causas y partes  
-📊 Generar reportes de atención  
-
-¿Querés abrir <b>Atención Público</b>?`;
-          break;
-
-        case 'ir-seccion':
-          addUserMessage('📂 Ir a sección');
-          response = `Decime a cuál sección querés ir:
-
-• <b>Registro Causas</b>  
-• <b>Datos Partes</b>  
-• <b>Protección Personas</b>  
-• <b>Calendario</b>  
-• <b>Estadística</b>  
-• <b>Atención Público</b>`;
-          break;
-
-        case 'ayuda':
-          addUserMessage('❓ Ayuda');
-          response = `Comandos útiles:
-
-📑 <b>"Buscar causa 123/2024"</b>  
-👥 <b>"Buscar parte Juan Pérez"</b> o <b>"DNI 12345678"</b>  
-🛡️ <b>"Medidas de protección de [Nombre]"</b>  
-📅 <b>"Audiencias de hoy"</b>  
-⏰ <b>"Vencimientos próximos"</b>  
-📊 <b>"Ver estadísticas"</b>  
-📂 <b>"Ir a [sección]"</b>`;
-          break;
-      }
-
-      setTimeout(() => addBotMessage(response), 400);
+      addMessage('user', action);
+      
+      setTimeout(() => {
+        let response = '';
+        switch(action) {
+          case 'Buscar causa':
+            response = 'Para buscar una causa, ve a la sección "Registro Causas" en el menú lateral. Allí podrás filtrar por número de expediente, partes involucradas o fecha.';
+            break;
+          case 'Ver calendario':
+            response = 'El calendario muestra todas las audiencias programadas. Haz clic en "Calendario" en el menú lateral para acceder.';
+            break;
+          case 'Estadísticas':
+            response = 'En la sección "Estadística" encontrarás reportes detallados sobre el rendimiento del sistema y métricas de casos.';
+            break;
+          case 'Ayuda navegación':
+            response = 'Usa el menú lateral para navegar entre secciones. Puedes colapsar el menú haciendo clic en él. Cada sección tiene herramientas específicas para tu trabajo.';
+            break;
+          default:
+            response = 'Gracias por tu consulta. ¿Hay algo más en lo que pueda ayudarte?';
+        }
+        addMessage('bot', response);
+      }, 1000);
     }
 
     function sendMessage() {
       const input = document.getElementById('chatbot-input');
       const message = input.value.trim();
-
+      
       if (message) {
-        addUserMessage(message);
+        addMessage('user', message);
         input.value = '';
-        setTimeout(() => processUserMessage(message), 400);
+        
+        // Simular respuesta del bot
+        setTimeout(() => {
+          const responses = [
+            'Entiendo tu consulta. Te ayudo a encontrar la información que necesitas.',
+            'Perfecto, déjame buscar esa información en el sistema.',
+            'Excelente pregunta. Aquí tienes la información solicitada.',
+            'Claro, puedo ayudarte con eso. ¿Necesitas algo más específico?'
+          ];
+          const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+          addMessage('bot', randomResponse);
+        }, 1000);
       }
-    }
-
-    function processUserMessage(message) {
-      const lowerMessage = message.toLowerCase();
-      let response = '';
-
-      // BÚSQUEDAS (intención)
-      if (lowerMessage.includes('buscar') || lowerMessage.includes('encontrar')) {
-        // Específico por dominio
-        if (lowerMessage.includes('causa') || lowerMessage.includes('expediente')) {
-          loadPage('https://defensoria6.github.io/registro-causas/', null);
-          document.getElementById('active-section').innerText = "Registro Causas";
-          response = `✅ Abrí <b>Registro Causas</b>. Allí podés buscar por número de expediente, partes o fechas.`;
-        } else if (lowerMessage.includes('parte') || lowerMessage.includes('persona') || lowerMessage.includes('dni')) {
-          loadPage('https://defensoria6.github.io/datospartes/', null);
-          document.getElementById('active-section').innerText = "Datos Partes";
-          response = `✅ Abrí <b>Datos Partes</b>. Buscá por nombre, apellido o DNI.`;
-        } else if (lowerMessage.includes('protección') || lowerMessage.includes('medida')) {
-          loadPage('https://defensoria6.github.io/proteccion-personas/', null);
-          document.getElementById('active-section').innerText = "Protección Personas";
-          response = `✅ Abrí <b>Protección Personas</b>. Podés buscar medidas por nombre/DNI o causa.`;
-        } else if (lowerMessage.includes('audiencia') || lowerMessage.includes('calendario') || lowerMessage.includes('agenda')) {
-          loadPage('https://defensoria6.github.io/calendario/', null);
-          document.getElementById('active-section').innerText = "Calendario";
-          response = `✅ Abrí el <b>Calendario</b>. Filtrá por fecha, causa o parte.`;
-        } else if (lowerMessage.includes('estad') || lowerMessage.includes('reporte') || lowerMessage.includes('indicador')) {
-          loadPage('https://defensoria6.github.io/estadistica-sistema/', null);
-          document.getElementById('active-section').innerText = "Estadística";
-          response = `✅ Abrí <b>Estadística</b>. Visualizá reportes e indicadores de gestión.`;
-        } else if (lowerMessage.includes('público') || lowerMessage.includes('consulta')) {
-          loadPage('https://defensoria6.github.io/atencion-publico/', null);
-          document.getElementById('active-section').innerText = "Atención Público";
-          response = `✅ Abrí <b>Atención Público</b>. Registrá y consultá atenciones.`;
-        } else {
-          response = `🔍 ¿Qué deseás buscar?
-
-• <b>Causas</b> (número, partes, fecha)  
-• <b>Partes</b> (nombre, apellido, DNI)  
-• <b>Medidas de protección</b> (nombre, DNI, causa)  
-• <b>Audiencias</b> (fecha, causa, parte)  
-• <b>Estadísticas</b> (indicadores, periodos)  
-• <b>Atención al público</b> (consultas, historial)`;
-        }
-
-      // NAVEGACIÓN rápida por texto
-      } else if (lowerMessage.includes('ir a') || lowerMessage.includes('abrir') || lowerMessage.includes('sección')) {
-        if (lowerMessage.includes('registro') || lowerMessage.includes('causa')) {
-          loadPage('https://defensoria6.github.io/registro-causas/', null);
-          document.getElementById('active-section').innerText = "Registro Causas";
-          response = `✅ Te dirigí a <b>Registro Causas</b>.`;
-        } else if (lowerMessage.includes('datos') || lowerMessage.includes('partes')) {
-          loadPage('https://defensoria6.github.io/datospartes/', null);
-          document.getElementById('active-section').innerText = "Datos Partes";
-          response = `✅ Te dirigí a <b>Datos Partes</b>.`;
-        } else if (lowerMessage.includes('protección') || lowerMessage.includes('medida')) {
-          loadPage('https://defensoria6.github.io/proteccion-personas/', null);
-          document.getElementById('active-section').innerText = "Protección Personas";
-          response = `✅ Te dirigí a <b>Protección Personas</b>.`;
-        } else if (lowerMessage.includes('calendario') || lowerMessage.includes('audien')) {
-          loadPage('https://defensoria6.github.io/calendario/', null);
-          document.getElementById('active-section').innerText = "Calendario";
-          response = `✅ Te dirigí al <b>Calendario</b>.`;
-        } else if (lowerMessage.includes('estad')) {
-          loadPage('https://defensoria6.github.io/estadistica-sistema/', null);
-          document.getElementById('active-section').innerText = "Estadística";
-          response = `✅ Te dirigí a <b>Estadística</b>.`;
-        } else if (lowerMessage.includes('atención') || lowerMessage.includes('público')) {
-          loadPage('https://defensoria6.github.io/atencion-publico/', null);
-          document.getElementById('active-section').innerText = "Atención Público";
-          response = `✅ Te dirigí a <b>Atención Público</b>.`;
-        } else {
-          response = `📂 Indicá la sección: <b>Registro Causas</b>, <b>Datos Partes</b>, <b>Protección Personas</b>, <b>Calendario</b>, <b>Estadística</b> o <b>Atención Público</b>.`;
-        }
-
-      // AUDIENCIAS / CALENDARIO
-      } else if (lowerMessage.includes('audiencia')) {
-        loadPage('https://defensoria6.github.io/calendario/', null);
-        document.getElementById('active-section').innerText = "Calendario";
-        response = `📅 Abrí el <b>Calendario</b> para ver y filtrar audiencias.`;
-
-      // VENCIMIENTOS
-      } else if (lowerMessage.includes('vencimiento') || lowerMessage.includes('plazo')) {
-        response = `⏰ Vencimientos:
-• Próximos 7 días
-• Este mes
-• Por causa
-• Alertas automáticas
-
-¿Querés abrir el <b>Calendario</b> para revisar fechas?`;
-
-      // SALUDO / AYUDA
-      } else if (lowerMessage.includes('hola') || lowerMessage.includes('ayuda') || lowerMessage.includes('help')) {
-        response = `¡Hola! 👋 Puedo ayudarte a:
-• Buscar <b>causas</b>, <b>partes</b> y <b>medidas de protección</b>
-• Ver <b>audiencias</b> y <b>vencimientos</b>
-• Navegar a cualquier <b>sección</b> del portal
-• Consultar <b>estadísticas</b> o <b>atención al público</b>
-
-Probá: <b>"Buscar causa 123/2024"</b> o <b>"Ir a Protección Personas"</b>.`;
-
-      // RESPUESTA GENÉRICA
-      } else {
-        response = `🤔 No entendí bien: "${message}".
-
-Podés pedirme:
-• <b>"Buscar causa 123/2024"</b>
-• <b>"Buscar parte Juan Pérez"</b> o <b>"DNI 12345678"</b>
-• <b>"Medidas de protección vigentes"</b>
-• <b>"Audiencias de hoy"</b>
-• <b>"Ir a Estadística"</b>`;
-      }
-
-      addBotMessage(response);
     }
 
     function handleChatbotKeyPress(event) {
@@ -800,6 +1202,66 @@ Podés pedirme:
         sendMessage();
       }
     }
+
+    // Animación de entrada para los elementos del formulario
+    window.addEventListener('load', function() {
+      const formGroups = document.querySelectorAll('.form-group');
+      formGroups.forEach((group, index) => {
+        setTimeout(() => {
+          group.style.opacity = '0';
+          group.style.transform = 'translateX(-20px)';
+          group.style.transition = 'all 0.5s ease';
+          
+          setTimeout(() => {
+            group.style.opacity = '1';
+            group.style.transform = 'translateX(0)';
+          }, 100);
+        }, index * 200);
+      });
+    });
+
+    // Efecto de partículas en el cursor (opcional)
+    document.addEventListener('mousemove', function(e) {
+      if (Math.random() > 0.95) {
+        createParticle(e.clientX, e.clientY);
+      }
+    });
+
+    function createParticle(x, y) {
+      const particle = document.createElement('div');
+      particle.style.position = 'fixed';
+      particle.style.left = x + 'px';
+      particle.style.top = y + 'px';
+      particle.style.width = '4px';
+      particle.style.height = '4px';
+      particle.style.background = 'rgba(102, 126, 234, 0.6)';
+      particle.style.borderRadius = '50%';
+      particle.style.pointerEvents = 'none';
+      particle.style.zIndex = '1000';
+      particle.style.animation = 'particleFade 1s ease-out forwards';
+      
+      document.body.appendChild(particle);
+      
+      setTimeout(() => {
+        particle.remove();
+      }, 1000);
+    }
+
+    // Agregar keyframes para las partículas
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes particleFade {
+        0% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-50px) scale(0);
+        }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>

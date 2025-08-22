@@ -1,919 +1,280 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Defensoría Civil y Comercial 6</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        /* Estilos para el login */
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .login-form {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .login-form h2 {
-            margin-bottom: 30px;
-            color: #333;
-            font-size: 28px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-        }
-
-        /* Estilos para la aplicación principal */
-        .app-container {
-            display: none;
-            min-height: 100vh;
-        }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar-brand {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .navbar-toggle {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #667eea;
-            cursor: pointer;
-        }
-
-        .profile-pic-placeholder {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #667eea;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .welcome-message {
-            color: #333;
-            font-weight: 600;
-        }
-
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .logout-btn:hover {
-            background: #c82333;
-        }
-
-        .main-content {
-            display: flex;
-            min-height: calc(100vh - 80px);
-        }
-
-        .sidebar {
-            width: 70px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px 0;
-            transition: width 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .sidebar.expanded {
-            width: 280px;
-        }
-
-        .sidebar.collapsed {
-            transform: translateX(-100%);
-        }
-
-        .sidebar-menu {
-            list-style: none;
-        }
-
-        .sidebar-menu li {
-            margin-bottom: 5px;
-        }
-
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            color: #333;
-            text-decoration: none;
-            transition: all 0.3s;
-            border-left: 4px solid transparent;
-            cursor: pointer;
-        }
-
-        .sidebar-menu a:hover {
-            background: rgba(102, 126, 234, 0.1);
-            border-left-color: #667eea;
-            color: #667eea;
-        }
-
-        .sidebar-menu .icon {
-            font-size: 20px;
-            min-width: 30px;
-            text-align: center;
-        }
-
-        .sidebar-menu .text {
-            margin-left: 15px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar.expanded .sidebar-menu .text {
-            opacity: 1;
-        }
-
-        .content-area {
-            flex: 1;
-            padding: 0;
-            background: rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-
-        .welcome-screen {
-            padding: 40px;
-        }
-
-        .welcome-card {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .welcome-card h1 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 32px;
-        }
-
-        .welcome-card p {
-            color: #666;
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-            justify-content: center;
-        }
-
-        @media (min-width: 1200px) {
-            .cards-grid {
-                grid-template-columns: repeat(3, minmax(300px, 1fr));
-            }
-        }
-
-        .feature-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .feature-card h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        .feature-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .feature-card .btn-link {
-            background: #667eea;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 15px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .feature-card .btn-link:hover {
-            background: #5a6fd8;
-        }
-
-        .iframe-container {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .iframe-header {
-            background: white;
-            padding: 15px 20px;
-            border-bottom: 1px solid #e1e5e9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .iframe-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .close-iframe {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .close-iframe:hover {
-            background: #c82333;
-        }
-
-        .content-iframe {
-            width: 100%;
-            height: calc(100vh - 140px);
-            border: none;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: 0;
-                top: 80px;
-                height: calc(100vh - 80px);
-                z-index: 999;
-                transform: translateX(-100%);
-                width: 280px;
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
-            }
-
-            .sidebar.show .sidebar-menu .text {
-                opacity: 1;
-            }
-
-            .content-area {
-                padding: 20px;
-            }
-
-            .welcome-screen {
-                padding: 20px;
-            }
-
-            .welcome-card {
-                padding: 25px;
-            }
-
-            .welcome-card h1 {
-                font-size: 24px;
-            }
-
-            .cards-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .user-info {
-                gap: 10px;
-            }
-
-            .welcome-message {
-                display: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navbar {
-                padding: 10px 15px;
-            }
-
-            .navbar-brand {
-                font-size: 20px;
-            }
-
-            .welcome-screen {
-                padding: 15px;
-            }
-
-            .welcome-card {
-                padding: 20px;
-            }
-
-            .feature-card {
-                padding: 20px;
-            }
-        }
-
-        /* Modal para foto de perfil */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: black;
-        }
-
-        .file-input {
-            margin: 20px 0;
-        }
-
-        .error-message {
-            color: #dc3545;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .success-message {
-            color: #28a745;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Defensoría Civil y Comercial 6</title>
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      min-height:100vh; color:#333;
+    }
+    /* Login */
+    .login-container{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}
+    .login-form{background:white;padding:40px;border-radius:15px;box-shadow:0 15px 35px rgba(0,0,0,0.1);width:100%;max-width:400px;text-align:center;}
+    .login-form h2{margin-bottom:30px;color:#333;font-size:28px;}
+    .form-group{margin-bottom:20px;text-align:left;}
+    .form-group label{display:block;margin-bottom:8px;color:#555;font-weight:600;}
+    .form-group input{width:100%;padding:12px;border:2px solid #e1e5e9;border-radius:8px;font-size:16px;transition:border-color 0.3s;}
+    .form-group input:focus{outline:none;border-color:#667eea;}
+    .btn{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;border:none;padding:12px 30px;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;transition:transform 0.2s;width:100%;margin-bottom:10px;}
+    .btn:hover{transform:translateY(-2px);}
+    .btn-secondary{background:#6c757d;}
+    /* App */
+    .app-container{display:none;min-height:100vh;}
+    .navbar{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);padding:15px 20px;box-shadow:0 2px 20px rgba(0,0,0,0.1);position:sticky;top:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;}
+    .navbar-brand{font-size:24px;font-weight:bold;color:#667eea;}
+    .navbar-toggle{background:#667eea;color:white;border:none;padding:10px 15px;border-radius:5px;cursor:pointer;font-weight:bold;margin-right:10px;}
+    .user-info{display:flex;align-items:center;gap:15px;}
+    .profile-pic{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #667eea;cursor:pointer;}
+    .profile-pic-placeholder{width:40px;height:40px;border-radius:50%;background:#667eea;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;cursor:pointer;}
+    .welcome-message{color:#333;font-weight:600;}
+    .logout-btn{background:#dc3545;color:white;border:none;padding:8px 16px;border-radius:5px;cursor:pointer;font-weight:bold;transition:background 0.3s;}
+    .logout-btn:hover{background:#c82333;}
+    .report-btn{background:#17a2b8;color:white;border:none;padding:8px 16px;border-radius:5px;cursor:pointer;font-weight:bold;transition:background 0.3s;}
+    .report-btn:hover{background:#138496;}
+    /* Sidebar */
+    .main-content{display:flex;min-height:calc(100vh - 80px);}
+    .sidebar{width:70px;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);padding:20px 0;transition:width 0.3s ease;box-shadow:2px 0 10px rgba(0,0,0,0.1);overflow:hidden;}
+    .sidebar.expanded{width:280px;}
+    .sidebar-menu{list-style:none;}
+    .sidebar-menu li{margin-bottom:5px;}
+    .sidebar-menu a{display:flex;align-items:center;padding:15px 20px;color:#333;text-decoration:none;transition:all 0.3s;border-left:4px solid transparent;cursor:pointer;}
+    .sidebar-menu a:hover{background:rgba(102,126,234,0.1);border-left-color:#667eea;color:#667eea;}
+    .sidebar-menu .icon{font-size:20px;min-width:30px;text-align:center;}
+    .sidebar-menu .text{margin-left:15px;white-space:nowrap;opacity:0;transition:opacity 0.3s;}
+    .sidebar.expanded .sidebar-menu .text{opacity:1;}
+    /* Content */
+    .content-area{flex:1;padding:0;background:rgba(255,255,255,0.1);position:relative;}
+    .welcome-screen{padding:40px;}
+    .welcome-card{background:white;padding:40px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);text-align:center;margin-bottom:30px;}
+    .welcome-card h1{color:#333;margin-bottom:20px;font-size:32px;}
+    .welcome-card p{color:#666;font-size:18px;line-height:1.6;}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px;margin-top:30px;justify-content:center;}
+    .feature-card{background:white;padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);transition:transform 0.3s,box-shadow 0.3s;cursor:pointer;}
+    .feature-card:hover{transform:translateY(-5px);box-shadow:0 20px 40px rgba(0,0,0,0.15);}
+    .feature-card h3{color:#333;margin-bottom:15px;font-size:20px;}
+    .feature-card p{color:#666;line-height:1.6;}
+    .feature-card .btn-link{background:#667eea;color:white;padding:10px 20px;border-radius:5px;text-decoration:none;display:inline-block;margin-top:15px;font-weight:bold;transition:background 0.3s;}
+    .feature-card .btn-link:hover{background:#5a6fd8;}
+    /* Iframe */
+    .iframe-container{display:none;width:100%;height:100%;position:relative;}
+    .iframe-header{background:white;padding:15px 20px;border-bottom:1px solid #e1e5e9;display:flex;justify-content:space-between;align-items:center;}
+    .iframe-title{font-size:18px;font-weight:bold;color:#333;}
+    .close-iframe{background:#dc3545;color:white;border:none;padding:8px 12px;border-radius:5px;cursor:pointer;font-weight:bold;}
+    .close-iframe:hover{background:#c82333;}
+    .content-iframe{width:100%;height:calc(100vh - 140px);border:none;}
+    /* Modal */
+    .modal{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);}
+    .modal-content{background:white;margin:15% auto;padding:30px;border-radius:15px;width:90%;max-width:400px;text-align:center;}
+    .close{color:#aaa;float:right;font-size:28px;font-weight:bold;cursor:pointer;}
+    .close:hover{color:black;}
+    .file-input{margin:20px 0;}
+    .error-message{color:#dc3545;margin-top:10px;font-size:14px;}
+    .success-message{color:#28a745;margin-top:10px;font-size:14px;}
+  </style>
 </head>
 <body>
-    <!-- Formulario de Login/Registro -->
-    <div id="loginContainer" class="login-container">
-        <div class="login-form">
-            <h2>Sistema Defensoría Civil y Comercial 6</h2>
-            <div id="loginForm">
-                <div class="form-group">
-                    <label for="loginEmail">Correo Electrónico</label>
-                    <input type="email" id="loginEmail" required onkeydown="if(event.key === 'Enter') loginUser()">
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Contraseña</label>
-                    <input type="password" id="loginPassword" required onkeydown="if(event.key === 'Enter') loginUser()">
-                </div>
-                <button class="btn" onclick="loginUser()">Iniciar Sesión</button>
-                <button class="btn btn-secondary" onclick="showRegisterForm()">Registrarse</button>
-            </div>
-            
-            <div id="registerForm" style="display: none;">
-                <div class="form-group">
-                    <label for="registerName">Nombre Completo</label>
-                    <input type="text" id="registerName" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerEmail">Correo Electrónico</label>
-                    <input type="email" id="registerEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerPassword">Contraseña</label>
-                    <input type="password" id="registerPassword" required>
-                </div>
-                <button class="btn" onclick="registerUser()">Registrarse</button>
-                <button class="btn btn-secondary" onclick="showLoginForm()">Volver al Login</button>
-            </div>
-            
-            <div id="authMessage" class="error-message"></div>
-        </div>
+  <!-- Login -->
+  <div id="loginContainer" class="login-container">
+    <div class="login-form">
+      <h2>Sistema Defensoría Civil y Comercial 6</h2>
+      <div id="loginForm">
+        <div class="form-group"><label for="loginEmail">Correo Electrónico</label><input type="email" id="loginEmail" required onkeydown="if(event.key==='Enter') loginUser()"></div>
+        <div class="form-group"><label for="loginPassword">Contraseña</label><input type="password" id="loginPassword" required onkeydown="if(event.key==='Enter') loginUser()"></div>
+        <button class="btn" onclick="loginUser()">Iniciar Sesión</button>
+        <button class="btn btn-secondary" onclick="showRegisterForm()">Registrarse</button>
+      </div>
+      <div id="registerForm" style="display:none;">
+        <div class="form-group"><label for="registerName">Nombre Completo</label><input type="text" id="registerName" required></div>
+        <div class="form-group"><label for="registerEmail">Correo Electrónico</label><input type="email" id="registerEmail" required></div>
+        <div class="form-group"><label for="registerPassword">Contraseña</label><input type="password" id="registerPassword" required></div>
+        <button class="btn" onclick="registerUser()">Registrarse</button>
+        <button class="btn btn-secondary" onclick="showLoginForm()">Volver al Login</button>
+      </div>
+      <div id="authMessage" class="error-message"></div>
     </div>
+  </div>
 
-    <!-- Aplicación Principal -->
-    <div id="appContainer" class="app-container">
-        <nav class="navbar">
-            <div style="display: flex; align-items: center;">
-                <button class="navbar-toggle" onclick="toggleSidebar()">☰</button>
-                <div class="navbar-brand">Sistema Defensoría Civil y Comercial 6</div>
-            </div>
-            <div class="user-info">
-                <span class="welcome-message">Bienvenido, <span id="userName"></span></span>
-                <div id="profilePicContainer" onclick="openProfileModal()">
-                    <div class="profile-pic-placeholder" id="profilePlaceholder">U</div>
-                    <img class="profile-pic" id="profilePic" style="display: none;" alt="Foto de perfil">
-                </div>
-                <button class="logout-btn" onclick="logoutUser()">Cerrar Sesión</button>
-            </div>
-        </nav>
-
-        <div class="main-content">
-            <aside class="sidebar" id="sidebar">
-                <ul class="sidebar-menu">
-                    <li><a onclick="loadPage('https://defensoria6.github.io/datospartes/', 'Datos de Partes')">
-                        <span class="icon">📊</span>
-                        <span class="text">Datos de Partes</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/proteccion-personas/', 'Protección de Personas')">
-                        <span class="icon">🛡️</span>
-                        <span class="text">Protección de Personas</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/registro-causas/', 'Registro de Causas')">
-                        <span class="icon">📋</span>
-                        <span class="text">Registro de Causas</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/calendario/', 'Calendario')">
-                        <span class="icon">📅</span>
-                        <span class="text">Calendario</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/documentos/', 'Documentos')">
-                        <span class="icon">📄</span>
-                        <span class="text">Documentos</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/atencion-publico/', 'Atención al Público')">
-                        <span class="icon">👥</span>
-                        <span class="text">Atención al Público</span>
-                    </a></li>
-                </ul>
-            </aside>
-
-            <main class="content-area">
-                <div id="welcomeScreen" class="welcome-screen">
-                    <div class="welcome-card">
-                        <h1>Bienvenido al Sistema de Defensoría Civil y Comercial 6</h1>
-                        <p>Accede a todas las herramientas y recursos necesarios para gestionar eficientemente los procesos de la defensoría. Utiliza el menú lateral para navegar entre las diferentes secciones del sistema.</p>
-                    </div>
-
-                    <div class="cards-grid">
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/datospartes/', 'Datos de Partes')">
-                            <h3>📊 Datos de Partes</h3>
-                            <p>Gestiona y consulta información detallada sobre las partes involucradas en los procesos legales.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/proteccion-personas/', 'Protección de Personas')">
-                            <h3>🛡️ Protección de Personas</h3>
-                            <p>Sistema especializado para la protección y seguimiento de personas en situación de vulnerabilidad.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/registro-causas/', 'Registro de Causas')">
-                            <h3>📋 Registro de Causas</h3>
-                            <p>Registra, actualiza y da seguimiento a todas las causas y expedientes del sistema.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/calendario/', 'Calendario')">
-                            <h3>📅 Calendario</h3>
-                            <p>Organiza y programa audiencias, citas y eventos importantes del calendario judicial.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/documentos/', 'Documentos')">
-                            <h3>📄 Documentos</h3>
-                            <p>Gestiona, almacena y organiza todos los documentos legales y administrativos.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/atencion-publico/', 'Atención al Público')">
-                            <h3>👥 Atención al Público</h3>
-                            <p>Sistema de gestión para la atención y seguimiento de consultas ciudadanas.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="iframeContainer" class="iframe-container">
-                    <div class="iframe-header">
-                        <div class="iframe-title" id="iframeTitle">Cargando...</div>
-                        <button class="close-iframe" onclick="closeIframe()">✕ Cerrar</button>
-                    </div>
-                    <iframe id="contentIframe" class="content-iframe" src=""></iframe>
-                </div>
-            </main>
+  <!-- App -->
+  <div id="appContainer" class="app-container">
+    <nav class="navbar">
+      <div style="display:flex;align-items:center;">
+        <button class="navbar-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="navbar-brand">Sistema Defensoría Civil y Comercial 6</div>
+      </div>
+      <div class="user-info">
+        <span class="welcome-message">Bienvenido, <span id="userName"></span></span>
+        <div id="profilePicContainer" onclick="openProfileModal()">
+          <div class="profile-pic-placeholder" id="profilePlaceholder">U</div>
+          <img class="profile-pic" id="profilePic" style="display:none;" alt="Foto de perfil">
         </div>
-    </div>
+        <button class="report-btn" onclick="window.open('https://defensoria6.github.io/reporte/','_blank')">Reporte Sistema</button>
+        <button class="logout-btn" onclick="logoutUser()">Cerrar Sesión</button>
+      </div>
+    </nav>
 
-    <!-- Modal para cambiar foto de perfil -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeProfileModal()">&times;</span>
-            <h3>Cambiar Foto de Perfil</h3>
-            <input type="file" id="profileFileInput" accept="image/*" class="file-input">
-            <button class="btn" onclick="uploadProfilePic()">Subir Foto</button>
-            <div id="profileMessage"></div>
+    <div class="main-content">
+      <aside class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+          <li><a onclick="loadPage('https://defensoria6.github.io/datospartes/','Datos de Partes')"><span class="icon">📊</span><span class="text">Datos de Partes</span></a></li>
+          <li><a onclick="loadPage('https://defensoria6.github.io/proteccion-personas/','Protección de Personas')"><span class="icon">🛡️</span><span class="text">Protección de Personas</span></a></li>
+          <li><a onclick="loadPage('https://defensoria6.github.io/registro-causas/','Registro de Causas')"><span class="icon">📋</span><span class="text">Registro de Causas</span></a></li>
+          <li><a onclick="loadPage('https://defensoria6.github.io/calendario/','Calendario')"><span class="icon">📅</span><span class="text">Calendario</span></a></li>
+          <li><a onclick="loadPage('https://defensoria6.github.io/documentos/','Documentos')"><span class="icon">📄</span><span class="text">Documentos</span></a></li>
+          <li><a onclick="loadPage('https://defensoria6.github.io/atencion-publico/','Atención al Público')"><span class="icon">👥</span><span class="text">Atención al Público</span></a></li>
+        </ul>
+      </aside>
+
+      <main class="content-area">
+        <div id="welcomeScreen" class="welcome-screen">
+          <div class="welcome-card">
+            <h1>Bienvenido al Sistema de Defensoría Civil y Comercial 6</h1>
+            <p>Accede a todas las herramientas y recursos necesarios para gestionar eficientemente los procesos de la defensoría. Utiliza el menú lateral para navegar entre las diferentes secciones del sistema.</p>
+          </div>
+          <div class="cards-grid">
+            <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/datospartes/','Datos de Partes')"><h3>📊 Datos de Partes</h3><p>Gestiona y consulta información detallada sobre las partes involucradas en los procesos legales.</p><a class="btn-link">Acceder</a></div>
+            <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/proteccion-personas/','Protección de Personas')"><h3>🛡️ Protección de Personas</h3><p>Sistema especializado para la protección y seguimiento de personas en situación de vulnerabilidad.</p><a class="btn-link">Acceder</a></div>
+            <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/registro-causas/','Registro de Causas')"><h3>📋 Registro de Causas</h3><p>Registra, actualiza y da seguimiento a todas las causas y expedientes del sistema.</p><a class="btn-link">Acceder</a></div>
+            <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/calendario/','Calendario')"><h3>📅 Calendario</h3><p>Organiza y programa audiencias, citas y eventos importantes del calendario judicial.</p><a class="btn-link">Acceder</a></div>
+            <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/documentos/','Documentos')"><h3>📄 Documentos</h3><p>Gestiona, almacena y organiza todos los documentos legales y administrativos.</p><a class="btn-link">Acceder</a></div>
+            <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/atencion-publico/','Atención al Público')"><h3>👥 Atención al Público</h3><p>Sistema de gestión para la atención y seguimiento de consultas ciudadanas.</p><a class="btn-link">Acceder</a></div>
+          </div>
         </div>
+        <div id="iframeContainer" class="iframe-container">
+          <div class="iframe-header"><div class="iframe-title" id="iframeTitle">Cargando...</div><button class="close-iframe" onclick="closeIframe()">✕ Cerrar</button></div>
+          <iframe id="contentIframe" class="content-iframe" src=""></iframe>
+        </div>
+      </main>
     </div>
+  </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+  <!-- Modal Perfil -->
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeProfileModal()">&times;</span>
+      <h3>Cambiar Foto de Perfil</h3>
+      <input type="file" id="profileFileInput" accept="image/*" class="file-input">
+      <button class="btn" onclick="uploadProfilePic()">Subir Foto</button>
+      <div id="profileMessage"></div>
+    </div>
+  </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBDXZYAxWsvMiMGCrPRp3EBVuU0dzuWF4M",
-            authDomain: "sistemadefensoria6.firebaseapp.com",
-            projectId: "sistemadefensoria6",
-            storageBucket: "sistemadefensoria6.firebasestorage.app",
-            messagingSenderId: "1024631392849",
-            appId: "1:1024631392849:web:1dc13292e690e2ed100670"
-        };
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const storage = getStorage(app);
+    const firebaseConfig = {
+      apiKey: "AIzaSyBDXZYAxWsvMiMGCrPRp3EBVuU0dzuWF4M",
+      authDomain: "sistemadefensoria6.firebaseapp.com",
+      projectId: "sistemadefensoria6",
+      storageBucket: "sistemadefensoria6.appspot.com",
+      messagingSenderId: "1024631392849",
+      appId: "1:1024631392849:web:1dc13292e690e2ed100670"
+    };
 
-        // Variables globales
-        window.auth = auth;
-        window.storage = storage;
-        window.currentUser = null;
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const storage = getStorage(app);
+    window.currentUser = null;
 
-        // Verificar estado de autenticación
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                window.currentUser = user;
-                showApp(user);
-            } else {
-                window.currentUser = null;
-                showLogin();
-            }
-        });
+    onAuthStateChanged(auth, (user) => {
+      if (user) { window.currentUser = user; showApp(user); }
+      else { window.currentUser = null; showLogin(); }
+    });
 
-        // Funciones globales
-        window.registerUser = async function() {
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const messageDiv = document.getElementById('authMessage');
+    window.registerUser = async function() {
+      const name=document.getElementById('registerName').value;
+      const email=document.getElementById('registerEmail').value;
+      const password=document.getElementById('registerPassword').value;
+      const msg=document.getElementById('authMessage');
+      if(!name||!email||!password){msg.textContent='Complete todos los campos.';return;}
+      try {
+        const userCredential=await createUserWithEmailAndPassword(auth,email,password);
+        await updateProfile(userCredential.user,{displayName:name});
+        msg.textContent='';
+      } catch(e){msg.textContent=getErrorMessage(e.code);}
+    };
 
-            if (!name || !email || !password) {
-                messageDiv.textContent = 'Por favor, complete todos los campos.';
-                return;
-            }
+    window.loginUser = async function() {
+      const email=document.getElementById('loginEmail').value;
+      const password=document.getElementById('loginPassword').value;
+      const msg=document.getElementById('authMessage');
+      try {
+        await signInWithEmailAndPassword(auth,email,password);
+        msg.textContent='';
+      } catch(e){msg.textContent=getErrorMessage(e.code);}
+    };
 
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                await updateProfile(userCredential.user, { displayName: name });
-                messageDiv.textContent = '';
-            } catch (error) {
-                messageDiv.textContent = getErrorMessage(error.code);
-            }
-        };
+    window.logoutUser = async function(){await signOut(auth);};
 
-        window.loginUser = async function() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const messageDiv = document.getElementById('authMessage');
-
-            if (!email || !password) {
-                messageDiv.textContent = 'Por favor, complete todos los campos.';
-                return;
-            }
-
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                messageDiv.textContent = '';
-            } catch (error) {
-                messageDiv.textContent = getErrorMessage(error.code);
-            }
-        };
-
-        window.logoutUser = async function() {
-            try {
-                await signOut(auth);
-            } catch (error) {
-                console.error('Error al cerrar sesión:', error);
-            }
-        };
-
-        window.uploadProfilePic = async function() {
-            const fileInput = document.getElementById('profileFileInput');
-            const file = fileInput.files[0];
-            const messageDiv = document.getElementById('profileMessage');
-
-            if (!file) {
-                messageDiv.textContent = 'Por favor, seleccione una imagen.';
-                messageDiv.className = 'error-message';
-                return;
-            }
-
-            if (!file.type.startsWith('image/')) {
-                messageDiv.textContent = 'Por favor, seleccione un archivo de imagen válido.';
-                messageDiv.className = 'error-message';
-                return;
-            }
-
-            try {
-                const storageRef = ref(storage, `profile-pics/${window.currentUser.uid}`);
-                await uploadBytes(storageRef, file);
-                const downloadURL = await getDownloadURL(storageRef);
-                
-                await updateProfile(window.currentUser, { photoURL: downloadURL });
-                
-                // Actualizar la imagen en la interfaz
-                updateProfilePic(downloadURL);
-                
-                messageDiv.textContent = 'Foto de perfil actualizada correctamente.';
-                messageDiv.className = 'success-message';
-                
-                setTimeout(() => {
-                    closeProfileModal();
-                }, 2000);
-            } catch (error) {
-                messageDiv.textContent = 'Error al subir la imagen. Inténtelo de nuevo.';
-                messageDiv.className = 'error-message';
-            }
-        };
-
-        function getErrorMessage(errorCode) {
-            switch (errorCode) {
-                case 'auth/email-already-in-use':
-                    return 'Este correo electrónico ya está registrado.';
-                case 'auth/weak-password':
-                    return 'La contraseña debe tener al menos 6 caracteres.';
-                case 'auth/invalid-email':
-                    return 'El correo electrónico no es válido.';
-                case 'auth/user-not-found':
-                    return 'No existe una cuenta con este correo electrónico.';
-                case 'auth/wrong-password':
-                    return 'La contraseña es incorrecta.';
-                case 'auth/invalid-credential':
-                    return 'Las credenciales son inválidas.';
-                default:
-                    return 'Ha ocurrido un error. Inténtelo de nuevo.';
-            }
-        }
-
-        function showApp(user) {
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'block';
-            
-            const userName = user.displayName || user.email.split('@')[0];
-            document.getElementById('userName').textContent = userName;
-            
-            // Actualizar foto de perfil
-            if (user.photoURL) {
-                updateProfilePic(user.photoURL);
-            } else {
-                const placeholder = document.getElementById('profilePlaceholder');
-                placeholder.textContent = userName.charAt(0).toUpperCase();
-            }
-        }
-
-        function showLogin() {
-            document.getElementById('loginContainer').style.display = 'flex';
-            document.getElementById('appContainer').style.display = 'none';
-            document.getElementById('authMessage').textContent = '';
-        }
-
-        function updateProfilePic(photoURL) {
-            const profilePic = document.getElementById('profilePic');
-            const placeholder = document.getElementById('profilePlaceholder');
-            
-            profilePic.src = photoURL;
-            profilePic.style.display = 'block';
-            placeholder.style.display = 'none';
-        }
-    </script>
-
-    <script>
-        // Funciones para la interfaz
-        function showRegisterForm() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
-            document.getElementById('authMessage').textContent = '';
-        }
-
-        function showLoginForm() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('registerForm').style.display = 'none';
-            document.getElementById('authMessage').textContent = '';
-        }
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle('show');
-            } else {
-                sidebar.classList.toggle('expanded');
-            }
-        }
-
-        function loadPage(url, title) {
-            const welcomeScreen = document.getElementById('welcomeScreen');
-            const iframeContainer = document.getElementById('iframeContainer');
-            const iframe = document.getElementById('contentIframe');
-            const iframeTitle = document.getElementById('iframeTitle');
-            
-            // Ocultar pantalla de bienvenida y mostrar iframe
-            welcomeScreen.style.display = 'none';
-            iframeContainer.style.display = 'block';
-            
-            // Configurar iframe
-            iframe.src = url;
-            iframeTitle.textContent = title;
-            
-            // Cerrar sidebar en móvil
-            if (window.innerWidth <= 768) {
-                const sidebar = document.getElementById('sidebar');
-                sidebar.classList.remove('show');
-            }
-        }
-
-        function closeIframe() {
-            const welcomeScreen = document.getElementById('welcomeScreen');
-            const iframeContainer = document.getElementById('iframeContainer');
-            const iframe = document.getElementById('contentIframe');
-            
-            // Mostrar pantalla de bienvenida y ocultar iframe
-            welcomeScreen.style.display = 'block';
-            iframeContainer.style.display = 'none';
-            
-            // Limpiar iframe
-            iframe.src = '';
-        }
-
-        function openProfileModal() {
-            document.getElementById('profileModal').style.display = 'block';
-            document.getElementById('profileMessage').textContent = '';
-        }
-
-        function closeProfileModal() {
-            document.getElementById('profileModal').style.display = 'none';
-            document.getElementById('profileFileInput').value = '';
-            document.getElementById('profileMessage').textContent = '';
-        }
-
-        // Cerrar modal al hacer clic fuera de él
-        window.onclick = function(event) {
-            const modal = document.getElementById('profileModal');
-            if (event.target == modal) {
-                closeProfileModal();
-            }
-        }
-
-        // Cerrar sidebar en móvil al hacer clic fuera
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.navbar-toggle');
-            
-            if (window.innerWidth <= 768 && 
-                !sidebar.contains(event.target) && 
-                !toggleBtn.contains(event.target) && 
-                sidebar.classList.contains('show')) {
-                sidebar.classList.remove('show');
-            }
-        });
-
-        // Manejar redimensionamiento de ventana
-        window.addEventListener('resize', function() {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth > 768) {
-                sidebar.classList.remove('show');
-            }
-        });
-    </script>
+    function showApp(user){
+      document.getElementById('loginContainer').style.display='none';
+      document.getElementById('appContainer').style.display='block';
+      document.getElementById('userName').textContent=user.displayName||user.email;
+      updateProfilePic(user.photoURL);
+    }
+    function showLogin(){
+      document.getElementById('loginContainer').style.display='flex';
+      document.getElementById('appContainer').style.display='none';
+    }
+    function toggleSidebar(){document.getElementById('sidebar').classList.toggle('expanded');}
+    window.loadPage=function(url,title){
+      document.getElementById('welcomeScreen').style.display='none';
+      document.getElementById('iframeContainer').style.display='block';
+      document.getElementById('iframeTitle').textContent=title;
+      document.getElementById('contentIframe').src=url;
+    }
+    window.closeIframe=function(){
+      document.getElementById('iframeContainer').style.display='none';
+      document.getElementById('welcomeScreen').style.display='block';
+      document.getElementById('contentIframe').src='';
+    }
+    function getErrorMessage(code){
+      switch(code){
+        case 'auth/email-already-in-use':return 'El correo ya está en uso.';
+        case 'auth/invalid-email':return 'Correo inválido.';
+        case 'auth/weak-password':return 'Contraseña demasiado débil.';
+        case 'auth/user-not-found':return 'Usuario no encontrado.';
+        case 'auth/wrong-password':return 'Contraseña incorrecta.';
+        default:return 'Error: '+code;
+      }
+    }
+    // Perfil
+    window.openProfileModal=function(){document.getElementById('profileModal').style.display='block';};
+    window.closeProfileModal=function(){document.getElementById('profileModal').style.display='none';};
+    window.uploadProfilePic=async function(){
+      const file=document.getElementById('profileFileInput').files[0];
+      const msg=document.getElementById('profileMessage');
+      if(!file){msg.textContent='Seleccione un archivo.';return;}
+      try{
+        const storageRef=ref(storage,'profilePics/'+auth.currentUser.uid);
+        await uploadBytes(storageRef,file);
+        const url=await getDownloadURL(storageRef);
+        await updateProfile(auth.currentUser,{photoURL:url});
+        updateProfilePic(url);
+        msg.textContent='Foto actualizada correctamente';
+        msg.className='success-message';
+      }catch(e){msg.textContent='Error al subir foto';msg.className='error-message';}
+    };
+    function updateProfilePic(url){
+      const pic=document.getElementById('profilePic');
+      const placeholder=document.getElementById('profilePlaceholder');
+      if(url){pic.src=url;pic.style.display='block';placeholder.style.display='none';}
+      else{pic.style.display='none';placeholder.style.display='flex';}
+    }
+    window.showRegisterForm=function(){
+      document.getElementById('loginForm').style.display='none';
+      document.getElementById('registerForm').style.display='block';
+    };
+    window.showLoginForm=function(){
+      document.getElementById('registerForm').style.display='none';
+      document.getElementById('loginForm').style.display='block';
+    };
+  </script>
 </body>
 </html>

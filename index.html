@@ -441,6 +441,16 @@
             }
         }
 
+        /* Refinos extra de responsividad sin tocar la lógica */
+        @supports (height: 100svh) {
+            .content-iframe {
+                height: calc(100svh - 140px);
+            }
+            .sidebar {
+                height: calc(100svh - 80px);
+            }
+        }
+
         /* Modal para foto de perfil */
         .modal {
             display: none;
@@ -561,6 +571,11 @@ Rómulo Fioravante.Leg2481.Año 2025</div>
                         <span class="icon">🛡️</span>
                         <span class="text">Protección de Personas</span>
                     </a></li>
+                    <!-- NUEVO BOTÓN: Protección Unificada -->
+                    <li><a onclick="loadPage('https://defensoria6.github.io/proteccion-unificado/', 'Protección Unificada')">
+                        <span class="icon">🧩</span>
+                        <span class="text">Protección Unificada</span>
+                    </a></li>
                     <li><a onclick="loadPage('https://defensoria6.github.io/registro-causas/', 'Registro de Causas')">
                         <span class="icon">📋</span>
                         <span class="text">Registro de Causas</span>
@@ -586,7 +601,7 @@ Rómulo Fioravante.Leg2481.Año 2025</div>
                         <span class="icon">🔧</span>
                         <span class="text">Modo Intervención</span>
                     </a></li>
-</ul>
+                </ul>
             </aside>
 
             <main class="content-area">

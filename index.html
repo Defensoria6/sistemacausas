@@ -617,7 +617,13 @@ Rómulo Fioravante.Leg2481.Año 2025</div>
                         <span class="icon">🔧</span>
                         <span class="text">Modo Intervención</span>
                     </a></li>
-                </ul>
+                    <li>
+        <a onclick="openIframe('Organismos Directorio','https://defensoria6.github.io/organismos-proteccion/')">
+            <span class="icon">📂</span>
+            <span class="text">Organismos Directorio</span>
+        </a>
+    </li>
+</ul>
             </aside>
 
             <main class="content-area">
@@ -957,5 +963,22 @@ Rómulo Fioravante.Leg2481.Año 2025</div>
             }
         });
     </script>
-</body>
+
+    <script>
+        function openIframe(title, url) {
+            document.getElementById('iframeTitle').innerText = title;
+            document.getElementById('contentIframe').src = url;
+            document.getElementById('iframeContainer').style.display = 'block';
+            const welcome = document.getElementById('welcomeScreen');
+            if (welcome) welcome.style.display = 'none';
+        }
+
+        function closeIframe() {
+            document.getElementById('iframeContainer').style.display = 'none';
+            document.getElementById('contentIframe').src = '';
+            const welcome = document.getElementById('welcomeScreen');
+            if (welcome) welcome.style.display = 'block';
+        }
+    </script>
+    </body>
 </html>

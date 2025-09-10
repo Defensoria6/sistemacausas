@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          background:url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/56e929c73f3a2cdc3bfea79ba85796dff7f4d3a4/Presentación1.jpg') 
+            background:url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/56e929c73f3a2cdc3bfea79ba85796dff7f4d3a4/Presentación1.jpg') 
                 no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
@@ -503,7 +503,7 @@
             margin-top: 10px;
             font-size: 14px;
         }
-/* Estilo para el logo */
+        /* Estilo para el logo */
         .logo-container {
             display: flex;
             justify-content: center;
@@ -521,9 +521,9 @@
     <div id="loginContainer" class="login-container">
         <div class="login-form">
             
-<div class="logo-container">
-    <img src='https://raw.githubusercontent.com/Defensoria6/sistemacausas/6e384b6af0debea9cc5977cf5abaa0fc7c3fe447/6.png' alt="Logo Defensoría">
-</div>
+            <div class="logo-container">
+                <img src='https://raw.githubusercontent.com/Defensoria6/sistemacausas/6e384b6af0debea9cc5977cf5abaa0fc7c3fe447/6.png' alt="Logo Defensoría">
+            </div>
 
             <h2>Sistema Defensoría Civil y Comercial 6</h2>
             <div id="loginForm">
@@ -558,7 +558,7 @@
             
             <div id="authMessage" class="error-message"></div>
             <div class="credit-message">Diseño y programación de:</div>
-Rómulo Fioravante.Leg2481.Año 2025</div>
+            Rómulo Fioravante.Leg2481.Año 2025
         </div>
     </div>
 
@@ -603,6 +603,10 @@ Rómulo Fioravante.Leg2481.Año 2025</div>
                         <span class="icon">📅</span>
                         <span class="text">Calendario</span>
                     </a></li>
+                    <li><a onclick="loadIframe('https://defensorialocal-seis.github.io/dictamen/', 'Dictámenes Firmados')">
+                        <span class="icon">📝</span>
+                        <span class="text">Dictámenes Firmados</span>
+                    </a></li>
                     <li><a onclick="loadPage('https://defensoria6.github.io/documentos/', 'Documentos')">
                         <span class="icon">📄</span>
                         <span class="text">Documentos</span>
@@ -621,12 +625,12 @@ Rómulo Fioravante.Leg2481.Año 2025</div>
                         <span class="text">Modo Intervención</span>
                     </a></li>
                     <li>
-        <a onclick="openIframe('Organismos Directorio','https://defensoria6.github.io/organismos-proteccion/')">
-            <span class="icon">🏛️</span>
-            <span class="text">Organismos Directorio</span>
-        </a>
-    </li>
-</ul>
+                        <a onclick="openIframe('Organismos Directorio','https://defensoria6.github.io/organismos-proteccion/')">
+                            <span class="icon">🏛️</span>
+                            <span class="text">Organismos Directorio</span>
+                        </a>
+                    </li>
+                </ul>
             </aside>
 
             <main class="content-area">
@@ -913,17 +917,44 @@ Rómulo Fioravante.Leg2481.Año 2025</div>
             }
         }
 
+        function loadIframe(url, title) {
+            // Oculta la pantalla de bienvenida
+            const welcome = document.getElementById("welcomeScreen");
+            if (welcome) welcome.style.display = "none";
+
+            // Muestra el contenedor del iframe
+            const iframeContainer = document.getElementById("iframeContainer");
+            iframeContainer.style.display = "block";
+
+            // Cambia el título que aparece arriba del iframe
+            const iframeTitle = document.getElementById("iframeTitle");
+            if (iframeTitle) iframeTitle.textContent = title;
+
+            // Carga la URL en el iframe
+            const iframe = document.getElementById("contentIframe");
+            iframe.src = url;
+        }
+
+        function openIframe(title, url) {
+            document.getElementById('iframeTitle').innerText = title;
+            document.getElementById('contentIframe').src = url;
+            document.getElementById('iframeContainer').style.display = 'block';
+            const welcome = document.getElementById('welcomeScreen');
+            if (welcome) welcome.style.display = 'none';
+        }
+
         function closeIframe() {
-            const welcomeScreen = document.getElementById('welcomeScreen');
-            const iframeContainer = document.getElementById('iframeContainer');
-            const iframe = document.getElementById('contentIframe');
-            
-            // Mostrar pantalla de bienvenida y ocultar iframe
-            welcomeScreen.style.display = 'block';
-            iframeContainer.style.display = 'none';
-            
-            // Limpiar iframe
-            iframe.src = '';
+            // Oculta el contenedor del iframe
+            const iframeContainer = document.getElementById("iframeContainer");
+            iframeContainer.style.display = "none";
+
+            // Limpia el src
+            const iframe = document.getElementById("contentIframe");
+            iframe.src = "";
+
+            // Vuelve a mostrar la pantalla de bienvenida
+            const welcome = document.getElementById("welcomeScreen");
+            if (welcome) welcome.style.display = "block";
         }
 
         function openProfileModal() {
@@ -966,22 +997,5 @@ Rómulo Fioravante.Leg2481.Año 2025</div>
             }
         });
     </script>
-
-    <script>
-        function openIframe(title, url) {
-            document.getElementById('iframeTitle').innerText = title;
-            document.getElementById('contentIframe').src = url;
-            document.getElementById('iframeContainer').style.display = 'block';
-            const welcome = document.getElementById('welcomeScreen');
-            if (welcome) welcome.style.display = 'none';
-        }
-
-        function closeIframe() {
-            document.getElementById('iframeContainer').style.display = 'none';
-            document.getElementById('contentIframe').src = '';
-            const welcome = document.getElementById('welcomeScreen');
-            if (welcome) welcome.style.display = 'block';
-        }
-    </script>
-    </body>
+</body>
 </html>

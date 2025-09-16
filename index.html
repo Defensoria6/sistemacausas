@@ -109,7 +109,7 @@
             top: 0;
             z-index: 1000;
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* Alinea los elementos a los extremos */
             align-items: center;
         }
 
@@ -117,6 +117,46 @@
             font-size: 24px;
             font-weight: bold;
             color: #667eea;
+        }
+
+        /* Estilos para los nuevos botones */
+        .navbar-btn {
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .navbar-btn + .navbar-btn {
+            margin-left: 10px;
+        }
+
+        /* Colores específicos para cada botón */
+        .btn-green {
+            background-color: darkgreen;
+        }
+
+        .btn-green:hover {
+            background-color: #005500;
+        }
+        
+        .btn-violet {
+            background-color: #8A2BE2; /* Violeta */
+        }
+        
+        .btn-violet:hover {
+            background-color: #6A1AAB;
+        }
+        
+        .btn-blue {
+            background-color: #0000FF; /* Azul */
+        }
+        
+        .btn-blue:hover {
+            background-color: #0000CC;
         }
 
         .navbar-toggle {
@@ -517,7 +557,6 @@
     </style>
 </head>
 <body>
-    <!-- Formulario de Login/Registro -->
     <div id="loginContainer" class="login-container">
         <div class="login-form">
             
@@ -562,12 +601,16 @@
         </div>
     </div>
 
-    <!-- Aplicación Principal -->
     <div id="appContainer" class="app-container">
         <nav class="navbar">
             <div style="display: flex; align-items: center;">
                 <button class="navbar-toggle" onclick="toggleSidebar()">☰</button>
                 <div class="navbar-brand">Sistema Defensoría Civil y Comercial 6</div>
+            </div>
+            <div>
+                <button class="navbar-btn btn-green" onclick="openIframe('Sistema Operador', 'https://defensoria6.github.io/operador-defensoria/')">Sistema Operador</button>
+                <button class="navbar-btn btn-violet" onclick="openIframe('Estadistica Sistema', 'https://defensoria6.github.io/reporte/')">Estadistica Sistema</button>
+                <button class="navbar-btn btn-blue" onclick="openIframe('Agenda Defensor', 'https://defensorialocal-seis.github.io/agenda/')">Agenda Defensor</button>
             </div>
             <div class="user-info">
                 <span class="welcome-message">Bienvenido, <span id="userName"></span></span>
@@ -602,10 +645,6 @@
                         <span class="icon">📅</span>
                         <span class="text">Calendario</span>
                     </a></li>
-                    <li><a onclick="loadPage('https://defensorialocal-seis.github.io/agenda/', 'Agenda Defensor')">
-                        <span class="icon">📅</span>
-                        <span class="text">Agenda Defensor</span>
-
                     <li><a onclick="loadIframe('https://defensorialocal-seis.github.io/dictamen/', 'Dictámenes Escritos Modelos')">
                         <span class="icon">📝</span>
                         <span class="text">Dictámenes Escritos Modelos</span>
@@ -613,15 +652,6 @@
                     <li><a onclick="loadPage('https://defensoria6.github.io/documentos/', 'Documentos')">
                         <span class="icon">📄</span>
                         <span class="text">Documentos</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/atencion-publico/', 'Atención al Público')">
-                        <span class="icon">👥</span>
-                        <span class="text">Atención al Público</span>
-                    </a></li>
-                
-                    <li><a onclick="loadPage('https://defensoria6.github.io/583ccyc/', 'Registro Art 583 CCyC')">
-                        <span class="icon">⚖️</span>
-                        <span class="text">Registro Art 583 CCyC</span>
                     </a></li>
                     <li><a onclick="loadPage('https://defensoria6.github.io/modo-intervencion/', 'Otras Intervenciones')">
                         <span class="icon">🔧</span>
@@ -642,23 +672,22 @@
                         <h1>Bienvenido al Sistema de Defensoría Civil y Comercial 6</h1>
                         <p>Accede a todas las herramientas y recursos necesarios para gestionar eficientemente los procesos de la defensoría. Utiliza el menú lateral para navegar entre las diferentes secciones del sistema.</p>
                     </div>
-
                     <div class="cards-grid">
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/datospartes/', 'Datos de Partes')">
+                     <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/registro-causas/', 'Registro de Causas')">
+                            <h3>📋 Registro de Causas</h3>
+                            <p>Registra, actualiza y da seguimiento a todas las causas y expedientes del sistema.</p>
+                            <a class="btn-link">Acceder</a>
+                        </div>
+
+                       <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/datospartes/', 'Datos de Partes')">
                             <h3>📊 Datos de Partes</h3>
                             <p>Gestiona y consulta información detallada sobre las partes involucradas en los procesos legales.</p>
                             <a class="btn-link">Acceder</a>
                         </div>
 
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/proteccion-personas/', 'Protección')">
+                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/proteccion-unificado/', 'Protección')">
                             <h3>🛡️ Protección de Personas</h3>
                             <p>Sistema especializado para la protección y seguimiento de personas en situación de vulnerabilidad.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/registro-causas/', 'Registro de Causas')">
-                            <h3>📋 Registro de Causas</h3>
-                            <p>Registra, actualiza y da seguimiento a todas las causas y expedientes del sistema.</p>
                             <a class="btn-link">Acceder</a>
                         </div>
 
@@ -673,10 +702,9 @@
                             <p>Gestiona, almacena y organiza todos los documentos legales y administrativos.</p>
                             <a class="btn-link">Acceder</a>
                         </div>
-
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/atencion-publico/', 'Atención al Público')">
-                            <h3>👥 Atención al Público</h3>
-                            <p>Sistema de gestión para la atención y seguimiento de consultas ciudadanas.</p>
+                        <div class="feature-card" onclick="loadPage('https://defensorialocal-seis.github.io/dictamen/', 'Dictamenes Escritos Modelos')">
+                            <h3>📝 Dictamenes Escritos Modelos</h3>
+                            <p>Acceda a precedentes firmados, tambien a calculadora de plazos procesales y mucho mas.</p>
                             <a class="btn-link">Acceder</a>
                         </div>
                     </div>
@@ -693,7 +721,6 @@
         </div>
     </div>
 
-    <!-- Modal para cambiar foto de perfil -->
     <div id="profileModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeProfileModal()">&times;</span>
@@ -704,7 +731,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';

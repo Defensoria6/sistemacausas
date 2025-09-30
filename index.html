@@ -3,8 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Defensoría Civil y Comercial 6</title>
+    <title>Login - Sistema Defensoría Civil y Comercial 6</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,736 +30,611 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background:url('https://raw.githubusercontent.com/Defensoria6/sistemacausas/56e929c73f3a2cdc3bfea79ba85796dff7f4d3a4/Presentación1.jpg') 
-                no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            color: #333;
-        }
-
-        /* Estilos para el login */
-        .login-container {
+            color: var(--dark);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
         }
 
-        .login-form {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        .login-container {
             width: 100%;
-            max-width: 400px;
-            text-align: center;
+            max-width: 1200px;
+            display: flex;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            min-height: 650px;
         }
 
-        .login-form h2 {
+        /* Panel izquierdo - Imagen responsiva */
+        .image-panel {
+            flex: 1.2;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .responsive-image {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: var(--transition);
+            position: relative;
+            z-index: 2;
+        }
+
+        .responsive-image:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.02);
+        }
+
+        /* Panel central - Icono animado */
+        .center-panel {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .center-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: cover;
+        }
+
+        .brand-content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .animated-icon {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 30px;
+            position: relative;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            animation: float 6s ease-in-out infinite;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .animated-icon img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            filter: brightness(0.9);
+            transition: transform 0.5s ease;
+        }
+
+        .animated-icon:hover img {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .icon-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 3s linear infinite;
+            opacity: 0;
+        }
+
+        .sparkle:nth-child(1) {
+            top: 15%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .sparkle:nth-child(2) {
+            top: 25%;
+            right: 20%;
+            animation-delay: 0.5s;
+        }
+
+        .sparkle:nth-child(3) {
+            bottom: 20%;
+            left: 25%;
+            animation-delay: 1s;
+        }
+
+        .sparkle:nth-child(4) {
+            bottom: 10%;
+            right: 15%;
+            animation-delay: 1.5s;
+        }
+
+        .brand-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .brand-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 400;
+            max-width: 300px;
+            line-height: 1.5;
+        }
+
+        /* Panel derecho - Formularios */
+        .right-panel {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px 40px;
+            background: white;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-header {
+            text-align: center;
             margin-bottom: 30px;
-            color: #333;
-            font-size: 28px;
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-header p {
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        .form {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 1;
+            visibility: visible;
+            transition: var(--transition);
+        }
+
+        .form.hidden {
+            opacity: 0;
+            visibility: hidden;
         }
 
         .form-group {
             margin-bottom: 20px;
-            text-align: left;
+            position: relative;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #555;
             font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
         }
 
-        .form-group input {
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .input-with-icon input {
             width: 100%;
-            padding: 12px;
+            padding: 14px 15px 14px 45px;
             border: 2px solid #e1e5e9;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: white;
         }
 
-        .form-group input:focus {
+        .input-with-icon input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
+            display: block;
             width: 100%;
-            margin-bottom: 10px;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
         }
 
-        .btn:hover {
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         .btn-secondary {
-            background: #6c757d;
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
         }
 
-        /* Estilos para la aplicación principal */
-        .app-container {
-            display: none;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #87CEEB 0%, #ADD8E6 100%); /* Fondo celeste para la app */
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.1);
         }
 
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between; /* Alinea los elementos a los extremos */
-            align-items: center;
-        }
-
-        .navbar-brand {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        /* Estilos para los nuevos botones */
-        .navbar-btn {
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .navbar-btn + .navbar-btn {
-            margin-left: 10px;
-        }
-
-        /* Colores específicos para cada botón */
-        .btn-green {
-            background-color: darkgreen;
-        }
-
-        .btn-green:hover {
-            background-color: #005500;
-        }
-        
-        .btn-violet {
-            background-color: #8A2BE2; /* Violeta */
-        }
-        
-        .btn-violet:hover {
-            background-color: #6A1AAB;
-        }
-        
-        .btn-blue {
-            background-color: #0000FF; /* Azul */
-        }
-        
-        .btn-blue:hover {
-            background-color: #0000CC;
-        }
-
-        .navbar-toggle {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .user-info {
+        .divider {
             display: flex;
             align-items: center;
-            gap: 15px;
+            margin: 20px 0;
         }
 
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #667eea;
-            cursor: pointer;
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e1e5e9;
         }
 
-        .profile-pic-placeholder {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #667eea;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
+        .divider span {
+            padding: 0 15px;
+            color: #6c757d;
+            font-size: 0.9rem;
         }
 
-        .welcome-message {
-            color: #333;
-            font-weight: 600;
+        .auth-message {
+            padding: 12px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
 
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
+        .error-message {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.2);
         }
 
-        .logout-btn:hover {
-            background: #c82333;
+        .success-message {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(40, 167, 69, 0.2);
         }
 
-        .main-content {
-            display: flex;
-            min-height: calc(100vh - 80px);
+        .card-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+            text-align: center;
         }
 
-        .sidebar {
-            width: 70px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px 0;
-            transition: width 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .sidebar.expanded {
-            width: 280px;
-        }
-
-        .sidebar.collapsed {
-            transform: translateX(-100%);
-        }
-
-        .sidebar-menu {
-            list-style: none;
-        }
-
-        .sidebar-menu li {
+        .credit-message {
+            font-size: 0.85rem;
+            color: #6c757d;
             margin-bottom: 5px;
         }
 
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            color: #333;
-            text-decoration: none;
-            transition: all 0.3s;
-            border-left: 4px solid transparent;
-            cursor: pointer;
+        .developer {
+            font-weight: 600;
+            color: var(--primary);
         }
 
-        .sidebar-menu a:hover {
-            background: rgba(102, 126, 234, 0.1);
-            border-left-color: #667eea;
-            color: #667eea;
-        }
-
-        .sidebar-menu .icon {
-            font-size: 20px;
-            min-width: 30px;
-            text-align: center;
-        }
-
-        .sidebar-menu .text {
-            margin-left: 15px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .sidebar.expanded .sidebar-menu .text {
-            opacity: 1;
-        }
-
-        .content-area {
-            flex: 1;
-            padding: 0;
-            background: rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-
-        .welcome-screen {
-            padding: 40px;
-        }
-
-        .welcome-card {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .welcome-card h1 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 32px;
-        }
-
-        .welcome-card p {
-            color: #666;
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-            justify-content: center;
-        }
-
-        @media (min-width: 1200px) {
-            .cards-grid {
-                grid-template-columns: repeat(3, minmax(300px, 1fr));
+        /* Animaciones */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
             }
         }
 
-        .feature-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .feature-card h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        .feature-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .feature-card .btn-link {
-            background: #667eea;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 15px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .feature-card .btn-link:hover {
-            background: #5a6fd8;
-        }
-
-        .iframe-container {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .iframe-header {
-            background: white;
-            padding: 15px 20px;
-            border-bottom: 1px solid #e1e5e9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .iframe-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .close-iframe {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .close-iframe:hover {
-            background: #c82333;
-        }
-
-        .content-iframe {
-            width: 100%;
-            height: calc(100vh - 140px);
-            border: none;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: 0;
-                top: 80px;
-                height: calc(100vh - 80px);
-                z-index: 999;
-                transform: translateX(-100%);
-                width: 280px;
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.2;
             }
-
-            .sidebar.show {
-                transform: translateX(0);
+            50% {
+                opacity: 0.5;
             }
+        }
 
-            .sidebar.show .sidebar-menu .text {
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
                 opacity: 1;
+                transform: scale(1.5);
             }
+        }
 
-            .content-area {
-                padding: 20px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .login-container {
+                max-width: 900px;
             }
-
-            .welcome-screen {
-                padding: 20px;
+            
+            .image-panel {
+                flex: 1;
             }
-
-            .welcome-card {
-                padding: 25px;
+            
+            .center-panel {
+                flex: 0.8;
             }
-
-            .welcome-card h1 {
-                font-size: 24px;
+            
+            .right-panel {
+                flex: 1;
             }
+        }
 
-            .cards-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 500px;
+                min-height: auto;
             }
-
-            .user-info {
-                gap: 10px;
+            
+            .image-panel {
+                padding: 30px 20px;
+                min-height: 200px;
             }
-
-            .welcome-message {
-                display: none;
+            
+            .center-panel {
+                padding: 30px 20px;
+                min-height: 250px;
+            }
+            
+            .right-panel {
+                padding: 30px 20px;
+            }
+            
+            .responsive-image {
+                max-width: 250px;
+                transform: none;
+            }
+            
+            .animated-icon {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 20px;
+            }
+            
+            .animated-icon img {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .brand-title {
+                font-size: 1.8rem;
+            }
+            
+            .brand-subtitle {
+                font-size: 1rem;
             }
         }
 
         @media (max-width: 480px) {
-            .navbar {
-                padding: 10px 15px;
+            .login-container {
+                max-width: 100%;
             }
-
-            .navbar-brand {
-                font-size: 20px;
+            
+            .image-panel,
+            .center-panel,
+            .right-panel {
+                padding: 25px 15px;
             }
-
-            .welcome-screen {
-                padding: 15px;
+            
+            .form-header h2 {
+                font-size: 1.5rem;
             }
-
-            .welcome-card {
-                padding: 20px;
+            
+            .responsive-image {
+                max-width: 200px;
             }
-
-            .feature-card {
-                padding: 20px;
-            }
-        }
-
-        /* Refinos extra de responsividad sin tocar la lógica */
-        @supports (height: 100svh) {
-            .content-iframe {
-                height: calc(100svh - 140px);
-            }
-            .sidebar {
-                height: calc(100svh - 80px);
-            }
-        }
-
-        /* Modal para foto de perfil */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: black;
-        }
-
-        .file-input {
-            margin: 20px 0;
-        }
-
-        .error-message {
-            color: #dc3545;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .success-message {
-            color: #28a745;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-        /* Estilo para el logo */
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .logo-container img {
-            max-width: 280px; /* aumentado de 180px a 280px */
-            height: auto;
         }
     </style>
 </head>
 <body>
-    <div id="loginContainer" class="login-container">
-        <div class="login-form">
-            
-            <div class="logo-container">
-                <img src='https://raw.githubusercontent.com/Defensoria6/sistemacausas/6e384b6af0debea9cc5977cf5abaa0fc7c3fe447/6.png' alt="Logo Defensoría">
-            </div>
+    <div class="login-container fade-in">
+        <!-- Panel izquierdo - Imagen Balanza -->
+        <div class="image-panel">
+            <img src="https://raw.githubusercontent.com/AdminDefensoria6/listadecausas/0bed6ff7d4a612c68f1a3193b694f02bf900387e/balanza2.png" 
+                 alt="Balanza de la Justicia" 
+                 class="responsive-image">
+        </div>
 
-            <h3>Sistema Defensor Secretarios </h3>
-            <div id="loginForm">
-                <div class="form-group">
-                    <label for="loginEmail">Correo Electrónico</label>
-                    <input type="email" id="loginEmail" required onkeydown="if(event.key === 'Enter') loginUser()">
+        <!-- Panel central - Icono Login -->
+        <div class="center-panel">
+            <div class="brand-content">
+                <div class="animated-icon">
+                    <img src="https://raw.githubusercontent.com/AdminDefensoria6/listadecausas/0bed6ff7d4a612c68f1a3193b694f02bf900387e/icons8-bloquear.gif" 
+                         alt="Sistema Defensoría">
+                    <div class="icon-glow"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
                 </div>
-                <div class="form-group">
-                    <label for="loginPassword">Contraseña</label>
-                    <input type="password" id="loginPassword" required onkeydown="if(event.key === 'Enter') loginUser()">
-                </div>
-                <button class="btn" onclick="loginUser()">Iniciar Sesión</button>
-                <button class="btn btn-secondary" onclick="showRegisterForm()">Registrarse</button>
+                <h1 class="brand-title">Sistema Defensor Secretarios</h1>
+                <p class="brand-subtitle">Defensoría Civil y Comercial 6</p>
             </div>
-            
-            <div id="registerForm" style="display: none;">
-                <div class="form-group">
-                    <label for="registerName">Nombre Completo</label>
-                    <input type="text" id="registerName" required>
+        </div>
+
+        <!-- Panel derecho - Formularios -->
+        <div class="right-panel">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Acceso al Sistema</h2>
+                    <p>Ingresa tus credenciales para continuar</p>
                 </div>
-                <div class="form-group">
-                    <label for="registerEmail">Correo Electrónico</label>
-                    <input type="email" id="registerEmail" required>
+                
+                <div id="authMessage" class="auth-message" style="display: none;"></div>
+                
+                <div style="position: relative; min-height: 300px;">
+                    <!-- Formulario de Login -->
+                    <div id="loginForm" class="form">
+                        <div class="form-group">
+                            <label for="loginEmail">Correo Electrónico</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="loginEmail" placeholder="usuario@defensoria.com" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="loginPassword">Contraseña</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="loginPassword" placeholder="••••••••" required>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="loginUser()">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                        </button>
+                        
+                        <div class="divider">
+                            <span>¿No tienes cuenta?</span>
+                        </div>
+                        
+                        <button class="btn btn-secondary" onclick="showRegisterForm()">
+                            <i class="fas fa-user-plus"></i> Crear Cuenta
+                        </button>
+                    </div>
+                    
+                    <!-- Formulario de Registro -->
+                    <div id="registerForm" class="form hidden">
+                        <div class="form-group">
+                            <label for="registerName">Nombre Completo</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="registerName" placeholder="Ingresa tu nombre completo" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="registerEmail">Correo Electrónico</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="registerEmail" placeholder="usuario@defensoria.com" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="registerPassword">Contraseña</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="registerUser()">
+                            <i class="fas fa-user-check"></i> Crear Cuenta
+                        </button>
+                        
+                        <div class="divider">
+                            <span>¿Ya tienes cuenta?</span>
+                        </div>
+                        
+                        <button class="btn btn-secondary" onclick="showLoginForm()">
+                            <i class="fas fa-arrow-left"></i> Volver al Login
+                        </button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="registerPassword">Contraseña</label>
-                    <input type="password" id="registerPassword" required>
+                
+                <div class="card-footer">
+                    <div class="credit-message">Diseño y programación de:</div>
+                    <div class="developer">Rómulo Fioravante - Leg2481 - Año 2025</div>
                 </div>
-                <button class="btn" onclick="registerUser()">Registrarse</button>
-                <button class="btn btn-secondary" onclick="showLoginForm()">Volver al Login</button>
             </div>
-            
-            <div id="authMessage" class="error-message"></div>
-            <div class="credit-message">Diseño y programación de:</div>
-            Rómulo Fioravante.Leg2481.Año 2025
         </div>
     </div>
 
-    <div id="appContainer" class="app-container">
-        <nav class="navbar">
-            <div style="display: flex; align-items: center;">
-                <button class="navbar-toggle" onclick="toggleSidebar()">☰</button>
-                <div class="navbar-brand">Sistema Defensoría Civil y Comercial 6</div>
-            </div>
-            <div>
-                <button class="navbar-btn btn-green" onclick="openIframe('Sistema Operador', 'https://defensoria6.github.io/operador-defensoria/')">Sistema Operador</button>
-                <button class="navbar-btn btn-violet" onclick="openIframe('Estadistica Sistema', 'https://defensoria6.github.io/reporte/')">Estadistica Sistema</button>
-                <button class="navbar-btn btn-blue" onclick="openIframe('Agenda Defensor', 'https://defensorialocal-seis.github.io/agenda/')">Agenda Defensor</button>
-            </div>
-            <div class="user-info">
-                <span class="welcome-message">Bienvenido, <span id="userName"></span></span>
-                <div id="profilePicContainer" onclick="openProfileModal()">
-                    <div class="profile-pic-placeholder" id="profilePlaceholder">U</div>
-                    <img class="profile-pic" id="profilePic" style="display: none;" alt="Foto de perfil">
-                </div>
-                <button class="logout-btn" onclick="logoutUser()">Cerrar Sesión</button>
-            </div>
-        </nav>
-
-        <div class="main-content">
-            <aside class="sidebar" id="sidebar">
-                <ul class="sidebar-menu">
-                    <li><a onclick="loadPage('https://defensoria6.github.io/datospartes/', 'Datos de Partes')">
-                        <span class="icon">📊</span>
-                        <span class="text">Datos de Partes</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/proteccion-personas/', 'Protección')">
-                        <span class="icon">🛡️</span>
-                        <span class="text">Protección NNyA</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/proteccion-unificado/', 'Protección')">
-                        <span class="icon">🧩</span>
-                        <span class="text">Protección Adultos</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/registro-causas/', 'Registro de Causas')">
-                        <span class="icon">📋</span>
-                        <span class="text">Registro de Causas</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/calendario/', 'Calendario')">
-                        <span class="icon">📅</span>
-                        <span class="text">Calendario</span>
-                    </a></li>
-                    <li><a onclick="loadIframe('https://defensorialocal-seis.github.io/dictamen/', 'Dictámenes Escritos Modelos')">
-                        <span class="icon">📝</span>
-                        <span class="text">Dictámenes Escritos Modelos</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/documentos/', 'Documentos')">
-                        <span class="icon">📄</span>
-                        <span class="text">Documentos</span>
-                    </a></li>
-                    <li><a onclick="loadPage('https://defensoria6.github.io/modo-intervencion/', 'Otras Intervenciones')">
-                        <span class="icon">🔧</span>
-                        <span class="text">Otras Intervenciones</span>
-                    </a></li>
-                    <li>
-                        <a onclick="openIframe('Organismos Directorio','https://defensoria6.github.io/organismos-proteccion/')">
-                            <span class="icon">🏛️</span>
-                            <span class="text">Organismos Directorio</span
-					<li><a onclick="loadIframe('https://admindefensoria6.github.io/bibliotecajuridica6/', 'Biblioteca Juridica')">
-                            <span class="icon">⚖️</span>
-                            <span class="text">Biblioteca Juridica</span>
-                    </a></li>
-                        </a>
-                    </li>
-                </ul>
-            </aside>
-
-            <main class="content-area">
-                <div id="welcomeScreen" class="welcome-screen">
-                    <div class="welcome-card">
-                        <h1>Bienvenido al Sistema de Defensoría Civil y Comercial 6</h1>
-                        <p>Accede a todas las herramientas y recursos necesarios para gestionar eficientemente los procesos de la defensoría. Utiliza el menú lateral para navegar entre las diferentes secciones del sistema.</p>
-                    </div>
-
-                    <div class="cards-grid">
-                         <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/registro-causas/', 'Registro de Causas')">
-                            <h3>📋 Registro de Causas</h3>
-                            <p>Registra, actualiza y da seguimiento a todas las causas y expedientes del sistema.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-		
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/datospartes/', 'Datos de Partes')">
-			<h3>📊 Datos de Partes</h3>
-                            <p>Gestiona y consulta información detallada sobre las partes involucradas en los procesos legales.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/proteccion-personas/', 'Protección')">
-                            <h3>🛡️ Protección de Personas</h3>
-                            <p>Sistema especializado para la protección y seguimiento de personas en situación de vulnerabilidad.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-
-                       
-
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/calendario/', 'Calendario')">
-                            <h3>📅 Calendario</h3>
-                            <p>Organiza y programa audiencias, citas y eventos importantes del calendario judicial.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-
-                        <div class="feature-card" onclick="loadPage('https://defensoria6.github.io/documentos/', 'Documentos')">
-                            <h3>📄 Documentos</h3>
-                            <p>Gestiona, almacena y organiza todos los documentos legales y administrativos.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-
-                        <div class="feature-card" onclick="loadPage('https://defensorialocal-seis.github.io/dictamen/', 'Atención al Público')">
-                            <h3>📝 Dictamenes Escritos Modelos</h3>
-                            <p>Acceda a dictamenes Escritos Modelos Calculadora de plazos procesales y mucho mas.</p>
-                            <a class="btn-link">Acceder</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="iframeContainer" class="iframe-container">
-                    <div class="iframe-header">
-                        <div class="iframe-title" id="iframeTitle">Cargando...</div>
-                        <button class="close-iframe" onclick="closeIframe()">✕ Cerrar</button>
-                    </div>
-                    <iframe id="contentIframe" class="content-iframe" src=""></iframe>
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeProfileModal()">&times;</span>
-            <h3>Cambiar Foto de Perfil</h3>
-            <input type="file" id="profileFileInput" accept="image/*" class="file-input">
-            <button class="btn" onclick="uploadProfilePic()">Subir Foto</button>
-            <div id="profileMessage"></div>
-        </div>
-    </div>
-
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyBDXZYAxWsvMiMGCrPRp3EBVuU0dzuWF4M",
@@ -755,21 +647,17 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const storage = getStorage(app);
 
         // Variables globales
         window.auth = auth;
-        window.storage = storage;
         window.currentUser = null;
 
         // Verificar estado de autenticación
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 window.currentUser = user;
-                showApp(user);
-            } else {
-                window.currentUser = null;
-                showLogin();
+                // Redirigir a la aplicación principal
+                window.location.href = 'app.html';
             }
         });
 
@@ -781,16 +669,21 @@
             const messageDiv = document.getElementById('authMessage');
 
             if (!name || !email || !password) {
-                messageDiv.textContent = 'Por favor, complete todos los campos.';
+                showMessage('Por favor, complete todos los campos.', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('La contraseña debe tener al menos 6 caracteres.', 'error');
                 return;
             }
 
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 await updateProfile(userCredential.user, { displayName: name });
-                messageDiv.textContent = '';
+                showMessage('¡Cuenta creada exitosamente! Redirigiendo...', 'success');
             } catch (error) {
-                messageDiv.textContent = getErrorMessage(error.code);
+                showMessage(getErrorMessage(error.code), 'error');
             }
         };
 
@@ -800,62 +693,15 @@
             const messageDiv = document.getElementById('authMessage');
 
             if (!email || !password) {
-                messageDiv.textContent = 'Por favor, complete todos los campos.';
+                showMessage('Por favor, complete todos los campos.', 'error');
                 return;
             }
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                messageDiv.textContent = '';
+                showMessage('Iniciando sesión...', 'success');
             } catch (error) {
-                messageDiv.textContent = getErrorMessage(error.code);
-            }
-        };
-
-        window.logoutUser = async function() {
-            try {
-                await signOut(auth);
-            } catch (error) {
-                console.error('Error al cerrar sesión:', error);
-            }
-        };
-
-        window.uploadProfilePic = async function() {
-            const fileInput = document.getElementById('profileFileInput');
-            const file = fileInput.files[0];
-            const messageDiv = document.getElementById('profileMessage');
-
-            if (!file) {
-                messageDiv.textContent = 'Por favor, seleccione una imagen.';
-                messageDiv.className = 'error-message';
-                return;
-            }
-
-            if (!file.type.startsWith('image/')) {
-                messageDiv.textContent = 'Por favor, seleccione un archivo de imagen válido.';
-                messageDiv.className = 'error-message';
-                return;
-            }
-
-            try {
-                const storageRef = ref(storage, `profile-pics/${window.currentUser.uid}`);
-                await uploadBytes(storageRef, file);
-                const downloadURL = await getDownloadURL(storageRef);
-                
-                await updateProfile(window.currentUser, { photoURL: downloadURL });
-                
-                // Actualizar la imagen en la interfaz
-                updateProfilePic(downloadURL);
-                
-                messageDiv.textContent = 'Foto de perfil actualizada correctamente.';
-                messageDiv.className = 'success-message';
-                
-                setTimeout(() => {
-                    closeProfileModal();
-                }, 2000);
-            } catch (error) {
-                messageDiv.textContent = 'Error al subir la imagen. Inténtelo de nuevo.';
-                messageDiv.className = 'error-message';
+                showMessage(getErrorMessage(error.code), 'error');
             }
         };
 
@@ -878,160 +724,54 @@
             }
         }
 
-        function showApp(user) {
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'block';
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('authMessage');
+            messageDiv.textContent = message;
+            messageDiv.className = 'auth-message ' + type + '-message';
+            messageDiv.style.display = 'block';
             
-            const userName = user.displayName || user.email.split('@')[0];
-            document.getElementById('userName').textContent = userName;
-            
-            // Actualizar foto de perfil
-            if (user.photoURL) {
-                updateProfilePic(user.photoURL);
-            } else {
-                const placeholder = document.getElementById('profilePlaceholder');
-                placeholder.textContent = userName.charAt(0).toUpperCase();
-            }
-        }
-
-        function showLogin() {
-            document.getElementById('loginContainer').style.display = 'flex';
-            document.getElementById('appContainer').style.display = 'none';
-            document.getElementById('authMessage').textContent = '';
-        }
-
-        function updateProfilePic(photoURL) {
-            const profilePic = document.getElementById('profilePic');
-            const placeholder = document.getElementById('profilePlaceholder');
-            
-            profilePic.src = photoURL;
-            profilePic.style.display = 'block';
-            placeholder.style.display = 'none';
+            // Ocultar mensaje después de 5 segundos
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
         }
     </script>
 
     <script>
         // Funciones para la interfaz
         function showRegisterForm() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
-            document.getElementById('authMessage').textContent = '';
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('authMessage').style.display = 'none';
         }
 
         function showLoginForm() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('registerForm').style.display = 'none';
-            document.getElementById('authMessage').textContent = '';
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('authMessage').style.display = 'none';
         }
 
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle('show');
-            } else {
-                sidebar.classList.toggle('expanded');
-            }
-        }
-
-        function loadPage(url, title) {
-            const welcomeScreen = document.getElementById('welcomeScreen');
-            const iframeContainer = document.getElementById('iframeContainer');
-            const iframe = document.getElementById('contentIframe');
-            const iframeTitle = document.getElementById('iframeTitle');
+        // Permitir enviar formularios con Enter
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('loginEmail').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') loginUser();
+            });
             
-            // Ocultar pantalla de bienvenida y mostrar iframe
-            welcomeScreen.style.display = 'none';
-            iframeContainer.style.display = 'block';
+            document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') loginUser();
+            });
             
-            // Configurar iframe
-            iframe.src = url;
-            iframeTitle.textContent = title;
+            document.getElementById('registerName').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') registerUser();
+            });
             
-            // Cerrar sidebar en móvil
-            if (window.innerWidth <= 768) {
-                const sidebar = document.getElementById('sidebar');
-                sidebar.classList.remove('show');
-            }
-        }
-
-        function loadIframe(url, title) {
-            // Oculta la pantalla de bienvenida
-            const welcome = document.getElementById("welcomeScreen");
-            if (welcome) welcome.style.display = "none";
-
-            // Muestra el contenedor del iframe
-            const iframeContainer = document.getElementById("iframeContainer");
-            iframeContainer.style.display = "block";
-
-            // Cambia el título que aparece arriba del iframe
-            const iframeTitle = document.getElementById("iframeTitle");
-            if (iframeTitle) iframeTitle.textContent = title;
-
-            // Carga la URL en el iframe
-            const iframe = document.getElementById("contentIframe");
-            iframe.src = url;
-        }
-
-        function openIframe(title, url) {
-            document.getElementById('iframeTitle').innerText = title;
-            document.getElementById('contentIframe').src = url;
-            document.getElementById('iframeContainer').style.display = 'block';
-            const welcome = document.getElementById('welcomeScreen');
-            if (welcome) welcome.style.display = 'none';
-        }
-
-        function closeIframe() {
-            // Oculta el contenedor del iframe
-            const iframeContainer = document.getElementById("iframeContainer");
-            iframeContainer.style.display = "none";
-
-            // Limpia el src
-            const iframe = document.getElementById("contentIframe");
-            iframe.src = "";
-
-            // Vuelve a mostrar la pantalla de bienvenida
-            const welcome = document.getElementById("welcomeScreen");
-            if (welcome) welcome.style.display = "block";
-        }
-
-        function openProfileModal() {
-            document.getElementById('profileModal').style.display = 'block';
-            document.getElementById('profileMessage').textContent = '';
-        }
-
-        function closeProfileModal() {
-            document.getElementById('profileModal').style.display = 'none';
-            document.getElementById('profileFileInput').value = '';
-            document.getElementById('profileMessage').textContent = '';
-        }
-
-        // Cerrar modal al hacer clic fuera de él
-        window.onclick = function(event) {
-            const modal = document.getElementById('profileModal');
-            if (event.target == modal) {
-                closeProfileModal();
-            }
-        }
-
-        // Cerrar sidebar en móvil al hacer clic fuera
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.navbar-toggle');
+            document.getElementById('registerEmail').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') registerUser();
+            });
             
-            if (window.innerWidth <= 768 && 
-                !sidebar.contains(event.target) && 
-                !toggleBtn.contains(event.target) && 
-                sidebar.classList.contains('show')) {
-                sidebar.classList.remove('show');
-            }
-        });
-
-        // Manejar redimensionamiento de ventana
-        window.addEventListener('resize', function() {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth > 768) {
-                sidebar.classList.remove('show');
-            }
+            document.getElementById('registerPassword').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') registerUser();
+            });
         });
     </script>
 </body>

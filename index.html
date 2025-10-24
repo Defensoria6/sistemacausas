@@ -72,6 +72,8 @@
             background: rgba(0, 0, 0, 0.3);
         }
 
+        /* INICIO: SE ELIMINAN ESTILOS DE LA IMAGEN DE BALANZA */
+        /*
         .responsive-image {
             width: 100%;
             max-width: 400px;
@@ -87,6 +89,26 @@
         .responsive-image:hover {
             transform: perspective(1000px) rotateY(0deg) scale(1.02);
         }
+        */
+        /* FIN: SE ELIMINAN ESTILOS DE LA IMAGEN DE BALANZA */
+
+        /* INICIO: NUEVOS ESTILOS AGREGADOS PARA EL TEXTO EN EL PANEL IZQUIERDO */
+        .panel-text-content {
+            color: white; 
+            text-align: center;
+            z-index: 2; 
+            padding: 20px;
+        }
+
+        .panel-text-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease forwards;
+        }
+        /* FIN: NUEVOS ESTILOS AGREGADOS PARA EL TEXTO EN EL PANEL IZQUIERDO */
+
 
         /* Panel central - Icono animado */
         .center-panel {
@@ -492,6 +514,10 @@
             .brand-subtitle {
                 font-size: 1rem;
             }
+            
+            .panel-text-content h1 { /* Ajuste responsive para el nuevo texto */
+                font-size: 2rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -517,31 +543,19 @@
 </head>
 <body>
     <div class="login-container fade-in">
-        <!-- Panel izquierdo - Imagen Balanza -->
         <div class="image-panel">
-            <img src="https://raw.githubusercontent.com/AdminDefensoria6/listadecausas/0bed6ff7d4a612c68f1a3193b694f02bf900387e/balanza2.png" 
-                 alt="Balanza de la Justicia" 
-                 class="responsive-image">
+            <div class="panel-text-content">
+                <h1>Sistema Digital de Causas</h1>
+            </div>
         </div>
 
-        <!-- Panel central - Icono Login -->
         <div class="center-panel">
             <div class="brand-content">
-                <div class="animated-icon">
-                    <img src="https://raw.githubusercontent.com/AdminDefensoria6/listadecausas/0bed6ff7d4a612c68f1a3193b694f02bf900387e/icons8-bloquear.gif" 
-                         alt="Sistema Defensoría">
-                    <div class="icon-glow"></div>
-                    <div class="sparkle"></div>
-                    <div class="sparkle"></div>
-                    <div class="sparkle"></div>
-                    <div class="sparkle"></div>
-                </div>
                 <h1 class="brand-title">Defensor Secretarios</h1>
                 <p class="brand-subtitle">Defensoría Civil y Comercial 6</p>
             </div>
         </div>
 
-        <!-- Panel derecho - Formularios -->
         <div class="right-panel">
             <div class="form-container">
                 <div class="form-header">
@@ -552,7 +566,6 @@
                 <div id="authMessage" class="auth-message" style="display: none;"></div>
                 
                 <div style="position: relative; min-height: 300px;">
-                    <!-- Formulario de Login -->
                     <div id="loginForm" class="form">
                         <div class="form-group">
                             <label for="loginEmail">Correo Electrónico</label>
@@ -583,7 +596,6 @@
                         </button>
                     </div>
                     
-                    <!-- Formulario de Registro -->
                     <div id="registerForm" class="form hidden">
                         <div class="form-group">
                             <label for="registerName">Nombre Completo</label>
@@ -631,7 +643,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
